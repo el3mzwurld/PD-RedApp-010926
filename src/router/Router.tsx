@@ -1,7 +1,9 @@
 import { Routes, Route } from "react-router-dom";
-
+import { Home } from "../pages/home";
 export const AppRouter = () => {
-  <Routes>
-    <Route></Route> {/*page loader*/}
-  </Routes>;
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} /> {/*SPA*/}
+    </Routes>
+  );
 };

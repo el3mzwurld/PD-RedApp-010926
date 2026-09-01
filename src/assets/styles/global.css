@@ -1,0 +1,42 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  transition: width 0.5s ease;
+  flex-shrink: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+
+  @media (min-width: 1024px) and (max-width: 1250px) {
+    width: 250px;
+    padding: 0 15px;
+  }
+
+  @media (min-width: 1251px) {
+    width: 230px;
+    padding: 0 25px;
+  }
+}
+
+.sidebar.collapsed {
+  @media (min-width: 1024px) and (max-width: 1250px) {
+    width: 80px;
+    padding: 0 15px;
+  }
+  @media (min-width: 1251px) {
+    width: 80px;
+    padding: 0 25px;
+  }
+}
