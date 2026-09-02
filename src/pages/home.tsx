@@ -16,7 +16,9 @@ export type RenderedPage =
   | "customers"
   | "disputes"
   | "settlement"
-  | "transaction";
+  | "transaction"
+  | "Users"
+  | "Payment Link";
 
 export const Home = () => {
   const [page, setPage] = useState<RenderedPage>("dashboard");
@@ -27,7 +29,7 @@ export const Home = () => {
 
   const renderPage = () => {
     if (page === "dashboard") {
-      return <Dashboard />;
+      return <Dashboard pageChange={handlePageChange} />;
     }
     if (page === "profile") {
       return <Profile />;

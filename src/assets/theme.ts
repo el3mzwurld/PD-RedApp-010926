@@ -17,7 +17,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Poppins", "Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
       fontSize: "2rem",
       fontWeight: 600,
@@ -32,6 +32,15 @@ const theme = createTheme({
   },
   shape: {
     borderRadius: 4,
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1024,
+      xl: 1300,
+    },
   },
 });
 

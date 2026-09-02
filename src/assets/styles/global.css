@@ -8,6 +8,8 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  font-family: "Poppins", sans-serif;
+  font-size: 14;
 }
 
 .sidebar {
@@ -18,10 +20,19 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+  overflow-y: auto;
 
+  scrollbar-width: none;
+
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
   @media (min-width: 1024px) and (max-width: 1250px) {
-    width: 250px;
+    width: 200px;
     padding: 0 15px;
+    padding-bottom: 10px;
   }
 
   @media (min-width: 1251px) {
@@ -38,5 +49,47 @@ body {
   @media (min-width: 1251px) {
     width: 80px;
     padding: 0 25px;
+  }
+}
+
+.count-outer-ring {
+  width: 135px;
+  height: 135px;
+  background: linear-gradient(160deg, #d0031b6a 50%, #ffffff 100%);
+  border-radius: 100px;
+  z-index: 0;
+  position: relative;
+
+  .count-inner-ring {
+    width: 60%;
+    height: 60%;
+    z-index: 1;
+    background-color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ee1721;
+  }
+}
+
+.dash--card {
+  padding: 5px 0px;
+  background-color: white;
+}
+
+.quick-link--item {
+  @media (min-width: 1024px) and (max-width: 1250px) {
+    font-size: 10px;
+  }
+  @media (min-width: 1251px) {
+    font-size: 12px;
+  }
+  @media (min-width: 1440px) {
+    font-size: 14px;
   }
 }

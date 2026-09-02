@@ -10,6 +10,8 @@ import {
   AttachMoney,
   ChevronRight,
   ChevronLeft,
+  Link,
+  Group,
 } from "@mui/icons-material";
 import logo from "../img/logo.png";
 import type { RenderedPage } from "../../pages/home";
@@ -56,6 +58,14 @@ export const Sidebar = ({ pageChange }: SidebarProps) => {
       Icon: AttachMoney,
       label: "Transaction",
     },
+    {
+      Icon: Group,
+      label: "Users",
+    },
+    {
+      Icon: Link,
+      label: "Payment Link",
+    },
   ];
 
   return (
@@ -89,7 +99,7 @@ export const Sidebar = ({ pageChange }: SidebarProps) => {
         direction={"column"}
         component={"nav"}
         aria-description="navigation pane for sidebar"
-        spacing={2.5}
+        spacing={0.8}
         sx={{
           height: "auto",
           flex: 1,
@@ -170,7 +180,7 @@ const SidebarItem = ({ Icon, label, click, active }: SidebarItemProps) => {
     <Box
       sx={{
         width: "100%",
-        height: 50,
+        height: { md: 45.5, xl: 55 },
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
