@@ -110,16 +110,15 @@ export const Modal = ({ mode }: ModalProps) => {
             return (
               <option
                 key={index}
-                style={{ width: "100%", height: "100%", paddingLeft: 2 }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  paddingLeft: 2,
+                  fontSize: 12,
+                }}
                 value={r}
               >
-                <Typography
-                  variant="caption"
-                  sx={{ width: "70%", textAlign: "center" }}
-                >
-                  {capitalized}
-                </Typography>
-                <ArrowDropDown />
+                {capitalized}
               </option>
             );
           })}

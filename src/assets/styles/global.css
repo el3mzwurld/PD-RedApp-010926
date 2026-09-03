@@ -12,6 +12,15 @@ body {
   font-size: 14;
 }
 
+.container {
+  scrollbar-width: none;
+
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
 .sidebar {
   transition: width 0.5s ease;
   flex-shrink: 0;
