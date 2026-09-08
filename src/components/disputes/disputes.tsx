@@ -14,7 +14,7 @@ import { NavBar } from "../ui/navbar";
 import { motion } from "motion/react";
 import { InformationContainer } from "../ui/InformationContainer";
 import { Search } from "../ui/Search";
-import { ArrowDownward, Download } from "@mui/icons-material";
+import { ArrowDownward } from "@mui/icons-material";
 
 export const Disputes = () => {
   const theme = useTheme();
