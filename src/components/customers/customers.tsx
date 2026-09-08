@@ -1,8 +1,21 @@
-import { Box } from "@mui/material";
+import {
+  Box,
+  Button,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import { NavBar } from "../ui/navbar";
 import { motion } from "motion/react";
+import { InformationContainer } from "../ui/InformationContainer";
+import { Search } from "../ui/Search";
 
 export const Customers = () => {
+  const handleSubmit = (query: string) => {};
   return (
     <Box
       sx={{
@@ -67,7 +80,88 @@ export const Customers = () => {
             alignItems: "flex-start",
             gap: 25,
           }}
-        ></section>
+        >
+          <Stack
+            direction={"row"}
+            spacing={1}
+            sx={{
+              flexWrap: "wrap",
+              height: "auto",
+              rowGap: 4.5,
+              alignItems: "start",
+              justifyContent: "start",
+              columnGap: 2.5,
+              width: "100%",
+            }}
+          >
+            <InformationContainer
+              mode="read"
+              name="Merchant ID"
+              content="Fresh Farms"
+            />
+            <InformationContainer
+              mode="edit"
+              name="Total number of Customers"
+              content="20"
+            />
+          </Stack>
+          <Stack
+            direction={"row"}
+            spacing={1}
+            sx={{
+              height: 120,
+              alignItems: "center",
+              justifyContent: "start",
+              gap: 4.5,
+              width: "100%",
+              px: 10,
+              backgroundColor: "white",
+              py: 5,
+              boxShadow: "1.5px 1.5px 10px #7876769f",
+            }}
+          >
+            <Search mode="default" onSubmit={handleSubmit} />
+          </Stack>
+
+          <TableContainer>
+            <Table
+              sx={{
+                width: "100%",
+                height: "auto",
+                backgroundColor: "white",
+                padding: { lg: 1.5, xl: 2.5 },
+              }}
+              aria-description="customers-table"
+            >
+              <TableHead>
+                <TableRow sx={{ border: "none" }}>
+                  <TableCell>S/N</TableCell>
+                  <TableCell>First Name</TableCell>
+                  <TableCell>Last Name</TableCell>
+                  <TableCell>Phone Number</TableCell>
+                  <TableCell>Email Address</TableCell>
+                  <TableCell>Action</TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody
+                component={Stack}
+                sx={{ width: "100%", padding: 1.8, gap: 2, px: 3 }}
+              >
+                <TableRow component={Stack} sx={{ padding: 2.5 }}>
+                  <TableCell>1</TableCell>
+                  <TableCell>First Name</TableCell>
+                  <TableCell>Last Name</TableCell>
+                  <TableCell>Phone Number</TableCell>
+                  <TableCell>Email Address</TableCell>
+                  <TableCell>
+                    <Button variant="text">VIEW</Button>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </section>
       </Box>{" "}
     </Box>
   );
