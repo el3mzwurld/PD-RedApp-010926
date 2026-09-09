@@ -189,7 +189,10 @@ const SidebarItem = ({ Icon, label, click, active }: SidebarItemProps) => {
         cursor: "pointer",
       }}
       title={label}
-      onClick={() => click(label.toLowerCase() as RenderedPage)}
+      onClick={() => {
+        click(label.toLowerCase() as RenderedPage);
+        console.log(label.toLowerCase());
+      }}
       aria-description={`${label}`}
     >
       <Icon

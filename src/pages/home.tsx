@@ -9,6 +9,8 @@ import { Customers } from "../components/customers/customers";
 import { Disputes } from "../components/disputes/disputes";
 import { Settlement } from "../components/settlement/settlement";
 import { Transaction } from "../components/transaction/transaction";
+import Users from "../components/users/Users";
+import { PaymentLink } from "../components/link/PaymentLink";
 
 export type RenderedPage =
   | "dashboard"
@@ -17,8 +19,8 @@ export type RenderedPage =
   | "disputes"
   | "settlement"
   | "transaction"
-  | "Users"
-  | "Payment Link";
+  | "users"
+  | "payment link";
 
 export const Home = () => {
   const [page, setPage] = useState<RenderedPage>("dashboard");
@@ -45,6 +47,12 @@ export const Home = () => {
     }
     if (page === "transaction") {
       return <Transaction />;
+    }
+    if (page === "users") {
+      return <Users />;
+    }
+    if (page === "payment link") {
+      return <PaymentLink />;
     }
   };
   return (

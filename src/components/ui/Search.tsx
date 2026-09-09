@@ -4,7 +4,7 @@ import { useState } from "react";
 
 interface SearchProps {
   onSubmit: (filter: string) => void;
-  mode: "default" | "settlement" | "disputes" | "transaction";
+  mode: "default" | "settlement" | "disputes" | "transaction" | "users";
 }
 
 type Dispute = {
@@ -26,6 +26,14 @@ type Transaction = {
   transStatus: TransactionStatus;
   paymentMethod: PaymentMethod;
 };
+
+type User = {
+  fName: string;
+  lName: string;
+  mobileNumber: string;
+  altMobile: string;
+  email: string;
+};
 export const Search = ({ onSubmit, mode }: SearchProps) => {
   const [query, setQuery] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -45,6 +53,11 @@ export const Search = ({ onSubmit, mode }: SearchProps) => {
     "any",
   );
   const [refNumber, setRefNumber] = useState("");
+  const [fName, setFName] = useState("");
+  const [lName, setLName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [altPhone, setAltPhone] = useState("");
+  const [email, setEmail] = useState("");
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -656,6 +669,173 @@ export const Search = ({ onSubmit, mode }: SearchProps) => {
             onClick={(e) => {
               e.preventDefault();
               submitTransaction();
+            }}
+          >
+            Search
+          </Button>
+        </Stack>
+      )}
+      {mode === "users" && (
+        <Stack
+          component={"form"}
+          direction={"row"}
+          sx={{
+            width: "auto",
+            height: "auto",
+            gap: 3.5,
+            alignItems: "end",
+            flexWrap: "wrap",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 12,
+              gap: 15,
+            }}
+          >
+            <label>First Name</label>
+            <input
+              style={{
+                width: 270,
+                height: 55,
+                padding: 1.8,
+                paddingLeft: 12.5,
+                paddingRight: 2.2,
+                fontSize: 14,
+                borderRadius: 10,
+                border: "2px solid lightgrey",
+              }}
+              type="text"
+              placeholder="First Name"
+              value={fName}
+              onChange={(e) => setFName(e.target.value)}
+            ></input>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 12,
+              gap: 15,
+            }}
+          >
+            <label>Last Name</label>
+            <input
+              style={{
+                width: 270,
+                height: 55,
+                padding: 1.8,
+                paddingLeft: 12.5,
+                paddingRight: 2.2,
+                fontSize: 14,
+                borderRadius: 10,
+                border: "2px solid lightgrey",
+              }}
+              type="text"
+              placeholder="Last Name"
+              value={lName}
+              onChange={(e) => setLName(e.target.value)}
+            ></input>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 12,
+              gap: 15,
+            }}
+          >
+            <label>Mobile Number</label>
+            <input
+              style={{
+                width: 270,
+                height: 55,
+                padding: 1.8,
+                paddingLeft: 12.5,
+                paddingRight: 2.2,
+                fontSize: 14,
+                borderRadius: 10,
+                border: "2px solid lightgrey",
+              }}
+              type="tel"
+              placeholder="Phone Number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            ></input>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 12,
+              gap: 15,
+            }}
+          >
+            <label>Alternate Mobile Number</label>
+            <input
+              style={{
+                width: 270,
+                height: 55,
+                padding: 1.8,
+                paddingLeft: 12.5,
+                paddingRight: 2.2,
+                fontSize: 14,
+                borderRadius: 10,
+                border: "2px solid lightgrey",
+              }}
+              type="tel"
+              placeholder="Alternate Mobile Phone"
+              value={altPhone}
+              onChange={(e) => setAltPhone(e.target.value)}
+            ></input>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 12,
+              gap: 15,
+            }}
+          >
+            <label>Email Address</label>
+            <input
+              style={{
+                width: 270,
+                height: 55,
+                padding: 1.8,
+                paddingLeft: 12.5,
+                paddingRight: 2.2,
+                fontSize: 14,
+                borderRadius: 10,
+                border: "2px solid lightgrey",
+              }}
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            ></input>
+          </div>
+
+          <Button
+            variant="contained"
+            type="submit"
+            sx={{
+              width: 150,
+              p: 1.25,
+              px: 5,
+              fontSize: 12,
+              backgroundColor: "primary.main",
+              height: 50,
+              borderRadius: 25,
+            }}
+            onClick={(e) => {
+              e.preventDefault();
             }}
           >
             Search

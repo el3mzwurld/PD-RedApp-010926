@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Stack,
   Table,
   TableBody,
@@ -7,13 +8,16 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  useTheme,
 } from "@mui/material";
 import { NavBar } from "../ui/navbar";
 import { motion } from "motion/react";
 import { InformationContainer } from "../ui/InformationContainer";
 import { Search } from "../ui/Search";
 
-export const Settlement = () => {
+const Users = () => {
+  const theme = useTheme();
+  const handleSubmit = (filter: string) => {};
   return (
     <Box
       sx={{
@@ -63,7 +67,7 @@ export const Settlement = () => {
               fontSize: 16,
             }}
           >
-            Disputes
+            Users
           </p>
         </motion.div>
         <section
@@ -102,18 +106,14 @@ export const Settlement = () => {
             direction={"row"}
             spacing={1}
             sx={{
-              height: 120,
+              height: "auto",
               alignItems: "center",
               justifyContent: "start",
               gap: 4.5,
               width: "100%",
-              px: 5,
-              backgroundColor: "white",
-              py: { md: 15, xl: 10 },
-              boxShadow: "1.5px 1.5px 10px #7876769f",
             }}
           >
-            <Search mode="settlement" />
+            <Search mode="users" onSubmit={handleSubmit} />
           </Stack>
 
           <motion.div
@@ -129,6 +129,17 @@ export const Settlement = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: "easeIn" }}
           >
+            {/* title */}
+            <p
+              style={{
+                cursor: "pointer",
+                color: "red",
+                fontWeight: 600,
+                fontSize: 18,
+              }}
+            >
+              List of Users
+            </p>
             {/* list container */}
             <div
               style={{
@@ -136,8 +147,8 @@ export const Settlement = () => {
                 height: "auto",
                 paddingLeft: 22.5,
                 paddingRight: 22.5,
-                paddingTop: 20,
-                paddingBottom: 20,
+                paddingTop: 15,
+                paddingBottom: 15,
                 backgroundColor: "white",
               }}
             >
@@ -157,52 +168,52 @@ export const Settlement = () => {
                     <TableRow sx={{ border: "none" }}>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
                         S/N
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Account Name
+                        First Name
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Account Number
+                        Last Name
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Batch Code
+                        Phone Number
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Currency
+                        Email Address
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Reference
+                        Active
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Status
+                        Action
                       </TableCell>
                     </TableRow>
                   </TableHead>
@@ -210,52 +221,54 @@ export const Settlement = () => {
                     <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
                         1
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Oluwanimofe Bankole
+                        Samuel
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        098777453
+                        Elemi
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        001
+                        07017041247
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        NGN
+                        elemisamuel77@gmail.com
+                      </TableCell>
+
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        Yes
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        RT001
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "left",
-                        }}
-                      >
-                        Open
+                        {" "}
+                        <Button variant="text">VIEW</Button>
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -268,3 +281,5 @@ export const Settlement = () => {
     </Box>
   );
 };
+
+export default Users;
