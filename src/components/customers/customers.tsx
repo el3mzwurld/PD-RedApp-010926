@@ -114,9 +114,9 @@ export const Customers = () => {
               justifyContent: "start",
               gap: 4.5,
               width: "100%",
-              px: 10,
+              px: 8,
               backgroundColor: "white",
-              py: 5,
+              py: 10,
               boxShadow: "1.5px 1.5px 10px #7876769f",
             }}
           >

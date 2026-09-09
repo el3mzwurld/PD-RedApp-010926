@@ -102,3 +102,12 @@ body {
     font-size: 14px;
   }
 }
+
+input.blank-date:required:invalid::-webkit-datetime-edit {
+  color: transparent !important;
+}
+
+input.blank-date:focus::-webkit-datetime-edit,
+input.blank-date:valid::-webkit-datetime-edit {
+  color: inherit !important;
+}
