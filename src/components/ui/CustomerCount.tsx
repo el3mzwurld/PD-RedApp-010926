@@ -1,4 +1,8 @@
-const CustomerCount = () => {
+interface CustomerCountProps {
+  variant: "new" | "total" | "active" | "inactive";
+}
+
+const CustomerCount = ({ variant = "total" }: CustomerCountProps) => {
   return (
     <div
       style={{
@@ -11,14 +15,16 @@ const CustomerCount = () => {
       }}
     >
       {/* count */}
-      <div className="count-outer-ring">
+      <div className={`count-outer-ring-${variant}`}>
         {/* outer div */}
 
-        <div className="count-inner-ring">
+        <div className={`count-inner-ring-${variant}`}>
           <h2>409</h2>
         </div>
       </div>
-      <p style={{ fontSize: 12 }}>Total</p>
+      <p style={{ fontSize: 12 }}>
+        {variant.charAt(0).toUpperCase() + variant.slice(1)}
+      </p>
     </div>
   );
 };

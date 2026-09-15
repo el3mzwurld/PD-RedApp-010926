@@ -1,14 +1,21 @@
-import { Box, useTheme } from "@mui/material";
+import { Box, Stack, useTheme } from "@mui/material";
 import { NavBar } from "../ui/navbar";
-import { Modal } from "./modal";
+import { Modal, type Range } from "./modal";
 import { Card } from "./card";
 import type { RenderedPage } from "../../pages/home";
-
+import { motion } from "motion/react";
+import { useState } from "react";
 export const Dashboard = ({
   pageChange,
 }: {
   pageChange: (page: RenderedPage) => void;
 }) => {
+  const [role, setRole] = useState<"merchant" | "admin">("admin");
+  const [range, setRange] = useState<Range>("daily");
+
+  const setTimeRange = (time: Range) => {
+    setRange(time);
+  };
   const theme = useTheme();
   return (
     <Box
@@ -23,7 +30,7 @@ export const Dashboard = ({
         flex: 1,
       }}
     >
-      <NavBar />
+      <NavBar role="merchant" />
       <Box
         component={"main"}
         sx={{
@@ -37,7 +44,30 @@ export const Dashboard = ({
           gap: 2.5,
         }}
       >
-        <h4>Dashboard</h4>
+        <motion.div
+          style={{
+            width: "100%",
+            justifyContent: "start",
+            alignItems: "center",
+            padding: "5px 0px",
+            gap: "60px",
+            display: "flex",
+          }}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.55, ease: "easeIn" }}
+        >
+          <p
+            style={{
+              cursor: "pointer",
+              color: "red",
+              fontWeight: 600,
+              fontSize: 16,
+            }}
+          >
+            Dashboard
+          </p>
+        </motion.div>{" "}
         <section
           style={{
             width: "100%",
@@ -45,42 +75,117 @@ export const Dashboard = ({
             backgroundColor: theme.palette.background.paper,
             padding: "20px",
             display: "flex",
-            alignItems: "center",
+            alignItems: "start",
             justifyContent: "center",
             borderRadius: 10,
-            gap: "15px",
+            gap: "20px",
+            flexDirection: "column",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "15px",
-              width: "50%",
-            }}
-          >
-            <Modal mode="line" />
-            <Modal mode="bar" />
-          </div>
+          {role === "admin" && (
+            <div
+              style={{ width: "auto", height: 48, display: "flex", gap: 25 }}
+            >
+              <select
+                style={{
+                  width: 220,
+                  height: "100%",
+                  color: "gray",
+                  backgroundColor: "lightgray",
+                  padding: 10,
+                  fontSize: 14,
+                  fontFamily: "poppins",
+                }}
+              >
+                <option>RED100023-JUMIA</option>
+              </select>
+              <select
+                style={{
+                  width: 220,
+                  height: "100%",
+                  color: "gray",
+                  backgroundColor: "lightgray",
+                  padding: 10,
+                  fontSize: 14,
+                  fontFamily: "poppins",
+                }}
+                onChange={(e) => {
+                  e.preventDefault();
 
-          <div
-            className="dash-card--grid"
-            style={{
-              display: "grid",
+                  setTimeRange(e.target.value.toLowerCase() as Range);
+                }}
+              >
+                <option value={"daily"}>Today</option>
+                <option value={"weekly"}>Daily</option>
+                <option value={"monthly"}>Year</option>
+              </select>
+            </div>
+          )}
+
+          <Stack
+            direction={"row"}
+            sx={{
               alignItems: "center",
-              width: "45%",
-              gridTemplateColumns: "1fr 1fr",
-              gridTemplateRows: "210.25px 209.25px",
-              columnGap: 30,
-              rowGap: 20,
-              height: "100%",
+              justifyContent: "space-evenly",
+              borderRadius: 10,
+              gap: "20px",
+              width: "100%",
             }}
           >
-            <Card mode="customer count" />
-            <Card mode="quick links" pageChange={pageChange} />
-            <Card mode="customer count" />
-          </div>
+            <div
+              style={{
+                display: "grid",
+                alignItems: "center",
+                gap: "15px",
+                width: "50%",
+                gridTemplateColumns: "1fr",
+                gridTemplateRows: "260px 260px",
+              }}
+            >
+              <Modal mode="line" timeRange={range} />
+              <Modal mode="bar" timeRange={range} />
+            </div>
+
+            <div
+              className="dash-card--grid"
+              style={{
+                display: "grid",
+                alignItems: "center",
+                width: "45%",
+                gridTemplateColumns: "1fr 1fr",
+                gridTemplateRows:
+                  role === "admin" ? "250px 300px" : "290px 290px",
+                columnGap: 30,
+                rowGap: 20,
+                height: "100%",
+              }}
+            >
+              {role === "merchant" && (
+                <>
+                  {" "}
+                  <Card mode="customer count" />
+                  <Card mode="quick links" pageChange={pageChange} />
+                  <Card mode="transaction volume" />
+                  <Card mode="transaction count" />
+                </>
+              )}
+              {role === "admin" && (
+                <>
+                  <div
+                    style={{
+                      gridArea: "1/1/ span 1 /span 2",
+                      width: "100%",
+                      height: "100%",
+                    }}
+                  >
+                    <Modal mode="merchant count" />
+                  </div>
+                  <Card mode="transaction volume" />
+                  <Card mode="transaction count" />
+                </>
+              )}
+            </div>
+          </Stack>
         </section>
       </Box>
     </Box>

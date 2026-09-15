@@ -61,15 +61,15 @@ body {
   }
 }
 
-.count-outer-ring {
-  width: 135px;
-  height: 135px;
+.count-outer-ring-total {
+  width: 120px;
+  height: 120px;
   background: linear-gradient(160deg, #d0031b6a 50%, #ffffff 100%);
   border-radius: 100px;
   z-index: 0;
   position: relative;
 
-  .count-inner-ring {
+  .count-inner-ring-total {
     width: 60%;
     height: 60%;
     z-index: 1;
@@ -83,6 +83,80 @@ body {
     align-items: center;
     justify-content: center;
     color: #ee1721;
+  }
+}
+
+.count-outer-ring-new {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(160deg, #be9731 50%, #ffffff 100%);
+  border-radius: 100px;
+  z-index: 0;
+  position: relative;
+
+  .count-inner-ring-new {
+    width: 60%;
+    height: 60%;
+    z-index: 1;
+    background-color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #be9731;
+  }
+}
+
+.count-outer-ring-active {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(160deg, #358eb5 50%, #ffffff 100%);
+  border-radius: 100px;
+  z-index: 0;
+  position: relative;
+
+  .count-inner-ring-active {
+    width: 60%;
+    height: 60%;
+    z-index: 1;
+    background-color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #358eb5;
+  }
+}
+.count-outer-ring-inactive {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(160deg, #37474f 50%, #ffffff 100%);
+  border-radius: 100px;
+  z-index: 0;
+  position: relative;
+
+  .count-inner-ring-inactive {
+    width: 60%;
+    height: 60%;
+    z-index: 1;
+    background-color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #37474f;
   }
 }
 

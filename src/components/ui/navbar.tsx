@@ -1,7 +1,11 @@
 import { Box, Stack, Typography, useTheme } from "@mui/material";
 import { getDate } from "../../lib/utils";
 import { Notifications, ExitToApp } from "@mui/icons-material";
-export const NavBar = () => {
+export const NavBar = ({
+  role = "merchant",
+}: {
+  role: "merchant" | "admin";
+}) => {
   const theme = useTheme();
   return (
     <Stack
@@ -23,7 +27,7 @@ export const NavBar = () => {
       {/* date/role = 30%*/}
       <div
         style={{
-          width: "30%",
+          width: "35%",
           textAlign: "left",
           display: "flex",
           gap: 2,
@@ -47,7 +51,10 @@ export const NavBar = () => {
         />
 
         <Typography variant="body2" sx={{ fontWeight: 400, marginLeft: 3.5 }}>
-          Role : <span>Merchant</span>
+          Role :
+          <span style={{ fontWeight: 600 }}>
+            {role === "merchant" ? "Merchant" : "Admin"}
+          </span>
         </Typography>
       </div>
 

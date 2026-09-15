@@ -15,9 +15,11 @@ import { motion } from "motion/react";
 import { InformationContainer } from "../ui/InformationContainer";
 import { Search } from "../ui/Search";
 import { ArrowDownward } from "@mui/icons-material";
+import { useState } from "react";
 
 export const Disputes = () => {
   const theme = useTheme();
+  const [role, setRole] = useState<"merchant" | "admin">("admin");
   const handleSubmit = (filter: string) => {};
   return (
     <Box
@@ -33,7 +35,7 @@ export const Disputes = () => {
         gap: 2.5,
       }}
     >
-      <NavBar />
+      <NavBar role={role} />
       <Box
         component={"main"}
         sx={{
@@ -77,32 +79,37 @@ export const Disputes = () => {
             minHeight: "100vh",
             backgroundColor: "lightgray",
             borderRadius: 12,
-            padding: "45px",
+            padding: 45,
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
             gap: 40,
+            paddingLeft: role === "admin" ? 65 : 45,
+            paddingRight: role === "admin" ? 65 : 45,
           }}
         >
-          <Stack
-            direction={"row"}
-            spacing={1}
-            sx={{
-              flexWrap: "wrap",
-              height: "auto",
-              rowGap: 4.5,
-              alignItems: "start",
-              justifyContent: "start",
-              columnGap: 2.5,
-              width: "100%",
-            }}
-          >
-            <InformationContainer
-              mode="read"
-              name="Merchant ID"
-              content="Fresh Farms"
-            />
-          </Stack>
+          {role === "merchant" && (
+            <Stack
+              direction={"row"}
+              spacing={1}
+              sx={{
+                flexWrap: "wrap",
+                height: "auto",
+                rowGap: 4.5,
+                alignItems: "start",
+                justifyContent: "start",
+                columnGap: 2.5,
+                width: "100%",
+              }}
+            >
+              <InformationContainer
+                mode="read"
+                name="Merchant ID"
+                content="Fresh Farms"
+              />
+            </Stack>
+          )}
+
           <Stack
             direction={"row"}
             spacing={1}
@@ -112,9 +119,12 @@ export const Disputes = () => {
               justifyContent: "start",
               gap: 4.5,
               width: "100%",
+              backgroundColor: role === "admin" ? "white" : "none",
+              padding: role === "admin" ? 5 : 0,
+              boxShadow: role === "admin" ? "2px 2.5px 10px gray" : "none",
             }}
           >
-            <Search mode="disputes" onSubmit={handleSubmit} />
+            <Search mode="disputes" onSubmit={handleSubmit} role="admin" />
           </Stack>
 
           <motion.div

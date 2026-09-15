@@ -5,6 +5,7 @@ import { useState } from "react";
 interface SearchProps {
   onSubmit: (filter: string) => void;
   mode: "default" | "settlement" | "disputes" | "transaction" | "users";
+  role: "merchant" | "admin";
 }
 
 type Dispute = {
@@ -16,6 +17,13 @@ type Dispute = {
   resolutionStatus: "all" | "resolved" | "unresolved";
 };
 
+interface AdminDisputeFilter {
+  merchantID?: string;
+  transactionStatus: TransactionStatus;
+  paymentRef?: string;
+  startDate: string;
+  endDate: string;
+}
 type TransactionStatus = "Successful" | "Failed" | "Pending" | "Processing";
 type PaymentMethod = "Card" | "Bank Transfer";
 
@@ -34,7 +42,8 @@ type User = {
   altMobile: string;
   email: string;
 };
-export const Search = ({ onSubmit, mode }: SearchProps) => {
+
+export const Search = ({ onSubmit, mode, role }: SearchProps) => {
   const [query, setQuery] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -58,7 +67,7 @@ export const Search = ({ onSubmit, mode }: SearchProps) => {
   const [phone, setPhone] = useState("");
   const [altPhone, setAltPhone] = useState("");
   const [email, setEmail] = useState("");
-
+  const [merchantID, setMerchantID] = useState<string>("");
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -90,6 +99,19 @@ export const Search = ({ onSubmit, mode }: SearchProps) => {
     };
 
     const filter = JSON.stringify(transactionFilter);
+    onSubmit(filter);
+  };
+  const adminSubmitDispute = () => {
+    const dispute: AdminDisputeFilter = {
+      startDate,
+      endDate,
+      merchantID: merchantID ?? undefined,
+      paymentRef: paymentRef ?? undefined,
+      transactionStatus: transactionStatus,
+    };
+
+    const filter = JSON.stringify(dispute);
+
     onSubmit(filter);
   };
   return (
@@ -147,7 +169,7 @@ export const Search = ({ onSubmit, mode }: SearchProps) => {
           </Button>
         </Stack>
       )}
-      {mode === "disputes" && (
+      {mode === "disputes" && role !== "admin" && (
         <Stack
           component={"form"}
           direction={"row"}
@@ -836,6 +858,193 @@ export const Search = ({ onSubmit, mode }: SearchProps) => {
             }}
             onClick={(e) => {
               e.preventDefault();
+            }}
+          >
+            Search
+          </Button>
+        </Stack>
+      )}
+      {mode === "disputes" && role === "admin" && (
+        <Stack
+          component={"form"}
+          direction={"row"}
+          sx={{
+            width: "auto",
+            height: "auto",
+            gap: 3.5,
+            alignItems: "end",
+            flexWrap: "wrap",
+          }}
+        >
+          {/* merchant ID */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 12,
+              gap: 5,
+            }}
+          >
+            <label>Filter by</label>
+            <select
+              style={{
+                width: 270,
+                height: 55,
+                padding: 1.8,
+                paddingLeft: 10,
+                paddingRight: 10,
+                fontSize: 14,
+                borderRadius: 10,
+                border: "2px solid lightgrey",
+                cursor: "pointer",
+                fontFamily: "poppins",
+              }}
+              value={merchantID}
+              onChange={(e) => setMerchantID(e.target.value)}
+            >
+              <option disabled selected hidden>
+                Merchant ID
+              </option>
+            </select>
+          </div>
+          {/* payment reference */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 12,
+              gap: 5,
+            }}
+          >
+            <label>Payment Reference</label>
+            <input
+              style={{
+                width: 270,
+                height: 55,
+                padding: 1.8,
+                paddingLeft: 10,
+                paddingRight: 10,
+                fontSize: 14,
+                borderRadius: 10,
+                border: "2px solid lightgrey",
+                cursor: "pointer",
+                fontFamily: "poppins",
+              }}
+              type="text"
+              value={paymentRef}
+              onChange={(e) => setPaymentRef(e.target.value)}
+            ></input>
+          </div>
+          {/* transaction status */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 12,
+              gap: 5,
+            }}
+          >
+            <label>Transaction Status</label>
+            <select
+              value={transactionStatus}
+              style={{
+                width: 270,
+                height: 55,
+                padding: 1.8,
+                paddingLeft: 10,
+                paddingRight: 10,
+                fontSize: 14,
+                borderRadius: 10,
+                border: "2px solid lightgrey",
+                cursor: "pointer",
+                fontFamily: "poppins",
+              }}
+              onChange={(e) => {
+                setTransactionStatus(e.target.value as TransactionStatus);
+              }}
+            >
+              <option disabled hidden selected>
+                Transaction Status
+              </option>
+              <option value={"Successful"}>Successful</option>
+              <option value={"Failed"}>Failed</option>
+              <option value={"Pending"}>Pending</option>
+              <option value={"Processing"}>Processing</option>
+            </select>
+          </div>
+          {/* start date */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 12,
+              gap: 5,
+            }}
+          >
+            <label>Start Date</label>
+            <input
+              style={{
+                width: 270,
+                height: 55,
+                padding: 1.8,
+                paddingLeft: 10,
+                paddingRight: 10,
+                fontSize: 14,
+                borderRadius: 10,
+                border: "2px solid lightgrey",
+                cursor: "pointer",
+                fontFamily: "poppins",
+              }}
+              type="date"
+              value={startDate}
+              required
+              onChange={(e) => setStartDate(e.target.value)}
+            ></input>
+          </div>
+          {/* end date */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 12,
+              gap: 5,
+            }}
+          >
+            <label>End Date</label>
+            <input
+              style={{
+                width: 270,
+                height: 55,
+                padding: 1.8,
+                paddingLeft: 10,
+                paddingRight: 10,
+                fontSize: 14,
+                borderRadius: 10,
+                border: "2px solid lightgrey",
+                cursor: "pointer",
+                fontFamily: "poppins",
+              }}
+              type="date"
+              value={endDate}
+              required
+              onChange={(e) => setEndDate(e.target.value)}
+            ></input>
+          </div>
+          <Button
+            variant="contained"
+            type="submit"
+            sx={{
+              width: 180,
+              p: 1.25,
+              px: 5,
+              fontSize: 12,
+              backgroundColor: "primary.main",
+              height: 50,
+              borderRadius: 20,
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              adminSubmitDispute();
             }}
           >
             Search

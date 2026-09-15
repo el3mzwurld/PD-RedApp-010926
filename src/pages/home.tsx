@@ -22,9 +22,19 @@ export type RenderedPage =
   | "users"
   | "payment link";
 
+export type AdminPages =
+  | "dashboard"
+  | "disputes"
+  | "merchant"
+  | "role"
+  | "settlement"
+  | "transaction"
+  | "wallet"
+  | "settings";
+
 export const Home = () => {
   const [page, setPage] = useState<RenderedPage>("dashboard");
-
+  const role = "admin";
   const handlePageChange = (page: RenderedPage) => {
     setPage(page);
   };
@@ -57,7 +67,7 @@ export const Home = () => {
   };
   return (
     <Box sx={{ width: "100%", height: "100vh", display: "flex" }}>
-      <Sidebar pageChange={handlePageChange} />
+      <Sidebar pageChange={handlePageChange} role={role} />
 
       <Container>{renderPage()}</Container>
     </Box>
