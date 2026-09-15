@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Stack,
   Table,
   TableBody,
@@ -7,15 +8,18 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  useTheme,
 } from "@mui/material";
 import { NavBar } from "../ui/navbar";
 import { motion } from "motion/react";
-import { InformationContainer } from "../ui/InformationContainer";
 import { Search } from "../ui/Search";
+import { ArrowDownward } from "@mui/icons-material";
 import { useState } from "react";
 
-export const Settlement = () => {
-  const [role, setRole] = useState<"merchant" | "admin">("admin");
+export const Settings = () => {
+  const [role, setRole] = useState<"admin" | "merchant">("admin");
+  const theme = useTheme();
+  const handleSubmit = (filter: string) => {};
   return (
     <Box
       sx={{
@@ -30,7 +34,7 @@ export const Settlement = () => {
         gap: 2.5,
       }}
     >
-      <NavBar />
+      <NavBar role={role} />
       <Box
         component={"main"}
         sx={{
@@ -62,10 +66,10 @@ export const Settlement = () => {
               cursor: "pointer",
               color: "red",
               fontWeight: 600,
-              fontSize: 16,
+              fontSize: 20,
             }}
           >
-            Disputes
+            Transactions
           </p>
         </motion.div>
         <section
@@ -85,37 +89,17 @@ export const Settlement = () => {
             direction={"row"}
             spacing={1}
             sx={{
-              flexWrap: "wrap",
               height: "auto",
-              rowGap: 4.5,
-              alignItems: "start",
-              justifyContent: "start",
-              columnGap: 2.5,
-              width: "100%",
-            }}
-          >
-            <InformationContainer
-              mode={role === "admin" ? "edit" : "read"}
-              name="Merchant ID"
-              content="Fresh Farms"
-            />
-          </Stack>
-          <Stack
-            direction={"row"}
-            spacing={1}
-            sx={{
-              height: 120,
               alignItems: "center",
               justifyContent: "start",
               gap: 4.5,
               width: "100%",
-              px: 5,
-              backgroundColor: "white",
-              py: { md: 15, xl: 10 },
-              boxShadow: "1.5px 1.5px 10px #7876769f",
+              backgroundColor: role === "admin" ? "white" : "none",
+              padding: 5,
+              borderRadius: 1.5,
             }}
           >
-            <Search mode="settlement" />
+            <Search mode="settings" onSubmit={handleSubmit} role="admin" />
           </Stack>
 
           <motion.div
@@ -143,6 +127,36 @@ export const Settlement = () => {
                 backgroundColor: "white",
               }}
             >
+              {/* download button */}
+              <div
+                style={{
+                  height: 40,
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <motion.button
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: 130,
+                    justifyContent: "center",
+                    gap: 10,
+                    height: "95%",
+                    backgroundColor: theme.palette.primary.main,
+                    border: "none",
+                    color: "white",
+                    cursor: "pointer",
+                    borderRadius: 5,
+                    fontWeight: 500,
+                  }}
+                >
+                  <ArrowDownward sx={{ width: 20 }} />
+                  Download
+                </motion.button>
+              </div>
+
               {/* container */}
               <TableContainer>
                 <Table
@@ -159,52 +173,73 @@ export const Settlement = () => {
                     <TableRow sx={{ border: "none" }}>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
                         S/N
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Account Name
+                        Merchant ID
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Account Number
+                        Payment Reference
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Batch Code
+                        Amount
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Currency
+                        Payment Method
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Reference
+                        Card Scheme
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
                         Status
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        Date Created
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        Transaction Date
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        Action
                       </TableCell>
                     </TableRow>
                   </TableHead>
@@ -212,52 +247,74 @@ export const Settlement = () => {
                     <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
                         1
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Oluwanimofe Bankole
+                        RED100023-JUMIA
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        098777453
+                        09877654gdhjm
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        001
+                        2,100.00
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        NGN
+                        Card
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        RT001
+                        MPGS
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Open
+                        Failed
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        2022/08/11
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        2022/08/12
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        {" "}
+                        <Button variant="text">VIEW</Button>
                       </TableCell>
                     </TableRow>
                   </TableBody>

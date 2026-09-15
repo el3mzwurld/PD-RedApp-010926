@@ -4,7 +4,14 @@ import { useState } from "react";
 
 interface SearchProps {
   onSubmit: (filter: string) => void;
-  mode: "default" | "settlement" | "disputes" | "transaction" | "users";
+  mode:
+    | "default"
+    | "settlement"
+    | "disputes"
+    | "transaction"
+    | "users"
+    | "merchant management"
+    | "settings";
   role: "merchant" | "admin";
 }
 
@@ -35,13 +42,12 @@ type Transaction = {
   paymentMethod: PaymentMethod;
 };
 
-type User = {
-  fName: string;
-  lName: string;
-  mobileNumber: string;
-  altMobile: string;
-  email: string;
-};
+interface MerchantFilter {
+  merchantID: string;
+  status: UserStatus;
+}
+
+type UserStatus = "new" | "inactive" | "active";
 
 export const Search = ({ onSubmit, mode, role }: SearchProps) => {
   const [query, setQuery] = useState("");
@@ -68,6 +74,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
   const [altPhone, setAltPhone] = useState("");
   const [email, setEmail] = useState("");
   const [merchantID, setMerchantID] = useState<string>("");
+  const [userStatus, setUserStatus] = useState<UserStatus | null>();
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -508,7 +515,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
           </Button>
         </Stack>
       )}
-      {mode === "transaction" && (
+      {mode === "transaction" && role !== "admin" && (
         <Stack
           component={"form"}
           direction={"row"}
@@ -1029,6 +1036,437 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
               required
               onChange={(e) => setEndDate(e.target.value)}
             ></input>
+          </div>
+          <Button
+            variant="contained"
+            type="submit"
+            sx={{
+              width: 180,
+              p: 1.25,
+              px: 5,
+              fontSize: 12,
+              backgroundColor: "primary.main",
+              height: 50,
+              borderRadius: 20,
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              adminSubmitDispute();
+            }}
+          >
+            Search
+          </Button>
+        </Stack>
+      )}
+      {mode === "merchant management" && (
+        <Stack
+          component={"form"}
+          direction={"row"}
+          sx={{
+            width: "auto",
+            height: "auto",
+            gap: 3.5,
+            alignItems: "end",
+            flexWrap: "wrap",
+          }}
+        >
+          {/* merchant ID */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 12,
+              gap: 5,
+            }}
+          >
+            <label>Merchant</label>
+            <select
+              style={{
+                width: 270,
+                height: 55,
+                padding: 1.8,
+                paddingLeft: 10,
+                paddingRight: 10,
+                fontSize: 14,
+                borderRadius: 10,
+                border: "2px solid lightgrey",
+                cursor: "pointer",
+                fontFamily: "poppins",
+                color: "lightgray",
+              }}
+              value={merchantID}
+              onChange={(e) => setMerchantID(e.target.value)}
+            >
+              <option disabled selected hidden>
+                Search by merchant ID
+              </option>
+            </select>
+          </div>
+          {/* User status */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 12,
+              gap: 5,
+            }}
+          >
+            <label>Status</label>
+            <select
+              value={userStatus ?? ""}
+              style={{
+                width: 270,
+                height: 55,
+                padding: 1.8,
+                paddingLeft: 10,
+                paddingRight: 10,
+                fontSize: 14,
+                borderRadius: 10,
+                border: "2px solid lightgrey",
+                cursor: "pointer",
+                fontFamily: "poppins",
+              }}
+              onChange={(e) => {
+                setUserStatus(e.target.value as UserStatus);
+              }}
+            >
+              <option disabled hidden selected>
+                Please select an option...
+              </option>
+              <option value={"Successful"}>New</option>
+              <option value={"Failed"}>Active</option>
+              <option value={"Pending"}>Inactive</option>
+            </select>
+          </div>
+          <Button
+            variant="contained"
+            type="submit"
+            sx={{
+              width: 180,
+              p: 1.25,
+              px: 5,
+              fontSize: 12,
+              backgroundColor: "primary.main",
+              height: 50,
+              borderRadius: 20,
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              adminSubmitDispute();
+            }}
+          >
+            Search
+          </Button>
+        </Stack>
+      )}
+      {mode === "transaction" && role === "admin" && (
+        <Stack
+          component={"form"}
+          direction={"column"}
+          sx={{
+            width: "auto",
+            height: "auto",
+            gap: 3.5,
+            flexWrap: "wrap",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              width: "auto",
+              height: "auto",
+              gap: 3.5,
+              alignItems: "end",
+              flexWrap: "wrap",
+              display: "flex",
+              justifyContent: "space-between",
+              rowGap: 30,
+              padding: 10,
+            }}
+          >
+            {/* merchant ID */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                fontSize: 12,
+                gap: 5,
+              }}
+            >
+              <label>Merchant ID</label>
+              <select
+                style={{
+                  width: 200,
+                  height: 55,
+                  padding: 1.8,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  fontSize: 14,
+                  borderRadius: 10,
+                  border: "2px solid lightgrey",
+                  cursor: "pointer",
+                  fontFamily: "poppins",
+                }}
+                value={merchantID}
+                onChange={(e) => setMerchantID(e.target.value)}
+              >
+                <option disabled selected hidden>
+                  Merchant ID
+                </option>
+              </select>
+            </div>
+            {/* transaction status */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                fontSize: 12,
+                gap: 5,
+              }}
+            >
+              <label>Transaction Status</label>
+              <select
+                value={transactionStatus}
+                style={{
+                  width: 200,
+                  height: 55,
+                  padding: 1.8,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  fontSize: 14,
+                  borderRadius: 10,
+                  border: "2px solid lightgrey",
+                  cursor: "pointer",
+                  fontFamily: "poppins",
+                }}
+                onChange={(e) => {
+                  setTransactionStatus(e.target.value as TransactionStatus);
+                }}
+              >
+                <option value={"Successful"}>Successful</option>
+                <option value={"Failed"}>Failed</option>
+                <option value={"Pending"}>Pending</option>
+                <option value={"Processing"}>Processing</option>
+              </select>
+            </div>
+            {/* Payment Method */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                fontSize: 12,
+                gap: 5,
+              }}
+            >
+              <label>Payment Method</label>
+              <select
+                value={paymentMethod}
+                style={{
+                  width: 190,
+                  height: 55,
+                  padding: 1.8,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  fontSize: 14,
+                  borderRadius: 10,
+                  border: "2px solid lightgrey",
+                  cursor: "pointer",
+                  fontFamily: "poppins",
+                }}
+                onChange={(e) => {
+                  setPaymentMethod(e.target.value as PaymentMethod);
+                }}
+              >
+                <option value={"Card"}>Card</option>
+                <option value={"Bank Transfer"}>Bank Transfer</option>
+              </select>
+            </div>
+            {/* Reference Number*/}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                fontSize: 12,
+                gap: 5,
+              }}
+            >
+              <label>Payment Reference</label>
+              <input
+                style={{
+                  width: 190,
+                  height: 55,
+                  padding: 1.8,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  fontSize: 14,
+                  borderRadius: 10,
+                  border: "2px solid gray",
+                  cursor: "pointer",
+                  fontFamily: "poppins",
+                }}
+                type="text"
+                value={refNumber}
+                required
+                onChange={(e) => setRefNumber(e.target.value)}
+              ></input>
+            </div>
+            {/* from  */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                fontSize: 12,
+                gap: 5,
+              }}
+            >
+              <label>From</label>
+              <input
+                className="blank-date"
+                style={{
+                  width: 230,
+                  height: 55,
+                  padding: 1.8,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  fontSize: 14,
+                  borderRadius: 10,
+                  border: "2px solid gray",
+                  cursor: "pointer",
+                  fontFamily: "poppins",
+                }}
+                type="date"
+                value={startDate}
+                required
+                onChange={(e) => setStartDate(e.target.value)}
+              ></input>
+            </div>
+            {/* end date */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                fontSize: 12,
+                gap: 5,
+              }}
+            >
+              <label>End Date</label>
+              <input
+                className="blank-date"
+                style={{
+                  width: 230,
+                  height: 55,
+                  padding: 1.8,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  fontSize: 14,
+                  borderRadius: 10,
+                  border: "2px solid gray",
+                  cursor: "pointer",
+                  fontFamily: "poppins",
+                }}
+                type="date"
+                value={endDate}
+                required
+                onChange={(e) => setEndDate(e.target.value)}
+              ></input>
+            </div>
+          </div>
+
+          <Button
+            variant="contained"
+            type="submit"
+            sx={{
+              width: 150,
+              p: 1.25,
+              px: 5,
+              fontSize: 12,
+              backgroundColor: "primary.main",
+              height: 50,
+              borderRadius: 25,
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              submitTransaction();
+            }}
+          >
+            Search
+          </Button>
+        </Stack>
+      )}
+      {mode === "settings" && (
+        <Stack
+          component={"form"}
+          direction={"row"}
+          sx={{
+            width: "auto",
+            height: "auto",
+            gap: 3.5,
+            alignItems: "end",
+            flexWrap: "wrap",
+          }}
+        >
+          {/* merchant ID */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 12,
+              gap: 5,
+            }}
+          >
+            <label>Email</label>
+            <input
+              style={{
+                width: 270,
+                height: 55,
+                padding: 1.8,
+                paddingLeft: 10,
+                paddingRight: 10,
+                fontSize: 14,
+                borderRadius: 10,
+                border: "2px solid lightgrey",
+                cursor: "pointer",
+                fontFamily: "poppins",
+                color: "lightgray",
+              }}
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            ></input>
+          </div>
+          {/* User status */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              fontSize: 12,
+              gap: 5,
+            }}
+          >
+            <label>Roles</label>
+            <select
+              value={""}
+              style={{
+                width: 270,
+                height: 55,
+                padding: 1.8,
+                paddingLeft: 10,
+                paddingRight: 10,
+                fontSize: 14,
+                borderRadius: 10,
+                border: "2px solid lightgrey",
+                cursor: "pointer",
+                fontFamily: "poppins",
+              }}
+            >
+              <option hidden selected>
+                Please select an option
+              </option>
+              <option value={"admin-1"}>Admin-1</option>
+              <option value={"admin-1"}>Admin-2</option>
+              <option value={"admin-3"}>Admin-3</option>
+              <option value={"admin-4"}>Admin-4</option>
+            </select>
           </div>
           <Button
             variant="contained"

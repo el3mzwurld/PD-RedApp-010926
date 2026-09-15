@@ -15,8 +15,10 @@ import { motion } from "motion/react";
 import { InformationContainer } from "../ui/InformationContainer";
 import { Search } from "../ui/Search";
 import { ArrowDownward } from "@mui/icons-material";
+import { useState } from "react";
 
 export const Transaction = () => {
+  const [role, setRole] = useState<"admin" | "merchant">("admin");
   const theme = useTheme();
   const handleSubmit = (filter: string) => {};
   return (
@@ -33,7 +35,7 @@ export const Transaction = () => {
         gap: 2.5,
       }}
     >
-      <NavBar />
+      <NavBar role={role} />
       <Box
         component={"main"}
         sx={{
@@ -88,33 +90,17 @@ export const Transaction = () => {
             direction={"row"}
             spacing={1}
             sx={{
-              flexWrap: "wrap",
-              height: "auto",
-              rowGap: 4.5,
-              alignItems: "start",
-              justifyContent: "start",
-              columnGap: 2.5,
-              width: "100%",
-            }}
-          >
-            <InformationContainer
-              mode="read"
-              name="Merchant ID"
-              content="Fresh Farms"
-            />
-          </Stack>
-          <Stack
-            direction={"row"}
-            spacing={1}
-            sx={{
               height: "auto",
               alignItems: "center",
               justifyContent: "start",
               gap: 4.5,
               width: "100%",
+              backgroundColor: role === "admin" ? "white" : "none",
+              padding: 5,
+              borderRadius: 1.5,
             }}
           >
-            <Search mode="transaction" onSubmit={handleSubmit} />
+            <Search mode="transaction" onSubmit={handleSubmit} role="admin" />
           </Stack>
 
           <motion.div
@@ -130,17 +116,6 @@ export const Transaction = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: "easeIn" }}
           >
-            {/* title */}
-            <p
-              style={{
-                cursor: "pointer",
-                color: "red",
-                fontWeight: 600,
-                fontSize: 18,
-              }}
-            >
-              List of Disputes
-            </p>
             {/* list container */}
             <div
               style={{

@@ -99,6 +99,12 @@ const adminLinks: AdminSidebarItem[] = [
     },
   },
   {
+    Icon: Handshake,
+    label: {
+      main: "settlement",
+    },
+  },
+  {
     Icon: AttachMoney,
     label: {
       main: "transaction",
@@ -248,7 +254,7 @@ export const Sidebar = ({ pageChange, role = "admin" }: SidebarProps) => {
 interface SidebarItemProps {
   Icon: SvgIconComponent;
   label: string;
-  click: (page: RenderedPage) => void;
+  click: (page: RenderedPage, sublink?: string) => void;
   active: boolean;
 }
 
@@ -296,7 +302,7 @@ const SidebarItem = ({ Icon, label, click, active }: SidebarItemProps) => {
 interface AdminSidebarItemProps {
   Icon: SvgIconComponent;
   label: AdminPages;
-  click: (page: RenderedPage) => void;
+  click: (page: RenderedPage, sublink?: string) => void;
   active: boolean;
   sublinks?: string[];
 }
@@ -358,7 +364,7 @@ const AdminSidebarItem = ({
             console.log(label.toLowerCase());
           }}
         >
-          {label}
+          {label.charAt(0).toUpperCase() + label.slice(1)}
         </Typography>
       </Box>
 
@@ -366,7 +372,7 @@ const AdminSidebarItem = ({
         sublinks.map((link, index) => (
           <li
             style={{
-              width: "80%",
+              width: "50%",
               height: "auto",
               color: "white",
               fontSize: 12,
@@ -376,6 +382,9 @@ const AdminSidebarItem = ({
               listStyleType: "square",
             }}
             key={index}
+            onClick={() => {
+              click(label.toLowerCase() as RenderedPage, link);
+            }}
           >
             {link.charAt(0).toUpperCase() + link.slice(1)}
           </li>

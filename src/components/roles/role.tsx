@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Stack,
   Table,
   TableBody,
@@ -7,15 +8,16 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  useTheme,
 } from "@mui/material";
 import { NavBar } from "../ui/navbar";
 import { motion } from "motion/react";
-import { InformationContainer } from "../ui/InformationContainer";
 import { Search } from "../ui/Search";
+import { ArrowDownward } from "@mui/icons-material";
 import { useState } from "react";
 
-export const Settlement = () => {
-  const [role, setRole] = useState<"merchant" | "admin">("admin");
+export const Role = () => {
+  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -50,7 +52,7 @@ export const Settlement = () => {
             justifyContent: "start",
             alignItems: "center",
             padding: "5px 0px",
-            gap: "60px",
+            gap: "12px",
             display: "flex",
           }}
           initial={{ opacity: 0, x: -20 }}
@@ -62,60 +64,114 @@ export const Settlement = () => {
               cursor: "pointer",
               color: "red",
               fontWeight: 600,
-              fontSize: 16,
+              fontSize: 20,
             }}
           >
-            Disputes
+            Roles
           </p>
         </motion.div>
         <section
           style={{
             width: "100%",
-            minHeight: "100vh",
+            minHeight: "80vh",
             backgroundColor: "lightgray",
             borderRadius: 12,
             padding: "45px",
             display: "flex",
             flexDirection: "column",
-            alignItems: "flex-start",
+            alignItems: "center",
             gap: 40,
+            justifyContent: "start",
           }}
         >
           <Stack
-            direction={"row"}
-            spacing={1}
+            direction={"column"}
+            spacing={3}
             sx={{
-              flexWrap: "wrap",
               height: "auto",
-              rowGap: 4.5,
-              alignItems: "start",
-              justifyContent: "start",
-              columnGap: 2.5,
-              width: "100%",
-            }}
-          >
-            <InformationContainer
-              mode={role === "admin" ? "edit" : "read"}
-              name="Merchant ID"
-              content="Fresh Farms"
-            />
-          </Stack>
-          <Stack
-            direction={"row"}
-            spacing={1}
-            sx={{
-              height: 120,
               alignItems: "center",
-              justifyContent: "start",
+              justifyContent: "center",
               gap: 4.5,
               width: "100%",
-              px: 5,
-              backgroundColor: "white",
-              py: { md: 15, xl: 10 },
-              boxShadow: "1.5px 1.5px 10px #7876769f",
+              backgroundColor: "none",
+              padding: 1,
             }}
           >
-            <Search mode="settlement" />
+            {/* role creation container */}
+
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                gap: 20,
+                alignItems: "end",
+                flexWrap: "wrap",
+                justifyContent: "start",
+                width: "100%",
+                rowGap: 20,
+              }}
+            >
+              {/* role name */}
+              <Stack spacing={1}>
+                <label style={{ fontSize: 14 }}>Role Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter role name"
+                  style={{
+                    width: 220,
+                    height: 48,
+                    backgroundColor: "white",
+                    border: "none",
+                    padding: 10,
+                    fontFamily: "poppins",
+                  }}
+                ></input>
+              </Stack>
+              {/* role description */}
+              <Stack spacing={1}>
+                <label style={{ fontSize: 14 }}>Role Description</label>
+                <input
+                  type="text"
+                  placeholder="Enter role description"
+                  style={{
+                    width: 700,
+                    height: 48,
+                    backgroundColor: "white",
+                    border: "none",
+                    padding: 10,
+                    fontFamily: "poppins",
+                  }}
+                ></input>
+              </Stack>
+              {/* select permission */}
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "white",
+                  color: "primary.main",
+                  height: 45,
+                  fontSize: 14,
+                  width: 300,
+                }}
+              >
+                Select Permissions
+              </Button>
+            </div>
+
+            {/* action button */}
+
+            <Button
+              variant="contained"
+              sx={{
+                width: 150,
+                height: 48,
+                fontSize: 14,
+                color: "white",
+                borderRadius: 25,
+              }}
+            >
+              Submit
+            </Button>
           </Stack>
 
           <motion.div
@@ -141,8 +197,39 @@ export const Settlement = () => {
                 paddingTop: 20,
                 paddingBottom: 20,
                 backgroundColor: "white",
+                borderRadius: 12,
               }}
             >
+              {/* download button */}
+              <div
+                style={{
+                  height: 40,
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <motion.button
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: 130,
+                    justifyContent: "center",
+                    gap: 10,
+                    height: "95%",
+                    backgroundColor: theme.palette.primary.main,
+                    border: "none",
+                    color: "white",
+                    cursor: "pointer",
+                    borderRadius: 5,
+                    fontWeight: 500,
+                  }}
+                >
+                  <ArrowDownward sx={{ width: 20 }} />
+                  Download
+                </motion.button>
+              </div>
+
               {/* container */}
               <TableContainer>
                 <Table
@@ -159,52 +246,38 @@ export const Settlement = () => {
                     <TableRow sx={{ border: "none" }}>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
                         S/N
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Account Name
+                        Name
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Account Number
+                        Description
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Batch Code
+                        Date Created
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Currency
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "left",
-                        }}
-                      >
-                        Reference
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "left",
-                        }}
-                      >
-                        Status
+                        Action
                       </TableCell>
                     </TableRow>
                   </TableHead>
@@ -212,52 +285,38 @@ export const Settlement = () => {
                     <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
                         1
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Oluwanimofe Bankole
+                        Admin
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        098777453
+                        Full access to manage users and settings
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        001
+                        12/09/2026
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        NGN
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "left",
-                        }}
-                      >
-                        RT001
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "left",
-                        }}
-                      >
-                        Open
+                        <Button variant="text">VIEW</Button>
                       </TableCell>
                     </TableRow>
                   </TableBody>

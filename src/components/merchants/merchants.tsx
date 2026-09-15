@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Stack,
   Table,
   TableBody,
@@ -7,15 +8,22 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  useTheme,
 } from "@mui/material";
 import { NavBar } from "../ui/navbar";
 import { motion } from "motion/react";
-import { InformationContainer } from "../ui/InformationContainer";
 import { Search } from "../ui/Search";
+import { ArrowDownward } from "@mui/icons-material";
 import { useState } from "react";
-
-export const Settlement = () => {
+interface MerchantProps {
+  mode: "manage" | "commercials";
+  role: "admin" | "merchant";
+}
+export const Merchants = ({ mode = "manage" }: MerchantProps) => {
+  const handleSubmit = (filter: string) => {};
   const [role, setRole] = useState<"merchant" | "admin">("admin");
+  const theme = useTheme();
+
   return (
     <Box
       sx={{
@@ -50,7 +58,7 @@ export const Settlement = () => {
             justifyContent: "start",
             alignItems: "center",
             padding: "5px 0px",
-            gap: "60px",
+            gap: "12px",
             display: "flex",
           }}
           initial={{ opacity: 0, x: -20 }}
@@ -62,60 +70,47 @@ export const Settlement = () => {
               cursor: "pointer",
               color: "red",
               fontWeight: 600,
-              fontSize: 16,
+              fontSize: 20,
             }}
           >
-            Disputes
+            {mode === "manage"
+              ? "Manage Merchants"
+              : "Commercials Configuration"}
           </p>
         </motion.div>
         <section
           style={{
             width: "100%",
-            minHeight: "100vh",
+            minHeight: "80vh",
             backgroundColor: "lightgray",
             borderRadius: 12,
             padding: "45px",
             display: "flex",
             flexDirection: "column",
-            alignItems: "flex-start",
+            alignItems: "center",
             gap: 40,
+            justifyContent: "start",
           }}
         >
           <Stack
             direction={"row"}
             spacing={1}
             sx={{
-              flexWrap: "wrap",
               height: "auto",
-              rowGap: 4.5,
-              alignItems: "start",
-              justifyContent: "start",
-              columnGap: 2.5,
-              width: "100%",
-            }}
-          >
-            <InformationContainer
-              mode={role === "admin" ? "edit" : "read"}
-              name="Merchant ID"
-              content="Fresh Farms"
-            />
-          </Stack>
-          <Stack
-            direction={"row"}
-            spacing={1}
-            sx={{
-              height: 120,
               alignItems: "center",
               justifyContent: "start",
               gap: 4.5,
               width: "100%",
-              px: 5,
-              backgroundColor: "white",
-              py: { md: 15, xl: 10 },
-              boxShadow: "1.5px 1.5px 10px #7876769f",
+              backgroundColor: role === "admin" ? "white" : "none",
+              padding: role === "admin" ? 5 : 0,
+              boxShadow: role === "admin" ? "2px 2.5px 10px gray" : "none",
             }}
           >
-            <Search mode="settlement" />
+            <Search
+              mode="merchant management"
+              onSubmit={handleSubmit}
+              role="admin"
+            />
           </Stack>
 
           <motion.div
@@ -143,6 +138,36 @@ export const Settlement = () => {
                 backgroundColor: "white",
               }}
             >
+              {/* download button */}
+              <div
+                style={{
+                  height: 40,
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <motion.button
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: 130,
+                    justifyContent: "center",
+                    gap: 10,
+                    height: "95%",
+                    backgroundColor: theme.palette.primary.main,
+                    border: "none",
+                    color: "white",
+                    cursor: "pointer",
+                    borderRadius: 5,
+                    fontWeight: 500,
+                  }}
+                >
+                  <ArrowDownward sx={{ width: 20 }} />
+                  Download
+                </motion.button>
+              </div>
+
               {/* container */}
               <TableContainer>
                 <Table
@@ -159,52 +184,45 @@ export const Settlement = () => {
                     <TableRow sx={{ border: "none" }}>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
                         S/N
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Account Name
+                        Merchant ID
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Account Number
+                        Merchant Name
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
-                        }}
-                      >
-                        Batch Code
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "left",
-                        }}
-                      >
-                        Currency
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "left",
-                        }}
-                      >
-                        Reference
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
                         Status
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        Date Created
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                        }}
+                      >
+                        Action
                       </TableCell>
                     </TableRow>
                   </TableHead>
@@ -212,52 +230,45 @@ export const Settlement = () => {
                     <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
                         1
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        Oluwanimofe Bankole
+                        RED100023-JUMIA
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        098777453
+                        Jumia
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        001
+                        Active
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        NGN
+                        12/09/2026
                       </TableCell>
                       <TableCell
                         sx={{
-                          textAlign: "left",
+                          textAlign: "center",
                         }}
                       >
-                        RT001
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "left",
-                        }}
-                      >
-                        Open
+                        <Button variant="text">VIEW</Button>
                       </TableCell>
                     </TableRow>
                   </TableBody>
