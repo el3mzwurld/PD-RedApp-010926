@@ -15,6 +15,7 @@ import { Merchants } from "../components/merchants/merchants";
 import { Role } from "../components/roles/role";
 import { NotFound } from "../components/not-found/notfound";
 import { Settings } from "./../components/settings/settings";
+import { useUser } from "../context/user";
 
 export type RenderedPage =
   | "dashboard"
@@ -39,6 +40,7 @@ export type AdminPages =
 export const Home = () => {
   const [page, setPage] = useState<RenderedPage | AdminPages>("dashboard");
   const [subLink, setSubLink] = useState<string>("");
+  const { user } = useUser();
   const role = "admin";
   const handlePageChange = (
     page: RenderedPage | AdminPages,

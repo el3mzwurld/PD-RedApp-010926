@@ -183,42 +183,14 @@ export const Settings = () => {
                           textAlign: "center",
                         }}
                       >
-                        Merchant ID
+                        Email
                       </TableCell>
                       <TableCell
                         sx={{
                           textAlign: "center",
                         }}
                       >
-                        Payment Reference
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Amount
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Payment Method
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Card Scheme
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Status
+                        Role
                       </TableCell>
                       <TableCell
                         sx={{
@@ -226,13 +198,6 @@ export const Settings = () => {
                         }}
                       >
                         Date Created
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Transaction Date
                       </TableCell>
                       <TableCell
                         sx={{
@@ -257,42 +222,14 @@ export const Settings = () => {
                           textAlign: "center",
                         }}
                       >
-                        RED100023-JUMIA
+                        admin@example.com
                       </TableCell>
                       <TableCell
                         sx={{
                           textAlign: "center",
                         }}
                       >
-                        09877654gdhjm
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        2,100.00
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Card
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        MPGS
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Failed
+                        Admin
                       </TableCell>
                       <TableCell
                         sx={{
@@ -306,15 +243,8 @@ export const Settings = () => {
                           textAlign: "center",
                         }}
                       >
-                        2022/08/12
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
                         {" "}
-                        <Button variant="text">VIEW</Button>
+                        <Button variant="text">EDIT</Button>
                       </TableCell>
                     </TableRow>
                   </TableBody>
