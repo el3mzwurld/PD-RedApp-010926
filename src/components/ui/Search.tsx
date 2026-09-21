@@ -1,6 +1,7 @@
 import { Button, Stack } from "@mui/material";
 import type React from "react";
 import { useState } from "react";
+import type { Dispute, DisputeFilter } from "../../lib/types";
 
 interface SearchProps {
   onSubmit: (filter: string) => void;
@@ -14,15 +15,6 @@ interface SearchProps {
     | "settings";
   role: "merchant" | "admin";
 }
-
-type Dispute = {
-  start: string;
-  due: string;
-  paymentRef?: string;
-  customerEmail?: string;
-  disputeStatus: "all" | "accepted" | "declined";
-  resolutionStatus: "all" | "resolved" | "unresolved";
-};
 
 interface AdminDisputeFilter {
   merchantID?: string;
@@ -55,11 +47,9 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
   const [endDate, setEndDate] = useState("");
   const [paymentRef, setPaymentRef] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
-  const [disputeStatus, setDisputeStatus] = useState<
-    "all" | "accepted" | "declined"
-  >("all");
-  const [status, setStatus] = useState<"all" | "resolved" | "unresolved">(
-    "all",
+  const [disputeStatus, setDisputeStatus] = useState<Dispute["status"]>("Open");
+  const [status, setStatus] = useState<"pending" | "settled" | "disputed">(
+    "pending",
   );
   const [settlementSearchParams, setSettlementSearchParams] = useState("");
   const [transactionStatus, setTransactionStatus] =
@@ -83,13 +73,13 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
     onSubmit(query);
   };
   const submitDispute = () => {
-    const disputeFilter: Dispute = {
-      start: startDate,
+    const disputeFilter: Partial<DisputeFilter> = {
+      paymentRef,
+      customerEmail,
+      status: disputeStatus,
+      createdAt: startDate,
       due: endDate,
-      paymentRef: paymentRef ?? undefined,
-      customerEmail: customerEmail ?? undefined,
-      disputeStatus,
-      resolutionStatus: status,
+      transactionStatus: status,
     };
 
     const filter = JSON.stringify(disputeFilter);
@@ -181,7 +171,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
           </Button>
         </Stack>
       )}
-      {mode === "disputes" && role !== "admin" && (
+      {mode === "disputes" && role === "merchant" && (
         <Stack
           component={"form"}
           direction={"row"}
@@ -333,14 +323,14 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
                 fontFamily: "poppins",
               }}
               onChange={(e) => {
-                setDisputeStatus(
-                  e.target.value as "all" | "declined" | "accepted",
-                );
+                setDisputeStatus(e.target.value as typeof disputeStatus);
               }}
             >
-              <option value={"all"}>All</option>
-              <option value={"accepted"}>Accepted</option>
-              <option value={"declined"}>Rejected</option>
+              <option value={"Open"}>All</option>
+              <option value={"Accepted"}>Accepted</option>
+              <option value={"Declined"}>Rejected</option>
+              <option value={"Fully Declined"}>Fully Rejected</option>
+              <option value={"Fully Accepted"}>Fully Accepted</option>
             </select>
           </div>
           {/* status */}

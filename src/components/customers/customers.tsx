@@ -19,17 +19,29 @@ import { useMerchant } from "../../hooks/useMerchant";
 import { useState } from "react";
 import { PopupModal } from "../ui/Popup";
 import type { Customer } from "../../lib/types";
+import { Paginate } from "../ui/paginate";
 
 export const Customers = () => {
   const [open, setOpen] = useState(false);
   const [searchResult, setSearchResult] = useState<Customer[]>([]);
+  const [paginated, setPaginated] = useState<Customer[]>([]);
+  const [page, setPage] = useState(1);
   const handleSubmit = (query: string) => {
     const result = handleCustomerSearch(query);
     setSearchResult(result);
   };
+  const getPaginated = (array: unknown[]) => {
+    setPaginated(array as Customer[]);
+  };
+  const nextPage = () => {
+    setPage((prev) => prev + 1);
+  };
+  const prevPage = () => {
+    setPage((prev) => prev - 1);
+  };
   const { user } = useUser();
   const userID = user!.role === "merchant" ? user!.profile.ID : "";
-  const { customers, error, loading, customerCount, handleCustomerSearch } =
+  const { customers, customerCount, handleCustomerSearch } =
     useMerchant(userID);
 
   if (user!.role === "admin") {
@@ -167,7 +179,7 @@ export const Customers = () => {
               <TableBody sx={{ width: "100%", padding: 1.8, gap: 2, px: 3 }}>
                 {customers.length !== 0 ? (
                   searchResult.length === 0 ? (
-                    customers.map((cus, index) => (
+                    paginated.map((cus, index) => (
                       <TableRow sx={{ padding: 2.5 }} key={index}>
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>
@@ -253,6 +265,14 @@ export const Customers = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <Paginate
+            page={page}
+            itemsPerPage={5}
+            array={customers}
+            returnArray={getPaginated}
+            nextPage={nextPage}
+            prev={prevPage}
+          />
         </section>
       </Box>
     </Box>

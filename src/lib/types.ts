@@ -80,22 +80,21 @@ export type Dispute = {
   cardScheme: string;
   customerEmail: string;
   transactionStatus: TransactionStatus;
+  status: DisputeStatus;
 };
 
 type LinkedMerchant = Pick<Merchant, "ID" | "fName" | "lName">;
 
-// export type TransactionStatus =
-//   | "Open"
-//   | "Accepted"
-//   | "Declined"
-//   | "Fully Accepted"
-//   | "Fully Declined";
+export type DisputeStatus =
+  | "Open"
+  | "Accepted"
+  | "Declined"
+  | "Fully Accepted"
+  | "Fully Declined";
 
-export type DisputeStatus = "open" | "pending" | "closed";
+export type SettlementStatus = "open" | "successful" | "disputed" | "failed";
 
-export type SettlementStatus = "successful" | "failed" | "pending";
-
-export type TransactionStatus = "pending" | "settled" | "disputed";
+export type TransactionStatus = "successful" | "failed" | "pending";
 
 export type Settlement = {
   merchant: LinkedMerchant;
@@ -123,4 +122,21 @@ export type Customer = {
   };
 };
 
-export type Transaction = {};
+export type Transaction = {
+  merchant: LinkedMerchant;
+  paymentRef: string;
+  amount: string;
+  paymentMethod: string;
+  cardScheme: string;
+  status: TransactionStatus;
+};
+
+export type DisputeFilter = Pick<
+  Dispute,
+  | "status"
+  | "createdAt"
+  | "due"
+  | "customerEmail"
+  | "paymentRef"
+  | "transactionStatus"
+>;

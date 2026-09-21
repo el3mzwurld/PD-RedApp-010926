@@ -1,0 +1,146 @@
+[
+  {
+    "merchant": {
+      "ID": "JAZ-688E62",
+      "fName": "Adaeze",
+      "lName": "Okafor"
+    },
+    "paymentRef": "TXN-20260818-001",
+    "amount": "25000.00",
+    "paymentMethod": "Card",
+    "cardScheme": "Visa",
+    "status": "successful"
+  },
+  {
+    "merchant": {
+      "ID": "JAZ-688E62",
+      "fName": "Chinedu",
+      "lName": "Eze"
+    },
+    "paymentRef": "TXN-20260818-002",
+    "amount": "18540.75",
+    "paymentMethod": "Bank Transfer",
+    "cardScheme": "N/A",
+    "status": "pending"
+  },
+  {
+    "merchant": {
+      "ID": "JAZ-688E62",
+      "fName": "Mariam",
+      "lName": "Yusuf"
+    },
+    "paymentRef": "TXN-20260818-003",
+    "amount": "49200.00",
+    "paymentMethod": "Card",
+    "cardScheme": "Mastercard",
+    "status": "successful"
+  },
+  {
+    "merchant": {
+      "ID": "JAZ-688E62",
+      "fName": "Adaeze",
+      "lName": "Okafor"
+    },
+    "paymentRef": "TXN-20260819-004",
+    "amount": "6800.00",
+    "paymentMethod": "Wallet",
+    "cardScheme": "N/A",
+    "status": "failed"
+  },
+  {
+    "merchant": {
+      "ID": "FRE-004",
+      "fName": "Ifeoma",
+      "lName": "Nwosu"
+    },
+    "paymentRef": "TXN-20260819-005",
+    "amount": "120000.00",
+    "paymentMethod": "Card",
+    "cardScheme": "Verve",
+    "status": "successful"
+  },
+  {
+    "merchant": {
+      "ID": "FRE-002",
+      "fName": "Chinedu",
+      "lName": "Eze"
+    },
+    "paymentRef": "TXN-20260820-006",
+    "amount": "7600.50",
+    "paymentMethod": "Bank Transfer",
+    "cardScheme": "N/A",
+    "status": "pending"
+  },
+  {
+    "merchant": {
+      "ID": "FRE-005",
+      "fName": "Bola",
+      "lName": "Adebayo"
+    },
+    "paymentRef": "TXN-20260820-007",
+    "amount": "33450.00",
+    "paymentMethod": "Card",
+    "cardScheme": "Visa",
+    "status": "successful"
+  },
+  {
+    "merchant": {
+      "ID": "FRE-001",
+      "fName": "Adaeze",
+      "lName": "Okafor"
+    },
+    "paymentRef": "TXN-20260821-008",
+    "amount": "15025.25",
+    "paymentMethod": "Card",
+    "cardScheme": "Mastercard",
+    "status": "failed"
+  },
+  {
+    "merchant": {
+      "ID": "FRE-003",
+      "fName": "Mariam",
+      "lName": "Yusuf"
+    },
+    "paymentRef": "TXN-20260821-009",
+    "amount": "21000.00",
+    "paymentMethod": "Wallet",
+    "cardScheme": "N/A",
+    "status": "successful"
+  },
+  {
+    "merchant": {
+      "ID": "FRE-006",
+      "fName": "Tunde",
+      "lName": "Balogun"
+    },
+    "paymentRef": "TXN-20260822-010",
+    "amount": "8900.00",
+    "paymentMethod": "Card",
+    "cardScheme": "Verve",
+    "status": "pending"
+  },
+  {
+    "merchant": {
+      "ID": "FRE-004",
+      "fName": "Ifeoma",
+      "lName": "Nwosu"
+    },
+    "paymentRef": "TXN-20260822-011",
+    "amount": "47800.90",
+    "paymentMethod": "Bank Transfer",
+    "cardScheme": "N/A",
+    "status": "successful"
+  },
+  {
+    "merchant": {
+      "ID": "FRE-005",
+      "fName": "Bola",
+      "lName": "Adebayo"
+    },
+    "paymentRef": "TXN-20260823-012",
+    "amount": "13250.40",
+    "paymentMethod": "Card",
+    "cardScheme": "Visa",
+    "status": "failed"
+  }
+]

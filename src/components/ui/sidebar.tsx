@@ -19,7 +19,7 @@ import {
 } from "@mui/icons-material";
 import logo from "../img/logo.png";
 import type { AdminPages, RenderedPage } from "../../pages/home";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type SidebarItem = {
   Icon: SvgIconComponent;
@@ -167,7 +167,6 @@ export const Sidebar = ({ role = "admin" }: SidebarProps) => {
           height: "auto",
           flex: 1,
           width: "100%",
-          px: 1,
           justifyContent: "start",
           marginBottom: 2.5,
         }}
@@ -257,17 +256,37 @@ interface SidebarItemProps {
 
 const SidebarItem = ({ Icon, label, active }: SidebarItemProps) => {
   const nav = useNavigate();
+  const location = useLocation();
+  const path = location.pathname;
+
+  const isPage = () => {
+    const pathname = path.split("/")[1];
+    if (label.toLowerCase() === "dashboard" && path === "/") {
+      return true;
+    }
+    if (label.toLowerCase() === "payment link" && pathname === "payment-link") {
+      return true;
+    }
+    if (label.toLowerCase() === pathname.toLowerCase()) {
+      return true;
+    }
+    return false;
+  };
+
+  console.log(path, isPage(), label);
+
   return (
     <Box
       sx={{
         width: "100%",
-        height: { md: 45.5, xl: 55 },
+        height: active ? { md: 45, xl: 55 } : { md: 50 },
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        px: 0.5,
         gap: 2,
         cursor: "pointer",
+        backgroundColor: isPage() ? "white" : "none",
+        borderRadius: active && 25,
       }}
       title={label}
       aria-description={`${label}`}
@@ -286,16 +305,16 @@ const SidebarItem = ({ Icon, label, active }: SidebarItemProps) => {
       <Icon
         sx={{
           width: 20,
-          color: "white",
+          color: isPage() ? "red" : "white",
         }}
       />
       <Typography
         variant="body2"
         sx={{
           width: "70%",
-          color: "white",
           fontWeight: 550,
           display: active ? "none" : "block",
+          color: isPage() ? "red" : "white",
         }}
       >
         {label}
@@ -317,6 +336,20 @@ const AdminSidebarItem = ({
   sublinks,
 }: AdminSidebarItemProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const path = location.pathname;
+
+  const isPage = () => {
+    if (label === "dashboard" && path === "/") {
+      return true;
+    }
+    if (label.toLowerCase() === path.toLowerCase()) {
+      return true;
+    }
+    return false;
+  };
+
+  console.log(path, isPage);
   return (
     <Box
       sx={{
@@ -342,12 +375,13 @@ const AdminSidebarItem = ({
           px: 0.5,
           gap: 2,
           cursor: "pointer",
+          backgroundColor: isPage() ? "white" : "none",
         }}
       >
         <Icon
           sx={{
             width: 20,
-            color: "white",
+            color: isPage() ? "red" : "white",
           }}
           onClick={() => {
             if (label.toLowerCase() === "dashboard") {
@@ -360,8 +394,8 @@ const AdminSidebarItem = ({
         <Typography
           variant="body2"
           sx={{
-            width: "70%",
-            color: "white",
+            width: "65%",
+            color: isPage() ? "red" : "white",
             fontWeight: 550,
             display: active ? "none" : "flex",
             position: "relative",
@@ -379,6 +413,7 @@ const AdminSidebarItem = ({
         >
           {label.charAt(0).toUpperCase() + label.slice(1)}
         </Typography>
+        <ChevronRight sx={{ width: "18px", color: "white" }} />
       </Box>
 
       {sublinks &&

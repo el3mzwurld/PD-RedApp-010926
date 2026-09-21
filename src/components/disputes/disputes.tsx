@@ -16,11 +16,22 @@ import { InformationContainer } from "../ui/InformationContainer";
 import { Search } from "../ui/Search";
 import { ArrowDownward } from "@mui/icons-material";
 import { useState } from "react";
+import { useUser } from "../../context/user";
+import { useMerchant } from "../../hooks/useMerchant";
 
 export const Disputes = () => {
   const theme = useTheme();
-  const [role, setRole] = useState<"merchant" | "admin">("admin");
   const handleSubmit = (filter: string) => {};
+  const { user } = useUser();
+  const role = user!.role;
+  const id = user!.role === "merchant" ? user!.profile.ID : "";
+  const { disputes } = useMerchant(id);
+
+  const formatDate = (query: string): string => {
+    const date = new Date(query);
+    const formatted = date.toLocaleDateString();
+    return formatted;
+  };
   return (
     <Box
       sx={{
@@ -35,7 +46,7 @@ export const Disputes = () => {
         gap: 2.5,
       }}
     >
-      <NavBar role={role} />
+      <NavBar />
       <Box
         component={"main"}
         sx={{
@@ -124,7 +135,7 @@ export const Disputes = () => {
               boxShadow: role === "admin" ? "2px 2.5px 10px gray" : "none",
             }}
           >
-            <Search mode="disputes" onSubmit={handleSubmit} role="admin" />
+            <Search mode="disputes" onSubmit={handleSubmit} role={role} />
           </Stack>
 
           <motion.div
@@ -273,72 +284,146 @@ export const Disputes = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        1
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        RED100023-JUMIA
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        09877654gdhjm
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        2,100.00
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Card
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        MPGS
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        2022/08/11
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        2022/08/12
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        {" "}
-                        <Button variant="text">VIEW</Button>
-                      </TableCell>
-                    </TableRow>
+                    {disputes.length !== 0 ? (
+                      disputes.map((d, index) => (
+                        <TableRow
+                          sx={{ backgroundColor: "#F4F4F4" }}
+                          key={index}
+                        >
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {index + 1}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {d.merchant.ID}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {d.paymentRef}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            NGN {d.amount}.00
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {d.paymentMtd}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            MPGS
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {formatDate(d.createdAt)}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {formatDate(d.due)}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {" "}
+                            <Button variant="text">VIEW</Button>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          -
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          -
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          -
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          -{" "}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          -
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          -
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          -
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          -
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          {" "}
+                          <Button variant="text">VIEW</Button>
+                        </TableCell>
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>

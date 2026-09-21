@@ -16,9 +16,14 @@ import { InformationContainer } from "../ui/InformationContainer";
 import { Search } from "../ui/Search";
 import { ArrowDownward } from "@mui/icons-material";
 import { useState } from "react";
+import { useUser } from "../../context/user";
+import { useMerchant } from "../../hooks/useMerchant";
 
 export const Transaction = () => {
-  const [role, setRole] = useState<"admin" | "merchant">("admin");
+  const { user } = useUser();
+  const role = user!.role;
+  const id = role === "merchant" ? user!.profile.ID : "";
+  const { transactions } = useMerchant(id);
   const theme = useTheme();
   const handleSubmit = (filter: string) => {};
   return (
@@ -35,7 +40,7 @@ export const Transaction = () => {
         gap: 2.5,
       }}
     >
-      <NavBar role={role} />
+      <NavBar />
       <Box
         component={"main"}
         sx={{
@@ -100,7 +105,7 @@ export const Transaction = () => {
               borderRadius: 1.5,
             }}
           >
-            <Search mode="transaction" onSubmit={handleSubmit} role="admin" />
+            <Search mode="transaction" onSubmit={handleSubmit} role={role} />
           </Stack>
 
           <motion.div
@@ -245,79 +250,52 @@ export const Transaction = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        1
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        RED100023-JUMIA
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        09877654gdhjm
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        2,100.00
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Card
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        MPGS
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Failed
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        2022/08/11
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        2022/08/12
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        {" "}
-                        <Button variant="text">VIEW</Button>
-                      </TableCell>
-                    </TableRow>
+                    {transactions.length > 0 ? (
+                      transactions.map((transaction, index) => (
+                        <TableRow
+                          key={`${transaction.paymentRef}-${index}`}
+                          sx={{ backgroundColor: "#F4F4F4" }}
+                        >
+                          <TableCell sx={{ textAlign: "center" }}>
+                            {index + 1}
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "center" }}>
+                            {transaction.merchant.ID}
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "center" }}>
+                            {transaction.paymentRef}
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "center" }}>
+                            {transaction.amount}
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "center" }}>
+                            {transaction.paymentMethod}
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "center" }}>
+                            {transaction.cardScheme}
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "center" }}>
+                            {transaction.status.charAt(0).toUpperCase() +
+                              transaction.status.slice(1)}
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "center" }}>
+                            N/A
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "center" }}>
+                            N/A
+                          </TableCell>
+                          <TableCell sx={{ textAlign: "center" }}>
+                            <Button variant="text">VIEW</Button>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
+                        <TableCell colSpan={10} sx={{ textAlign: "center" }}>
+                          No transactions available.
+                        </TableCell>
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>

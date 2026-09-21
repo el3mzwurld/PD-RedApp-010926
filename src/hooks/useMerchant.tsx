@@ -8,13 +8,11 @@ export const useMerchant = (id: string) => {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [disputes, setDisputes] = useState<Dispute[]>([]);
   const [settlements, setSettlements] = useState<Settlement[]>([]);
-  const [transaction, setTransaction] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [customerCount, setCustomerCount] = useState(0);
-  const [searchResult, setSearchResult] = useState<
-    Customer[] | Dispute[] | Settlement[] | Transaction[]
-  >([]);
+
   useEffect(() => {
     async function loadCustomer() {
       setLoading(true);
@@ -27,7 +25,6 @@ export const useMerchant = (id: string) => {
           );
 
         const data: Customer[] = await response.json();
-        console.log(data);
         setCustomers(data.filter((cus) => cus.merchant.ID === id));
         setCustomerCount(data.filter((cus) => cus.merchant.ID === id).length);
       } catch (error) {
@@ -39,7 +36,75 @@ export const useMerchant = (id: string) => {
         setLoading(false);
       }
     }
+    async function loadDisputes() {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch("/assets/data/disputes.json");
+        if (!response.ok)
+          throw new Error(
+            `Failed to fetch data, status code: ${response.status}`,
+          );
+
+        const data: Dispute[] = await response.json();
+        setDisputes(data.filter((cus) => cus.merchant.ID === id));
+      } catch (error) {
+        console.error(error);
+        setError(
+          `We encountered a bit of a snuggle fetching customer data for you...${error}`,
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+    async function loadSettlements() {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch("/assets/data/settlements.json");
+        if (!response.ok)
+          throw new Error(
+            `Failed to fetch data, status code: ${response.status}`,
+          );
+
+        const data: Settlement[] = await response.json();
+        setSettlements(data.filter((cus) => cus.merchant.ID === id));
+      } catch (error) {
+        console.error(error);
+        setError(
+          `We encountered a bit of a snuggle fetching customer data for you...${error}`,
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+    async function loadTransactions() {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch("/assets/data/transaction.json");
+        if (!response.ok)
+          throw new Error(
+            `Failed to fetch data, status code: ${response.status}`,
+          );
+
+        const data: Transaction[] = await response.json();
+        console.log(data);
+        setTransactions(data.filter((cus) => cus.merchant.ID === id));
+      } catch (error) {
+        console.error(error);
+        setError(
+          `We encountered a bit of a snuggle fetching customer data for you...${error}`,
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
     loadCustomer();
+    loadDisputes();
+    loadSettlements();
+    loadTransactions();
   }, [id]);
 
   const handleCustomerSearch = (query: string): Customer[] => {
@@ -62,5 +127,14 @@ export const useMerchant = (id: string) => {
       return results;
     }
   };
-  return { customers, error, loading, customerCount, handleCustomerSearch };
+  return {
+    customers,
+    error,
+    loading,
+    customerCount,
+    handleCustomerSearch,
+    disputes,
+    settlements,
+    transactions,
+  };
 };

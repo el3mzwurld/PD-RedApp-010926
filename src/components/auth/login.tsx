@@ -316,6 +316,7 @@ export const Login = () => {
                   color: "#f21620",
                   fontSize: 13,
                   fontWeight: 700,
+                  display: loginMode === "admin" && "none",
                   "&:hover": {
                     borderWidth: 2,
                     borderColor: "#d90f18",

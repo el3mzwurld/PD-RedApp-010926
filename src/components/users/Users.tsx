@@ -14,10 +14,16 @@ import { NavBar } from "../ui/navbar";
 import { motion } from "motion/react";
 import { InformationContainer } from "../ui/InformationContainer";
 import { Search } from "../ui/Search";
+import { useUser } from "../../context/user";
+import { useMerchant } from "../../hooks/useMerchant";
 
 const Users = () => {
   const theme = useTheme();
   const handleSubmit = (filter: string) => {};
+  const { user } = useUser();
+  const id = user!.role === "merchant" ? user!.profile.ID : " ";
+  const { customers } = useMerchant(id);
+  const role = user!.role;
   return (
     <Box
       sx={{
@@ -113,7 +119,7 @@ const Users = () => {
               width: "100%",
             }}
           >
-            <Search mode="users" onSubmit={handleSubmit} />
+            <Search mode="users" onSubmit={handleSubmit} role={role} />
           </Stack>
 
           <motion.div
@@ -218,59 +224,77 @@ const Users = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        1
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Samuel
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Elemi
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        07017041247
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        elemisamuel77@gmail.com
-                      </TableCell>
+                    {customers.length !== 0 ? (
+                      customers.map((c, index) => (
+                        <TableRow
+                          sx={{ backgroundColor: "#F4F4F4" }}
+                          key={index}
+                        >
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {index + 1}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {c.fName}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {c.lName}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {c.phones.main}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {c.email}
+                          </TableCell>
 
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Yes
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        {" "}
-                        <Button variant="text">VIEW</Button>
-                      </TableCell>
-                    </TableRow>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {c.active ? "Yes" : "No"}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {" "}
+                            <Button variant="text">VIEW</Button>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
+                        <TableCell
+                          colSpan={10}
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          There's nothing to see here for now...
+                        </TableCell>
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>

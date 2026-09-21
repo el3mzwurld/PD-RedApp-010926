@@ -1,47 +1,50 @@
 [
-	{
-		"merchant": {
-			"ID": "FRE-001",
-			"fName": "Adaeze",
-			"lName": "Okafor"
-		},
-		"createdAt": "2026-08-12T09:30:00.000Z",
-		"due": "2026-08-26T23:59:59.000Z",
-		"paymentRef": "PAY-DSP-1001",
-		"amount": 45000,
-		"paymentMtd": "Card",
-		"cardScheme": "Visa",
-		"customerEmail": "ifeoma.nwosu@example.com",
-		"transactionStatus": "disputed"
-	},
-	{
-		"merchant": {
-			"ID": "FRE-002",
-			"fName": "Chinedu",
-			"lName": "Eze"
-		},
-		"createdAt": "2026-08-18T14:15:00.000Z",
-		"due": "2026-09-01T23:59:59.000Z",
-		"paymentRef": "PAY-DSP-1002",
-		"amount": 125000,
-		"paymentMtd": "Bank Transfer",
-		"cardScheme": "N/A",
-		"customerEmail": "tunde.balogun@example.com",
-		"transactionStatus": "pending"
-	},
-	{
-		"merchant": {
-			"ID": "FRE-001",
-			"fName": "Adaeze",
-			"lName": "Okafor"
-		},
-		"createdAt": "2026-07-29T11:45:00.000Z",
-		"due": "2026-08-12T23:59:59.000Z",
-		"paymentRef": "PAY-DSP-1003",
-		"amount": 18900,
-		"paymentMtd": "Card",
-		"cardScheme": "Mastercard",
-		"customerEmail": "bola.adebayo@example.com",
-		"transactionStatus": "settled"
-	}
+  {
+    "merchant": {
+      "ID": "FRE-001",
+      "fName": "Adaeze",
+      "lName": "Okafor"
+    },
+    "createdAt": "2026-08-12T09:30:00.000Z",
+    "due": "2026-08-26T23:59:59.000Z",
+    "paymentRef": "PAY-DSP-1001",
+    "amount": 45000,
+    "paymentMtd": "Card",
+    "cardScheme": "Visa",
+    "customerEmail": "ifeoma.nwosu@example.com",
+    "transactionStatus": "disputed",
+    "status": "Open"
+  },
+  {
+    "merchant": {
+      "ID": "FRE-002",
+      "fName": "Chinedu",
+      "lName": "Eze"
+    },
+    "createdAt": "2026-08-18T14:15:00.000Z",
+    "due": "2026-09-01T23:59:59.000Z",
+    "paymentRef": "PAY-DSP-1002",
+    "amount": 125000,
+    "paymentMtd": "Bank Transfer",
+    "cardScheme": "N/A",
+    "customerEmail": "tunde.balogun@example.com",
+    "transactionStatus": "pending",
+    "status": "Accepted"
+  },
+  {
+    "merchant": {
+      "ID": "FRE-001",
+      "fName": "Adaeze",
+      "lName": "Okafor"
+    },
+    "createdAt": "2026-07-29T11:45:00.000Z",
+    "due": "2026-08-12T23:59:59.000Z",
+    "paymentRef": "PAY-DSP-1003",
+    "amount": 18900,
+    "paymentMtd": "Card",
+    "cardScheme": "Mastercard",
+    "customerEmail": "bola.adebayo@example.com",
+    "transactionStatus": "settled",
+    "status": "Fully Accepted"
+  }
 ]
