@@ -1,11 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import type { AdminPages, RenderedPage } from "../../pages/home";
 
-interface NotFoundProps {
-  handlePageChange: (page: RenderedPage | AdminPages) => void;
-}
-export const NotFound = ({ handlePageChange }: NotFoundProps) => {
+export const NotFound = () => {
   return (
     <Box
       sx={{
@@ -47,9 +43,6 @@ export const NotFound = ({ handlePageChange }: NotFoundProps) => {
             px: 4,
             py: 1.2,
             fontWeight: 600,
-          }}
-          onClick={() => {
-            handlePageChange("dashboard");
           }}
         >
           Go back home

@@ -3,6 +3,8 @@ import { NavBar } from "../ui/navbar";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { InformationContainer } from "../ui/InformationContainer";
+import { useUser } from "../../context/user";
+import { Navigate } from "react-router-dom";
 
 type Ward = {
   name: string;
@@ -21,6 +23,8 @@ interface States {
 }
 
 export const Profile = () => {
+  const { user, updateUser } = useUser();
+
   // theme
   const theme = useTheme();
   // geo data states
@@ -40,6 +44,12 @@ export const Profile = () => {
   };
 
   useEffect(() => {
+    if (user!.role === "merchant") {
+      setSelectedState(user!.profile.state ?? "");
+    }
+  }, [user]);
+
+  useEffect(() => {
     fetch("/nigeria-data/full.json")
       .then((res) => {
         if (!res.ok) throw new Error("Failed to load JSON asset");
@@ -57,6 +67,10 @@ export const Profile = () => {
     (item) => item.name.trim() === selectedLga.trim(),
   );
   const availableCities = matchToLga ? matchToLga.wards : [];
+
+  if (user!.role === "admin") {
+    return <Navigate to={"/unauthorized"} replace />;
+  }
   return (
     <Box
       sx={{
@@ -144,7 +158,7 @@ export const Profile = () => {
                   Merchant ID
                 </label>
                 <input
-                  value={"RED 100023-JUMIA "}
+                  value={user!.profile.ID}
                   readOnly
                   style={{
                     width: 200,
@@ -194,7 +208,12 @@ export const Profile = () => {
                 }}
               >
                 <Typography variant="h6" sx={{ color: "primary.main" }}>
-                  Business Information
+                  Business Information{" "}
+                  {user!.isComplete === false && (
+                    <span style={{ fontSize: 12 }}>
+                      (Please complete your profile)
+                    </span>
+                  )}
                 </Typography>
 
                 <Stack
@@ -214,67 +233,62 @@ export const Profile = () => {
                   <InformationContainer
                     mode="read"
                     name="Business Name"
-                    content="Fresh Farms"
+                    content={user!.profile.businessName}
                   />
                   <InformationContainer
-                    mode="edit"
+                    mode="read"
                     name="Business Number"
-                    content="RC-3871839"
-                  />
-                  <InformationContainer
-                    mode="edit"
-                    name="Contact email"
-                    content="t.odejeji@gmail.com"
+                    content={user!.profile.ID}
                   />
                   <InformationContainer
                     mode="edit"
                     name="Support Email"
-                    content="t.samuel@gmail.com"
+                    content={user!.profile.emails.supportEmail ?? ""}
                   />
                   <InformationContainer
                     mode="edit"
                     name="Dispute Email"
-                    content="t.odejeji@gmail.com"
-                  />
-                  <InformationContainer
-                    mode="edit"
-                    name="Business Email"
-                    content="freshfarms@gmail.com"
-                  />
-                  <InformationContainer
-                    mode="edit"
-                    name="Phone Number"
-                    content="07055438971"
+                    content={user!.profile.emails.disputeEmail ?? ""}
                   />
                   <InformationContainer
                     mode="read"
+                    name="Business Email"
+                    content={user!.profile.emails.businessEmail}
+                  />
+                  <InformationContainer
+                    mode="read"
+                    name="Phone Number"
+                    content={String(user!.profile.phone)}
+                  />
+                  <InformationContainer
+                    mode="edit"
                     name="Website"
-                    content="www.freshfarms.com"
+                    content={user!.profile.website ?? ""}
                   />
                   <InformationContainer
                     mode="edit"
                     name="Bank Name"
-                    content="Access bank"
+                    content={user!.profile.bank ?? ""}
                   />
                   <InformationContainer
                     mode="edit"
                     name="Account Number"
-                    content="0987654321"
+                    content={String(user!.profile.accountNumber ?? "")}
                   />
                   <InformationContainer
                     mode="edit"
                     name="Address 1"
-                    content="No 5 Balogun abgaje Close, Ifako Ibagada"
+                    content={user!.profile.address.address1 ?? ""}
                   />
                   <InformationContainer
                     mode="edit"
                     name="Address 2"
-                    content="No 5 Balogun abgaje Close, Ifako Ibagada"
+                    content={user!.profile.address.address2 ?? ""}
                   />
                   <InformationContainer
                     mode="read"
                     name="Sector/Industry"
-                    content="Farming"
+                    content={user!.profile.sector ?? ""}
                   />
                   {/* state */}
                   <Stack
@@ -294,6 +308,10 @@ export const Profile = () => {
                         setSelectedState(e.target.value);
                         setSelectedLga("");
                         setSelectedCity("");
+                        updateUser(user!.email, {
+                          ...user!,
+                          profile: { ...user!.profile, state: e.target.value },
+                        });
                       }}
                       style={{
                         width: "auto",
@@ -341,6 +359,10 @@ export const Profile = () => {
                       value={selectedCity}
                       onChange={(e) => {
                         setSelectedCity(e.target.value);
+                        updateUser(user!.email, {
+                          ...user!,
+                          profile: { ...user!.profile, city: e.target.value },
+                        });
                       }}
                       style={{
                         width: "auto",
@@ -388,6 +410,10 @@ export const Profile = () => {
                       value={selectedLga}
                       onChange={(e) => {
                         setSelectedLga(e.target.value);
+                        updateUser(user!.email, {
+                          ...user!,
+                          profile: { ...user!.profile, lga: e.target.value },
+                        });
                       }}
                       style={{
                         width: "auto",
@@ -456,27 +482,27 @@ export const Profile = () => {
                   <InformationContainer
                     mode="read"
                     name="First Name"
-                    content="Samuel"
+                    content={user!.profile.fName}
                   />
                   <InformationContainer
                     mode="read"
                     name="Last Name"
-                    content="Elemi"
+                    content={user!.profile.lName}
                   />
                   <InformationContainer
                     mode="edit"
                     name="Mobile Number"
-                    content="07017041247"
+                    content={String(user!.profile.personalPhone ?? "")}
                   />
                   <InformationContainer
                     mode="edit"
                     name="Alternate Mobile Number"
-                    content="08166149748"
+                    content={String(user!.profile.altPersonalPhone ?? "")}
                   />
                   <InformationContainer
                     mode="edit"
                     name="Email Address"
-                    content="t.odejeji@gmail.com"
+                    content={user!.profile.emails.personalEmail ?? ""}
                   />
                 </Stack>
               </Stack>
@@ -630,7 +656,7 @@ export const Profile = () => {
                 <InformationContainer
                   mode="read"
                   name="Test Key"
-                  content="10001"
+                  content={String(user!.profile.keys.test)}
                 />
 
                 <Button
@@ -654,7 +680,7 @@ export const Profile = () => {
                 <InformationContainer
                   mode="read"
                   name="Life Key"
-                  content="10001"
+                  content={String(user!.profile.keys.life)}
                 />
 
                 <Button

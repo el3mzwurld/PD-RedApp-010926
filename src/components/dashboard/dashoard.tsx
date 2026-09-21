@@ -2,17 +2,13 @@ import { Box, Stack, useTheme } from "@mui/material";
 import { NavBar } from "../ui/navbar";
 import { Modal, type Range } from "./modal";
 import { Card } from "./card";
-import type { RenderedPage } from "../../pages/home";
 import { motion } from "motion/react";
 import { useState } from "react";
-export const Dashboard = ({
-  pageChange,
-}: {
-  pageChange: (page: RenderedPage) => void;
-}) => {
-  const [role, setRole] = useState<"merchant" | "admin">("admin");
+import { useUser } from "../../context/user";
+export const Dashboard = () => {
   const [range, setRange] = useState<Range>("daily");
-
+  const { user } = useUser();
+  const role = user!.role;
   const setTimeRange = (time: Range) => {
     setRange(time);
   };
@@ -30,7 +26,7 @@ export const Dashboard = ({
         flex: 1,
       }}
     >
-      <NavBar role="merchant" />
+      <NavBar role={role} />
       <Box
         component={"main"}
         sx={{
@@ -142,8 +138,12 @@ export const Dashboard = ({
                 gridTemplateRows: "260px 260px",
               }}
             >
-              <Modal mode="line" timeRange={range} />
-              <Modal mode="bar" timeRange={range} />
+              <Modal
+                mode="line"
+                timeRange={range}
+                setTimeRange={setTimeRange}
+              />
+              <Modal mode="bar" timeRange={range} setTimeRange={setTimeRange} />
             </div>
 
             <div
@@ -164,7 +164,7 @@ export const Dashboard = ({
                 <>
                   {" "}
                   <Card mode="customer count" />
-                  <Card mode="quick links" pageChange={pageChange} />
+                  <Card mode="quick links" />
                   <Card mode="transaction volume" />
                   <Card mode="transaction count" />
                 </>
@@ -178,7 +178,7 @@ export const Dashboard = ({
                       height: "100%",
                     }}
                   >
-                    <Modal mode="merchant count" />
+                    <Modal mode="merchant count" setTimeRange={setTimeRange} />
                   </div>
                   <Card mode="transaction volume" />
                   <Card mode="transaction count" />

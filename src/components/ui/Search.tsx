@@ -75,7 +75,9 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
   const [email, setEmail] = useState("");
   const [merchantID, setMerchantID] = useState<string>("");
   const [userStatus, setUserStatus] = useState<UserStatus | null>();
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = (
+    e: React.SubmitEvent<HTMLFormElement> | React.ChangeEvent<HTMLInputElement>,
+  ) => {
     e.preventDefault();
 
     onSubmit(query);
@@ -155,7 +157,10 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
               type="text"
               placeholder="Customer name/Email"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                handleSubmit(e);
+              }}
             ></input>
           </div>
 

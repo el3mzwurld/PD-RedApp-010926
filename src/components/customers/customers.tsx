@@ -13,9 +13,29 @@ import { NavBar } from "../ui/navbar";
 import { motion } from "motion/react";
 import { InformationContainer } from "../ui/InformationContainer";
 import { Search } from "../ui/Search";
+import { useUser } from "../../context/user";
+import { Navigate } from "react-router-dom";
+import { useMerchant } from "../../hooks/useMerchant";
+import { useState } from "react";
+import { PopupModal } from "../ui/Popup";
+import type { Customer } from "../../lib/types";
 
 export const Customers = () => {
-  const handleSubmit = (query: string) => {};
+  const [open, setOpen] = useState(false);
+  const [searchResult, setSearchResult] = useState<Customer[]>([]);
+  const handleSubmit = (query: string) => {
+    const result = handleCustomerSearch(query);
+    setSearchResult(result);
+  };
+  const { user } = useUser();
+  const userID = user!.role === "merchant" ? user!.profile.ID : "";
+  const { customers, error, loading, customerCount, handleCustomerSearch } =
+    useMerchant(userID);
+
+  if (user!.role === "admin") {
+    return <Navigate to={"/login"} />;
+  }
+
   return (
     <Box
       sx={{
@@ -97,12 +117,12 @@ export const Customers = () => {
             <InformationContainer
               mode="read"
               name="Merchant ID"
-              content="Fresh Farms"
+              content={user!.profile.ID}
             />
             <InformationContainer
-              mode="edit"
+              mode="read"
               name="Total number of Customers"
-              content="20"
+              content={customerCount}
             />
           </Stack>
           <Stack
@@ -120,7 +140,7 @@ export const Customers = () => {
               boxShadow: "1.5px 1.5px 10px #7876769f",
             }}
           >
-            <Search mode="default" onSubmit={handleSubmit} />
+            <Search mode="default" onSubmit={handleSubmit} role={user!.role} />
           </Stack>
 
           <TableContainer>
@@ -144,25 +164,97 @@ export const Customers = () => {
                 </TableRow>
               </TableHead>
 
-              <TableBody
-                component={Stack}
-                sx={{ width: "100%", padding: 1.8, gap: 2, px: 3 }}
-              >
-                <TableRow component={Stack} sx={{ padding: 2.5 }}>
-                  <TableCell>1</TableCell>
-                  <TableCell>First Name</TableCell>
-                  <TableCell>Last Name</TableCell>
-                  <TableCell>Phone Number</TableCell>
-                  <TableCell>Email Address</TableCell>
-                  <TableCell>
-                    <Button variant="text">VIEW</Button>
-                  </TableCell>
-                </TableRow>
+              <TableBody sx={{ width: "100%", padding: 1.8, gap: 2, px: 3 }}>
+                {customers.length !== 0 ? (
+                  searchResult.length === 0 ? (
+                    customers.map((cus, index) => (
+                      <TableRow sx={{ padding: 2.5 }} key={index}>
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>
+                          {cus.fName.charAt(0).toUpperCase() +
+                            cus.fName.slice(1)}
+                        </TableCell>
+                        <TableCell>
+                          {cus.lName.charAt(0).toUpperCase() +
+                            cus.lName.slice(1)}
+                        </TableCell>
+                        <TableCell>{cus.phones.main}</TableCell>
+                        <TableCell>{cus.email}</TableCell>
+                        <TableCell>
+                          <Button
+                            variant="text"
+                            onClick={() => setOpen((prev) => !prev)}
+                          >
+                            VIEW
+                          </Button>
+                        </TableCell>
+                        <PopupModal
+                          open={open}
+                          setOpen={setOpen}
+                          title="Details"
+                          buttonTitle1="close"
+                          data={cus}
+                          options={1}
+                        />
+                      </TableRow>
+                    ))
+                  ) : (
+                    searchResult.map((cus, index) => (
+                      <TableRow sx={{ padding: 2.5 }} key={index}>
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>
+                          {cus.fName.charAt(0).toUpperCase() +
+                            cus.fName.slice(1)}
+                        </TableCell>
+                        <TableCell>
+                          {cus.lName.charAt(0).toUpperCase() +
+                            cus.lName.slice(1)}
+                        </TableCell>
+                        <TableCell>{cus.phones.main}</TableCell>
+                        <TableCell>{cus.email}</TableCell>
+                        <TableCell>
+                          <Button
+                            variant="text"
+                            onClick={() => setOpen((prev) => !prev)}
+                          >
+                            VIEW
+                          </Button>
+                        </TableCell>
+                        <PopupModal
+                          open={open}
+                          setOpen={setOpen}
+                          title="Details"
+                          buttonTitle1="close"
+                          data={cus}
+                          options={1}
+                        />
+                      </TableRow>
+                    ))
+                  )
+                ) : (
+                  <TableRow sx={{ padding: 2.5 }}>
+                    <TableCell>1</TableCell>
+                    <TableCell>First Name</TableCell>
+                    <TableCell>Last Name</TableCell>
+                    <TableCell>Phone Number</TableCell>
+                    <TableCell>Email Address</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="text"
+                        onClick={() => {
+                          setOpen((prev) => !prev);
+                        }}
+                      >
+                        VIEW
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>
         </section>
-      </Box>{" "}
+      </Box>
     </Box>
   );
 };

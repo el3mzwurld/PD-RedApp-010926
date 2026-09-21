@@ -1,0 +1,59 @@
+[
+  {
+    "merchant": {
+      "ID": "JAZ-688E62",
+      "fName": "Adaeze",
+      "lName": "Okafor"
+    },
+    "fName": "Ifeoma",
+    "lName": "Nwosu",
+    "phones": {
+      "main": 8034567890,
+      "alternate": 7061234567
+    },
+    "active": true,
+    "email": "ifeoma.nwosu@example.com",
+    "address": {
+      "address1": "14 Admiralty Way",
+      "address2": "Lekki Phase 1, Lagos"
+    }
+  },
+  {
+    "merchant": {
+      "ID": "FRE-002",
+      "fName": "Chinedu",
+      "lName": "Eze"
+    },
+    "fName": "Tunde",
+    "lName": "Balogun",
+    "phones": {
+      "main": 8098765432,
+      "alternate": null
+    },
+    "active": true,
+    "email": "tunde.balogun@example.com",
+    "address": {
+      "address1": "22 Allen Avenue",
+      "address2": "Ikeja, Lagos"
+    }
+  },
+  {
+    "merchant": {
+      "ID": "FRE-001",
+      "fName": "Adaeze",
+      "lName": "Okafor"
+    },
+    "fName": "Bola",
+    "lName": "Adebayo",
+    "phones": {
+      "main": 7012345678,
+      "alternate": 8156789012
+    },
+    "active": false,
+    "email": "bola.adebayo@example.com",
+    "address": {
+      "address1": "8 Ring Road",
+      "address2": "Ibadan, Oyo"
+    }
+  }
+]

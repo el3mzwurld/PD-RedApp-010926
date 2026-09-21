@@ -38,7 +38,7 @@ interface ModalProps {
   setTimeRange: (time: Range) => void;
 }
 
-export const Modal = ({ mode, timeRange }: ModalProps) => {
+export const Modal = ({ mode, timeRange, setTimeRange }: ModalProps) => {
   const [data, setData] = useState<Volume[]>([]);
   const role: "merchant" | "admin" = "admin";
   useEffect(() => {
@@ -112,7 +112,9 @@ export const Modal = ({ mode, timeRange }: ModalProps) => {
             <select
               value={timeRange}
               style={{ width: "100%", height: "100%", gridColumn: 3 }}
-              onChange={(e) => setRange(e.target.value.toLowerCase() as Range)}
+              onChange={(e) =>
+                setTimeRange(e.target.value.toLowerCase() as Range)
+              }
             >
               {ranges.map((r, index) => {
                 const capitalized = r.charAt(0).toUpperCase() + r.slice(1);

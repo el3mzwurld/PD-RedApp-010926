@@ -19,6 +19,7 @@ import {
 } from "@mui/icons-material";
 import logo from "../img/logo.png";
 import type { AdminPages, RenderedPage } from "../../pages/home";
+import { useNavigate } from "react-router-dom";
 
 type SidebarItem = {
   Icon: SvgIconComponent;
@@ -34,7 +35,6 @@ type AdminSidebarItem = {
 };
 
 interface SidebarProps {
-  pageChange: (page: RenderedPage) => void;
   role: "merchant" | "admin";
 }
 
@@ -124,7 +124,7 @@ const adminLinks: AdminSidebarItem[] = [
     },
   },
 ];
-export const Sidebar = ({ pageChange, role = "admin" }: SidebarProps) => {
+export const Sidebar = ({ role = "admin" }: SidebarProps) => {
   const [collapse, setCollapse] = useState(false);
   const theme = useTheme();
   const handleNavToggle = () => {
@@ -180,7 +180,6 @@ export const Sidebar = ({ pageChange, role = "admin" }: SidebarProps) => {
                 Icon={link.Icon}
                 label={link.label}
                 key={index}
-                click={pageChange}
                 active={collapse}
               />
             ))}
@@ -193,7 +192,6 @@ export const Sidebar = ({ pageChange, role = "admin" }: SidebarProps) => {
                 Icon={link.Icon}
                 label={link.label.main}
                 key={index}
-                click={pageChange}
                 active={collapse}
                 sublinks={link.label.sublinks}
               />
@@ -254,11 +252,11 @@ export const Sidebar = ({ pageChange, role = "admin" }: SidebarProps) => {
 interface SidebarItemProps {
   Icon: SvgIconComponent;
   label: string;
-  click: (page: RenderedPage, sublink?: string) => void;
   active: boolean;
 }
 
-const SidebarItem = ({ Icon, label, click, active }: SidebarItemProps) => {
+const SidebarItem = ({ Icon, label, active }: SidebarItemProps) => {
+  const nav = useNavigate();
   return (
     <Box
       sx={{
@@ -272,11 +270,18 @@ const SidebarItem = ({ Icon, label, click, active }: SidebarItemProps) => {
         cursor: "pointer",
       }}
       title={label}
-      onClick={() => {
-        click(label.toLowerCase() as RenderedPage);
-        console.log(label.toLowerCase());
-      }}
       aria-description={`${label}`}
+      onClick={() => {
+        if (label.toLowerCase() === "dashboard") {
+          nav("/");
+          return;
+        }
+        if (label.toLowerCase() === "payment link") {
+          nav("payment-link");
+          return;
+        }
+        nav(label.toLowerCase());
+      }}
     >
       <Icon
         sx={{
@@ -302,17 +307,16 @@ const SidebarItem = ({ Icon, label, click, active }: SidebarItemProps) => {
 interface AdminSidebarItemProps {
   Icon: SvgIconComponent;
   label: AdminPages;
-  click: (page: RenderedPage, sublink?: string) => void;
   active: boolean;
   sublinks?: string[];
 }
 const AdminSidebarItem = ({
   Icon,
   label,
-  click,
   active,
   sublinks,
 }: AdminSidebarItemProps) => {
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -346,8 +350,11 @@ const AdminSidebarItem = ({
             color: "white",
           }}
           onClick={() => {
-            click(label.toLowerCase() as RenderedPage);
-            console.log(label.toLowerCase());
+            if (label.toLowerCase() === "dashboard") {
+              navigate("/");
+              return;
+            }
+            navigate(label.toLowerCase());
           }}
         />
         <Typography
@@ -356,12 +363,18 @@ const AdminSidebarItem = ({
             width: "70%",
             color: "white",
             fontWeight: 550,
-            display: active ? "none" : "block",
+            display: active ? "none" : "flex",
             position: "relative",
+            height: "100%",
+            alignItems: "center",
+            justifyContent: "start",
           }}
           onClick={() => {
-            click(label.toLowerCase() as RenderedPage);
-            console.log(label.toLowerCase());
+            if (label.toLowerCase() === "dashboard") {
+              navigate("/");
+              return;
+            }
+            navigate(label.toLowerCase());
           }}
         >
           {label.charAt(0).toUpperCase() + label.slice(1)}
@@ -383,7 +396,7 @@ const AdminSidebarItem = ({
             }}
             key={index}
             onClick={() => {
-              click(label.toLowerCase() as RenderedPage, link);
+              navigate(`${label.toLowerCase()}/${link}`);
             }}
           >
             {link.charAt(0).toUpperCase() + link.slice(1)}

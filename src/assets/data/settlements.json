@@ -1,0 +1,41 @@
+[
+	{
+		"merchant": {
+			"ID": "FRE-001",
+			"fName": "Adaeze",
+			"lName": "Okafor"
+		},
+		"accountName": "Fresh Farms Nigeria",
+		"accountNumber": 9876543210,
+		"batchCode": "BAT-20260818-001",
+		"currency": "NGN",
+		"reference": "SET-REF-1001",
+		"status": "successful"
+	},
+	{
+		"merchant": {
+			"ID": "FRE-002",
+			"fName": "Chinedu",
+			"lName": "Eze"
+		},
+		"accountName": "Eze Logistics Limited",
+		"accountNumber": 1029384756,
+		"batchCode": "BAT-20260819-002",
+		"currency": "NGN",
+		"reference": "SET-REF-1002",
+		"status": "pending"
+	},
+	{
+		"merchant": {
+			"ID": "FRE-003",
+			"fName": "Mariam",
+			"lName": "Yusuf"
+		},
+		"accountName": "Northstar Retail Services",
+		"accountNumber": 5647382910,
+		"batchCode": "BAT-20260820-003",
+		"currency": "NGN",
+		"reference": "SET-REF-1003",
+		"status": "failed"
+	}
+]

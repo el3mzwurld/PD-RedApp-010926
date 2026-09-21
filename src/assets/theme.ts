@@ -9,7 +9,7 @@ const theme = createTheme({
     },
     secondary: {
       main: "#9c27b0",
-      light: "black",
+      light: "#000000", //  Changed from "black" to HEX
     },
     background: {
       default: "#f5f5f5",
@@ -40,6 +40,15 @@ const theme = createTheme({
       md: 900,
       lg: 1024,
       xl: 1300,
+    },
+  },
+  components: {
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          color: "#000000", // Use HEX instead
+        },
+      },
     },
   },
 });

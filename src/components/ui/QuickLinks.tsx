@@ -1,11 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import type { RenderedPage } from "../../pages/home";
 import { LinkOutlined } from "@mui/icons-material";
 
-const QuickLinks = ({
-  pageChange,
-}: {
-  pageChange: (page: RenderedPage) => void;
-}) => {
+const QuickLinks = () => {
   return (
     <div
       style={{
@@ -15,12 +12,12 @@ const QuickLinks = ({
         height: "100%",
         gap: 5,
         padding: "10px 10px",
-        justifyContent: "space-between",
+        justifyContent: "space-evenly",
       }}
     >
       {(["disputes", "customers", "transaction"] as RenderedPage[]).map(
         (p, index) => (
-          <MyLink name={p} click={pageChange} key={index} />
+          <MyLink name={p} key={index} />
         ),
       )}
     </div>
@@ -29,15 +26,15 @@ const QuickLinks = ({
 
 interface MyLinkProps {
   name: RenderedPage;
-  click: (page: RenderedPage) => void;
 }
 const MyLink = (props: MyLinkProps) => {
+  const nav = useNavigate();
   const formalizedLink =
     props.name.charAt(0).toUpperCase() + props.name.slice(1);
   return (
     <div
       onClick={() => {
-        props.click(props.name as RenderedPage);
+        nav(props.name.toLowerCase());
       }}
       style={{
         width: "100%",

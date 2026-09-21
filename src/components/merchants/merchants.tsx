@@ -14,15 +14,12 @@ import { NavBar } from "../ui/navbar";
 import { motion } from "motion/react";
 import { Search } from "../ui/Search";
 import { ArrowDownward } from "@mui/icons-material";
-import { useState } from "react";
-interface MerchantProps {
-  mode: "manage" | "commercials";
-  role: "admin" | "merchant";
-}
-export const Merchants = ({ mode = "manage" }: MerchantProps) => {
+import { useParams } from "react-router-dom";
+
+export const Merchants = ({ role }: { role: "merchant" | "admin" }) => {
   const handleSubmit = (filter: string) => {};
-  const [role, setRole] = useState<"merchant" | "admin">("admin");
   const theme = useTheme();
+  const { mode = "manage" } = useParams<{ mode: "manage" | "commercials" }>();
 
   return (
     <Box
@@ -38,7 +35,7 @@ export const Merchants = ({ mode = "manage" }: MerchantProps) => {
         gap: 2.5,
       }}
     >
-      <NavBar />
+      <NavBar role={role} />
       <Box
         component={"main"}
         sx={{

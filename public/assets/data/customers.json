@@ -1,0 +1,155 @@
+[
+  {
+    "merchant": {
+      "ID": "JAZ-688E62",
+      "fName": "Adaeze",
+      "lName": "Okafor"
+    },
+    "fName": "Ifeoma",
+    "lName": "Nwosu",
+    "phones": {
+      "main": 8034567890,
+      "alternate": 7061234567
+    },
+    "active": true,
+    "email": "ifeoma.nwosu@example.com",
+    "address": {
+      "address1": "14 Admiralty Way",
+      "address2": "Lekki Phase 1, Lagos"
+    }
+  },
+  {
+    "merchant": {
+      "ID": "JAZ-688E62",
+      "fName": "Chinedu",
+      "lName": "Eze"
+    },
+    "fName": "Tunde",
+    "lName": "Balogun",
+    "phones": {
+      "main": 8098765432,
+      "alternate": null
+    },
+    "active": true,
+    "email": "tunde.balogun@example.com",
+    "address": {
+      "address1": "22 Allen Avenue",
+      "address2": "Ikeja, Lagos"
+    }
+  },
+  {
+    "merchant": {
+      "ID": "FRE-001",
+      "fName": "Adaeze",
+      "lName": "Okafor"
+    },
+    "fName": "Bola",
+    "lName": "Adebayo",
+    "phones": {
+      "main": 7012345678,
+      "alternate": 8156789012
+    },
+    "active": false,
+    "email": "bola.adebayo@example.com",
+    "address": {
+      "address1": "8 Ring Road",
+      "address2": "Ibadan, Oyo"
+    }
+  },
+  {
+    "merchant": { "ID": "JAZ-688E62", "fName": "Adaeze", "lName": "Okafor" },
+    "fName": "Chisom",
+    "lName": "Okeke",
+    "phones": { "main": 8076543210, "alternate": null },
+    "active": true,
+    "email": "chisom.okeke@example.com",
+    "address": { "address1": "5 Wuse Zone 2", "address2": "Abuja" }
+  },
+  {
+    "merchant": { "ID": "JAZ-688E62", "fName": "Adaeze", "lName": "Okafor" },
+    "fName": "Emeka",
+    "lName": "Udeh",
+    "phones": { "main": 8165432109, "alternate": 7034567891 },
+    "active": true,
+    "email": "emeka.udeh@example.com",
+    "address": { "address1": "17 Zik Avenue", "address2": "Enugu" }
+  },
+  {
+    "merchant": { "ID": "JAZ-688E62", "fName": "Adaeze", "lName": "Okafor" },
+    "fName": "Amina",
+    "lName": "Ibrahim",
+    "phones": { "main": 8090123456, "alternate": null },
+    "active": false,
+    "email": "amina.ibrahim@example.com",
+    "address": { "address1": "31 Ahmadu Bello Way", "address2": "Kaduna" }
+  },
+  {
+    "merchant": { "ID": "JAZ-688E62", "fName": "Adaeze", "lName": "Okafor" },
+    "fName": "Segun",
+    "lName": "Olawale",
+    "phones": { "main": 8123456709, "alternate": 7067890123 },
+    "active": true,
+    "email": "segun.olawale@example.com",
+    "address": { "address1": "12 Allen Avenue", "address2": "Ikeja, Lagos" }
+  },
+  {
+    "merchant": { "ID": "JAZ-688E62", "fName": "Adaeze", "lName": "Okafor" },
+    "fName": "Ngozi",
+    "lName": "Ekwueme",
+    "phones": { "main": 8056789012, "alternate": null },
+    "active": true,
+    "email": "ngozi.ekwueme@example.com",
+    "address": {
+      "address1": "9 New Market Road",
+      "address2": "Onitsha, Anambra"
+    }
+  },
+  {
+    "merchant": { "ID": "JAZ-688E62", "fName": "Adaeze", "lName": "Okafor" },
+    "fName": "Yusuf",
+    "lName": "Abdullahi",
+    "phones": { "main": 7019876543, "alternate": 8143210987 },
+    "active": false,
+    "email": "yusuf.abdullahi@example.com",
+    "address": { "address1": "44 Airport Road", "address2": "Kano" }
+  },
+  {
+    "merchant": { "ID": "JAZ-688E62", "fName": "Adaeze", "lName": "Okafor" },
+    "fName": "Temitope",
+    "lName": "Fashola",
+    "phones": { "main": 8167890123, "alternate": null },
+    "active": true,
+    "email": "temitope.fashola@example.com",
+    "address": { "address1": "6 Bodija Estate", "address2": "Ibadan, Oyo" }
+  },
+  {
+    "merchant": { "ID": "JAZ-688E62", "fName": "Adaeze", "lName": "Okafor" },
+    "fName": "Hauwa",
+    "lName": "Musa",
+    "phones": { "main": 8032109876, "alternate": 7065432109 },
+    "active": true,
+    "email": "hauwa.musa@example.com",
+    "address": { "address1": "18 Bompai Road", "address2": "Kano" }
+  },
+  {
+    "merchant": { "ID": "JAZ-688E62", "fName": "Adaeze", "lName": "Okafor" },
+    "fName": "David",
+    "lName": "Ogunleye",
+    "phones": { "main": 8091234567, "alternate": null },
+    "active": false,
+    "email": "david.ogunleye@example.com",
+    "address": {
+      "address1": "27 Marina Road",
+      "address2": "Lagos Island, Lagos"
+    }
+  },
+  {
+    "merchant": { "ID": "JAZ-688E62", "fName": "Adaeze", "lName": "Okafor" },
+    "fName": "Blessing",
+    "lName": "Ezeani",
+    "phones": { "main": 8154321098, "alternate": 7012345896 },
+    "active": true,
+    "email": "blessing.ezeani@example.com",
+    "address": { "address1": "10 Independence Layout", "address2": "Enugu" }
+  }
+]

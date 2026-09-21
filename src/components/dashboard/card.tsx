@@ -1,4 +1,3 @@
-import type { RenderedPage } from "../../pages/home";
 import CustomerCount from "../ui/CustomerCount";
 import QuickLinks from "../ui/QuickLinks";
 import { PieGraph } from "./modal";
@@ -9,8 +8,6 @@ interface CardProps {
     | "quick links"
     | "transaction volume"
     | "transaction count";
-
-  pageChange?: (page: RenderedPage) => void;
 }
 
 const pieData: { status: string; value: number }[] = [
@@ -24,7 +21,7 @@ const countData: typeof pieData = [
   { status: "Successful", value: 800 },
   { status: "Failed", value: 200 },
 ];
-export const Card = ({ mode, pageChange }: CardProps) => {
+export const Card = ({ mode }: CardProps) => {
   return (
     <div
       className="dash--card"
@@ -65,10 +62,8 @@ export const Card = ({ mode, pageChange }: CardProps) => {
           justifyContent: "center",
         }}
       >
-        {mode === "customer count" && <CustomerCount />}
-        {mode === "quick links" && pageChange && (
-          <QuickLinks pageChange={pageChange} />
-        )}
+        {mode === "customer count" && <CustomerCount variant="total" />}
+        {mode === "quick links" && <QuickLinks />}
         {mode === "transaction volume" && (
           <PieGraph data={pieData} isAnimationActive={true} />
         )}

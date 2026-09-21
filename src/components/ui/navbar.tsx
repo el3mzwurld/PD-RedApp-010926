@@ -1,12 +1,11 @@
 import { Box, Stack, Typography, useTheme } from "@mui/material";
 import { getDate } from "../../lib/utils";
 import { Notifications, ExitToApp } from "@mui/icons-material";
-export const NavBar = ({
-  role = "merchant",
-}: {
-  role: "merchant" | "admin";
-}) => {
+import { useUser } from "../../context/user";
+export const NavBar = () => {
   const theme = useTheme();
+  const { user, logout } = useUser();
+  const role = user!.role;
   return (
     <Stack
       direction={"row"}
@@ -21,7 +20,7 @@ export const NavBar = ({
       {/* welcome = 25%*/}
       <div style={{ width: "25%", textAlign: "left" }}>
         <Typography variant="body2" sx={{ fontWeight: 400 }}>
-          Welcome, <span style={{ color: "red" }}>Samuel!</span>
+          Welcome, <span style={{ color: "red" }}>{user!.profile.fName}</span>
         </Typography>
       </div>
       {/* date/role = 30%*/}
@@ -52,7 +51,7 @@ export const NavBar = ({
 
         <Typography variant="body2" sx={{ fontWeight: 400, marginLeft: 3.5 }}>
           Role :
-          <span style={{ fontWeight: 600 }}>
+          <span style={{ fontWeight: 600, marginLeft: 2.5 }}>
             {role === "merchant" ? "Merchant" : "Admin"}
           </span>
         </Typography>
@@ -84,7 +83,7 @@ export const NavBar = ({
           style={{ width: "30%", display: "flex", justifyContent: "center" }}
         >
           <Typography variant="body2" sx={{ fontWeight: 400 }}>
-            Samuel Elemi
+            {user!.profile.fName + " " + user!.profile.lName}
           </Typography>
         </div>
         {/* logout = width 30% */}
@@ -97,6 +96,7 @@ export const NavBar = ({
             alignItems: "center",
             gap: 2.5,
           }}
+          onClick={logout}
         >
           <ExitToApp sx={{ color: "primary.main" }} />
           <Typography

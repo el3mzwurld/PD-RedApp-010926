@@ -3,30 +3,30 @@ export type Merchant = {
   businessName: string;
   businessNumber: number;
   emails: {
-    contactEmail?: string;
-    supportEmail?: string;
-    disputeEmail?: string;
+    contactEmail: string | null;
+    supportEmail: string | null;
+    disputeEmail: string | null;
     businessEmail: string;
-    personalEmail?: string;
+    personalEmail: string | null;
   };
   phone: number;
-  website?: string;
-  bank?: string;
-  accountNumber?: number;
+  website: string | null;
+  bank: string | null;
+  accountNumber: number | null;
   address: {
-    address1?: string;
-    address2?: string;
+    address1: string | null;
+    address2: string | null;
   };
-  sector?: string;
-  state?: string;
-  lga?: string;
-  city?: string;
-  country?: string;
+  sector: string | null;
+  state: string | null;
+  lga: string | null;
+  city: string | null;
+  country: string | null;
   fName: string;
   lName: string;
-  personalPhone?: number;
-  altPersonalPhone?: number;
-  companyLogo?: string;
+  personalPhone: number | null;
+  altPersonalPhone: number | null;
+  companyLogo: string | null;
   keys: {
     test: number;
     life: number;
@@ -51,15 +51,25 @@ export type Administrator = {
   fName: string;
   lName: string;
   role: AdminRole;
+  createdAt: string;
 };
-export type Profile = {
-  profile: Merchant | Administrator;
-  role: "merchant" | "admin";
+export type MerchantProfile = {
+  role: "merchant";
+  profile: Merchant;
   email: string;
   password: string;
   isComplete: boolean;
 };
 
+type AdminProfile = {
+  role: "admin";
+  profile: Administrator;
+  email: string;
+  password: string;
+  isComplete: boolean;
+};
+
+export type Profile = MerchantProfile | AdminProfile;
 export type Dispute = {
   merchant: LinkedMerchant;
   createdAt: string;
@@ -97,7 +107,8 @@ export type Settlement = {
   status: SettlementStatus;
 };
 
-export type User = {
+export type Customer = {
+  merchant: LinkedMerchant;
   fName: string;
   lName: string;
   phones: {
@@ -111,3 +122,5 @@ export type User = {
     address2: string | null;
   };
 };
+
+export type Transaction = {};

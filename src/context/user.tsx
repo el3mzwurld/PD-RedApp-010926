@@ -1,6 +1,12 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
 import type { Merchant, Profile } from "../lib/types";
-import { getDate } from "../lib/utils";
+import { generateBusinessCode, getDate } from "../lib/utils";
 
 interface UserContextType {
   users: Profile[];
@@ -12,8 +18,12 @@ interface UserContextType {
     lastName: string,
     phoneNumber: number,
     password: string,
-  ) => boolean; // Changed to boolean to let UI know it succeeded
-  login: (businessEmail: string, password: string) => boolean;
+  ) => boolean;
+  login: (
+    businessEmail: string,
+    password: string,
+    role?: Profile["role"],
+  ) => boolean;
   updateUser: (businessEmail: string, updatedUserObject: Profile) => void;
   logout: () => void;
   authError: string | null;
@@ -23,6 +33,26 @@ const UserContext = createContext<UserContextType | null>(null);
 
 const storageKey_Users = "red:users";
 const storageKey_CurrentSession = "red:session";
+
+const demoAdministrator: Profile = {
+  role: "admin",
+  profile: {
+    fName: "Toyin",
+    lName: "Ojedeji",
+    createdAt: "2026-01-01T00:00:00.000Z",
+    role: {
+      name: "Administrator",
+      createdAt: "2026-01-01T00:00:00.000Z",
+      permissions: [
+        { permission: "manage_merchants", description: "Manage merchants" },
+        { permission: "manage_roles", description: "Manage roles" },
+      ],
+    },
+  },
+  email: "t.ojedeji@redtech.com",
+  password: "admin123",
+  isComplete: true,
+};
 
 export const useUser = () => {
   const context = useContext(UserContext);
@@ -35,7 +65,10 @@ export const useUser = () => {
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [users, setUsers] = useState<Profile[]>(() => {
     const saved = localStorage.getItem(storageKey_Users);
-    return saved ? JSON.parse(saved) : [];
+    const savedUsers: Profile[] = saved ? JSON.parse(saved) : [];
+    return savedUsers.some((savedUser) => savedUser.role === "admin")
+      ? savedUsers
+      : [...savedUsers, demoAdministrator];
   });
 
   const [user, setUser] = useState<Profile | null>(() => {
@@ -45,6 +78,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const [authError, setAuthError] = useState<string | null>(null);
 
+  console.log(user);
   const createUser = (
     businessName: string,
     businessMail: string,
@@ -62,10 +96,16 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     const created = getDate();
     const userProfile: Merchant = {
-      ID: crypto.randomUUID(),
+      ID: generateBusinessCode(businessName),
       businessName,
       businessNumber: phone,
-      emails: { businessEmail: businessMail },
+      emails: {
+        businessEmail: businessMail,
+        contactEmail: null,
+        disputeEmail: null,
+        personalEmail: null,
+        supportEmail: null,
+      },
       phone,
       fName: firstName,
       lName: lastName,
@@ -74,7 +114,21 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       createdAt: created,
       status: "New",
       keys: { test: 1111, life: 1111 },
-      address: {},
+      address: {
+        address1: null,
+        address2: null,
+      },
+      accountNumber: null,
+      altPersonalPhone: null,
+      bank: null,
+      city: null,
+      companyLogo: null,
+      country: null,
+      lga: null,
+      personalPhone: null,
+      sector: null,
+      state: null,
+      website: null,
     };
 
     const newUser: Profile = {
@@ -85,7 +139,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       role: "merchant",
     };
 
-    // Fix: Functional update to ensure fresh state access and synchronization
     setUsers((prevUsers) => {
       const updated = [...prevUsers, newUser];
       localStorage.setItem(storageKey_Users, JSON.stringify(updated));
@@ -95,9 +148,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     return true;
   };
 
-  const login = (email: string, password: string): boolean => {
+  const login = (
+    email: string,
+    password: string,
+    role: Profile["role"] = "merchant",
+  ): boolean => {
     setAuthError(null);
-    const exists = users.find((u) => u.email === email);
+    const exists = users.find((u) => u.email === email && u.role === role);
 
     if (!exists || exists.password !== password) {
       setAuthError(
@@ -118,29 +175,39 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateUser = (mail: string, updatedProfile: Profile) => {
-    // Fix: Correct mapping update logic without duplicate appending
-    setUsers((prevUsers) => {
-      const updatedUsers = prevUsers.map((u) =>
-        u.email === mail ? { ...u, ...updatedProfile } : u,
-      );
-      localStorage.setItem(storageKey_Users, JSON.stringify(updatedUsers));
+    if (!user) return;
+    if (mail !== user.email) return;
 
-      // Fix: If updating the currently logged-in user, sync their active session too
-      if (user?.email === mail) {
-        const updatedSession =
-          updatedUsers.find((u) => u.email === mail) || null;
-        if (updatedSession) {
-          localStorage.setItem(
-            storageKey_CurrentSession,
-            JSON.stringify(updatedSession),
-          );
-          setUser(updatedSession);
-        }
-      }
+    const update: Profile = {
+      ...user,
+      ...updatedProfile,
+    };
+    const updatedUsers = users.map((u) =>
+      u.email === mail ? { ...u, ...updatedProfile } : u,
+    );
 
-      return updatedUsers;
-    });
+    // persist to local storage
+    localStorage.setItem(storageKey_Users, JSON.stringify(updatedUsers));
+    localStorage.setItem(storageKey_CurrentSession, JSON.stringify(update));
+
+    // set user and users
+    setUser(update);
+    setUsers(updatedUsers);
+
+    console.log(update);
   };
+
+  useEffect(() => {
+    if (!authError) return;
+
+    const clearError = setTimeout(() => {
+      setAuthError(null);
+    }, 3000);
+
+    return () => {
+      clearTimeout(clearError);
+    };
+  }, [authError]);
 
   return (
     <UserContext.Provider
