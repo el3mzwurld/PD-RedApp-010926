@@ -18,3 +18,9 @@ export function generateBusinessCode(businessName: string): string {
 
   return businessNumber;
 }
+
+export const formatDate = (query: string): string => {
+  const date = new Date(query);
+  const formatted = date.toLocaleDateString();
+  return formatted;
+};

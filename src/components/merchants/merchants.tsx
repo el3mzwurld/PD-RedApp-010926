@@ -15,12 +15,16 @@ import { motion } from "motion/react";
 import { Search } from "../ui/Search";
 import { ArrowDownward } from "@mui/icons-material";
 import { useParams } from "react-router-dom";
+import { useUser } from "../../context/user";
+import { useAdmin } from "../../hooks/useAdmin";
+import { formatDate } from "../../lib/utils";
 
 export const Merchants = ({ role }: { role: "merchant" | "admin" }) => {
   const handleSubmit = (filter: string) => {};
   const theme = useTheme();
   const { mode = "manage" } = useParams<{ mode: "manage" | "commercials" }>();
-
+  const { user } = useUser();
+  const { merchants } = useAdmin(role);
   return (
     <Box
       sx={{
@@ -35,7 +39,7 @@ export const Merchants = ({ role }: { role: "merchant" | "admin" }) => {
         gap: 2.5,
       }}
     >
-      <NavBar role={role} />
+      <NavBar />
       <Box
         component={"main"}
         sx={{
@@ -165,112 +169,118 @@ export const Merchants = ({ role }: { role: "merchant" | "admin" }) => {
                 </motion.button>
               </div>
 
-              {/* container */}
-              <TableContainer>
-                <Table
-                  sx={{
-                    width: "100%",
-                    height: "auto",
-                    padding: { lg: 1.5, xl: 2.5 },
-                    borderCollapse: "separate",
-                    borderSpacing: "0px 10px",
-                  }}
-                  aria-description="customers-table"
-                >
-                  <TableHead>
-                    <TableRow sx={{ border: "none" }}>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        S/N
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Merchant ID
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Merchant Name
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Status
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Date Created
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Action
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        1
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        RED100023-JUMIA
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Jumia
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Active
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        12/09/2026
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        <Button variant="text">VIEW</Button>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              {merchants && (
+                <TableContainer>
+                  <Table
+                    sx={{
+                      width: "100%",
+                      height: "auto",
+                      padding: { lg: 1.5, xl: 2.5 },
+                      borderCollapse: "separate",
+                      borderSpacing: "0px 10px",
+                    }}
+                    aria-description="customers-table"
+                  >
+                    <TableHead>
+                      <TableRow sx={{ border: "none" }}>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          S/N
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Merchant ID
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Merchant Name
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Status
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Date Created
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Action
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {merchants.map((m, index) => (
+                        <TableRow
+                          sx={{ backgroundColor: "#F4F4F4" }}
+                          key={index}
+                        >
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {index + 1}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {m.ID}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {m.fName + " " + m.lName}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {m.isActive ? "Active" : "Inactive"}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {formatDate(m.createdAt)}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            <Button variant="text">VIEW</Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
             </div>
           </motion.div>
         </section>

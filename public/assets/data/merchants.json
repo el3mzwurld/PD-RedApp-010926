@@ -1,0 +1,116 @@
+[
+  {
+    "ID": "FRE-001",
+    "businessName": "Fresh Market Supplies",
+    "businessNumber": 1001234567,
+    "emails": {
+      "contactEmail": "contact@freshmarket.com",
+      "supportEmail": "support@freshmarket.com",
+      "disputeEmail": "disputes@freshmarket.com",
+      "businessEmail": "business@freshmarket.com",
+      "personalEmail": "adaeze.okafor@example.com"
+    },
+    "phone": 2348012345678,
+    "website": "https://freshmarket.com",
+    "bank": "First Bank Nigeria",
+    "accountNumber": 1234567890,
+    "address": {
+      "address1": "42 Lagos Street",
+      "address2": "Ikeja"
+    },
+    "sector": "Retail",
+    "state": "Lagos",
+    "lga": "Ikeja",
+    "city": "Lagos",
+    "country": "Nigeria",
+    "fName": "Adaeze",
+    "lName": "Okafor",
+    "personalPhone": 2348012345678,
+    "altPersonalPhone": 2348012345679,
+    "companyLogo": "/logos/fresh-market.png",
+    "keys": {
+      "test": 123456,
+      "life": 654321
+    },
+    "status": "Active",
+    "createdAt": "2026-01-15T08:00:00.000Z",
+    "isKYCComplete": true,
+    "isActive": true
+  },
+  {
+    "ID": "FRE-002",
+    "businessName": "Eze Digital Solutions",
+    "businessNumber": 1002345678,
+    "emails": {
+      "contactEmail": "contact@ezedigital.com",
+      "supportEmail": "support@ezedigital.com",
+      "disputeEmail": "disputes@ezedigital.com",
+      "businessEmail": "business@ezedigital.com",
+      "personalEmail": "chinedu.eze@example.com"
+    },
+    "phone": 2348023456789,
+    "website": "https://ezedigital.com",
+    "bank": "GTBank Nigeria",
+    "accountNumber": 9876543210,
+    "address": {
+      "address1": "15 Tech Avenue",
+      "address2": "VI"
+    },
+    "sector": "Technology Services",
+    "state": "Lagos",
+    "lga": "Victoria Island",
+    "city": "Lagos",
+    "country": "Nigeria",
+    "fName": "Chinedu",
+    "lName": "Eze",
+    "personalPhone": 2348023456789,
+    "altPersonalPhone": 2348023456790,
+    "companyLogo": "/logos/eze-digital.png",
+    "keys": {
+      "test": 234567,
+      "life": 765432
+    },
+    "status": "Active",
+    "createdAt": "2026-02-20T10:30:00.000Z",
+    "isKYCComplete": true,
+    "isActive": true
+  },
+  {
+    "ID": "JAZ-688E62",
+    "businessName": "Jazz Events Management",
+    "businessNumber": 1003456789,
+    "emails": {
+      "contactEmail": "contact@jazzevents.com",
+      "supportEmail": "support@jazzevents.com",
+      "disputeEmail": "disputes@jazzevents.com",
+      "businessEmail": "business@jazzevents.com",
+      "personalEmail": "adaeze.jazz@example.com"
+    },
+    "phone": 2348034567890,
+    "website": "https://jazzevents.com",
+    "bank": "Access Bank Nigeria",
+    "accountNumber": 5555666677,
+    "address": {
+      "address1": "88 Event Plaza",
+      "address2": "Lekki"
+    },
+    "sector": "Events & Entertainment",
+    "state": "Lagos",
+    "lga": "Lekki",
+    "city": "Lagos",
+    "country": "Nigeria",
+    "fName": "Adaeze",
+    "lName": "Okafor",
+    "personalPhone": 2348034567890,
+    "altPersonalPhone": 2348034567891,
+    "companyLogo": "/logos/jazz-events.png",
+    "keys": {
+      "test": 345678,
+      "life": 876543
+    },
+    "status": "Active",
+    "createdAt": "2026-03-10T14:45:00.000Z",
+    "isKYCComplete": true,
+    "isActive": true
+  }
+]

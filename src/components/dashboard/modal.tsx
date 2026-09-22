@@ -29,6 +29,7 @@ import {
   Legend,
 } from "recharts";
 import CustomerCount from "../ui/CustomerCount";
+import { useUser } from "./../../context/user";
 
 export type Range = "daily" | "weekly" | "monthly";
 
@@ -40,7 +41,8 @@ interface ModalProps {
 
 export const Modal = ({ mode, timeRange, setTimeRange }: ModalProps) => {
   const [data, setData] = useState<Volume[]>([]);
-  const role: "merchant" | "admin" = "admin";
+  const { user } = useUser();
+  const role = user!.role;
   useEffect(() => {
     const loadData = () => {
       if (!timeRange) return;
@@ -108,7 +110,7 @@ export const Modal = ({ mode, timeRange, setTimeRange }: ModalProps) => {
             {mode === "line" ? "Transaction Volume" : "Transaction Count"}
           </Typography>
 
-          {role === "admin" && (
+          {role !== "admin" && (
             <select
               value={timeRange}
               style={{ width: "100%", height: "100%", gridColumn: 3 }}

@@ -16,6 +16,8 @@ import {
   GroupWork,
   Wallet,
   Settings,
+  ExpandLess,
+  ExpandMore,
 } from "@mui/icons-material";
 import logo from "../img/logo.png";
 import type { AdminPages, RenderedPage } from "../../pages/home";
@@ -286,7 +288,7 @@ const SidebarItem = ({ Icon, label, active }: SidebarItemProps) => {
         gap: 2,
         cursor: "pointer",
         backgroundColor: isPage() ? "white" : "none",
-        borderRadius: active && 25,
+        borderRadius: active ? 25 : 0,
       }}
       title={label}
       aria-description={`${label}`}
@@ -338,12 +340,16 @@ const AdminSidebarItem = ({
   const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname;
-
+  const [open, setOpen] = useState(false);
   const isPage = () => {
-    if (label === "dashboard" && path === "/") {
+    const pathname = path.split("/")[1];
+    if (label.toLowerCase() === "dashboard" && path === "/") {
       return true;
     }
-    if (label.toLowerCase() === path.toLowerCase()) {
+    if (label.toLowerCase() === "payment link" && pathname === "payment-link") {
+      return true;
+    }
+    if (label.toLowerCase() === pathname.toLowerCase()) {
       return true;
     }
     return false;
@@ -368,14 +374,15 @@ const AdminSidebarItem = ({
       <Box
         sx={{
           width: "100%",
+          height: active ? { md: 45, xl: 55 } : { md: 50 },
           display: "flex",
-          height: { md: 45.5, lg: 55.5 },
           alignItems: "center",
           justifyContent: "center",
-          px: 0.5,
           gap: 2,
           cursor: "pointer",
           backgroundColor: isPage() ? "white" : "none",
+          borderRadius: active ? 25 : 0,
+          px: active ? 0 : 2.5,
         }}
       >
         <Icon
@@ -413,7 +420,38 @@ const AdminSidebarItem = ({
         >
           {label.charAt(0).toUpperCase() + label.slice(1)}
         </Typography>
-        <ChevronRight sx={{ width: "18px", color: "white" }} />
+        <div
+          style={{
+            opacity: active ? "0" : "1",
+            width: "20%",
+            display: active ? "none" : "block",
+          }}
+        >
+          {sublinks &&
+            (open ? (
+              <ExpandMore
+                sx={{
+                  width: "22.5px",
+                  color: isPage() ? "red" : "white",
+                  fontWeight: 600,
+                }}
+                onClick={() => {
+                  setOpen((prev) => !prev);
+                }}
+              />
+            ) : (
+              <ChevronRight
+                sx={{
+                  width: "22.5px",
+                  fontWeight: 600,
+                  color: isPage() ? "red" : "white",
+                }}
+                onClick={() => {
+                  setOpen((prev) => !prev);
+                }}
+              />
+            ))}
+        </div>
       </Box>
 
       {sublinks &&
@@ -426,7 +464,7 @@ const AdminSidebarItem = ({
               fontSize: 12,
               marginTop: 2.5,
               marginBottom: 2.5,
-              display: active ? "none" : "list-item",
+              display: active || !open ? "none" : "list-item",
               listStyleType: "square",
             }}
             key={index}

@@ -18,6 +18,7 @@ import { ArrowDownward } from "@mui/icons-material";
 import { useState } from "react";
 import { useUser } from "../../context/user";
 import { useMerchant } from "../../hooks/useMerchant";
+import { useAdmin } from "../../hooks/useAdmin";
 
 export const Disputes = () => {
   const theme = useTheme();
@@ -26,7 +27,7 @@ export const Disputes = () => {
   const role = user!.role;
   const id = user!.role === "merchant" ? user!.profile.ID : "";
   const { disputes } = useMerchant(id);
-
+  const { adminDisputes } = useAdmin(role);
   const formatDate = (query: string): string => {
     const date = new Date(query);
     const formatted = date.toLocaleDateString();
@@ -205,146 +206,215 @@ export const Disputes = () => {
               </div>
 
               {/* container */}
-              <TableContainer>
-                <Table
-                  sx={{
-                    width: "100%",
-                    height: "auto",
-                    padding: { lg: 1.5, xl: 2.5 },
-                    borderCollapse: "separate",
-                    borderSpacing: "0px 10px",
-                  }}
-                  aria-description="customers-table"
-                >
-                  <TableHead>
-                    <TableRow sx={{ border: "none" }}>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        S/N
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Merchant ID
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Payment Reference
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Amount
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Payment Method
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Card Scheme
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Date Created
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Due Date
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Action
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {disputes.length !== 0 ? (
-                      disputes.map((d, index) => (
-                        <TableRow
-                          sx={{ backgroundColor: "#F4F4F4" }}
-                          key={index}
+              {role === "merchant" && (
+                <TableContainer>
+                  <Table
+                    sx={{
+                      width: "100%",
+                      height: "auto",
+                      padding: { lg: 1.5, xl: 2.5 },
+                      borderCollapse: "separate",
+                      borderSpacing: "0px 10px",
+                    }}
+                    aria-description="customers-table"
+                  >
+                    <TableHead>
+                      <TableRow sx={{ border: "none" }}>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
                         >
+                          S/N
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Merchant ID
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Payment Reference
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Amount
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Payment Method
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Card Scheme
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Date Created
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Due Date
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Action
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {disputes.length !== 0 ? (
+                        disputes.map((d, index) => (
+                          <TableRow
+                            sx={{ backgroundColor: "#F4F4F4" }}
+                            key={index}
+                          >
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {index + 1}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {d.merchant.ID}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {d.paymentRef}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              NGN {d.amount}.00
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {d.paymentMtd}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              MPGS
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {formatDate(d.createdAt)}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {formatDate(d.due)}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {" "}
+                              <Button variant="text">VIEW</Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
                           <TableCell
                             sx={{
                               textAlign: "center",
                             }}
                           >
-                            {index + 1}
+                            -
                           </TableCell>
                           <TableCell
                             sx={{
                               textAlign: "center",
                             }}
                           >
-                            {d.merchant.ID}
+                            -
                           </TableCell>
                           <TableCell
                             sx={{
                               textAlign: "center",
                             }}
                           >
-                            {d.paymentRef}
+                            -
                           </TableCell>
                           <TableCell
                             sx={{
                               textAlign: "center",
                             }}
                           >
-                            NGN {d.amount}.00
+                            -{" "}
                           </TableCell>
                           <TableCell
                             sx={{
                               textAlign: "center",
                             }}
                           >
-                            {d.paymentMtd}
+                            -
                           </TableCell>
                           <TableCell
                             sx={{
                               textAlign: "center",
                             }}
                           >
-                            MPGS
+                            -
                           </TableCell>
                           <TableCell
                             sx={{
                               textAlign: "center",
                             }}
                           >
-                            {formatDate(d.createdAt)}
+                            -
                           </TableCell>
                           <TableCell
                             sx={{
                               textAlign: "center",
                             }}
                           >
-                            {formatDate(d.due)}
+                            -
                           </TableCell>
                           <TableCell
                             sx={{
@@ -355,78 +425,235 @@ export const Disputes = () => {
                             <Button variant="text">VIEW</Button>
                           </TableCell>
                         </TableRow>
-                      ))
-                    ) : (
-                      <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
+              {role === "admin" && (
+                <TableContainer>
+                  <Table
+                    sx={{
+                      width: "100%",
+                      height: "auto",
+                      padding: { lg: 1.5, xl: 2.5 },
+                      borderCollapse: "separate",
+                      borderSpacing: "0px 10px",
+                    }}
+                    aria-description="customers-table"
+                  >
+                    <TableHead>
+                      <TableRow sx={{ border: "none" }}>
                         <TableCell
                           sx={{
                             textAlign: "center",
                           }}
                         >
-                          -
+                          S/N
                         </TableCell>
                         <TableCell
                           sx={{
                             textAlign: "center",
                           }}
                         >
-                          -
+                          Merchant ID
                         </TableCell>
                         <TableCell
                           sx={{
                             textAlign: "center",
                           }}
                         >
-                          -
+                          Payment Reference
                         </TableCell>
                         <TableCell
                           sx={{
                             textAlign: "center",
                           }}
                         >
-                          -{" "}
+                          Amount
                         </TableCell>
                         <TableCell
                           sx={{
                             textAlign: "center",
                           }}
                         >
-                          -
+                          Payment Method
                         </TableCell>
                         <TableCell
                           sx={{
                             textAlign: "center",
                           }}
                         >
-                          -
+                          Card Scheme
                         </TableCell>
                         <TableCell
                           sx={{
                             textAlign: "center",
                           }}
                         >
-                          -
+                          Date Created
                         </TableCell>
                         <TableCell
                           sx={{
                             textAlign: "center",
                           }}
                         >
-                          -
+                          Due Date
                         </TableCell>
                         <TableCell
                           sx={{
                             textAlign: "center",
                           }}
                         >
-                          {" "}
-                          <Button variant="text">VIEW</Button>
+                          Action
                         </TableCell>
                       </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                      {adminDisputes.length !== 0 ? (
+                        adminDisputes.map((d, index) => (
+                          <TableRow
+                            sx={{ backgroundColor: "#F4F4F4" }}
+                            key={index}
+                          >
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {index + 1}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {d.merchant.ID}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {d.paymentRef}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              NGN {d.amount}.00
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {d.paymentMtd}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              MPGS
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {formatDate(d.createdAt)}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {formatDate(d.due)}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "center",
+                              }}
+                            >
+                              {" "}
+                              <Button variant="text">VIEW</Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            -
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            -
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            -
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            -{" "}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            -
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            -
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            -
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            -
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {" "}
+                            <Button variant="text">VIEW</Button>
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
             </div>
           </motion.div>
         </section>

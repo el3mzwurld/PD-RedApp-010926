@@ -42,6 +42,7 @@ export const AppRouter = () => {
 
           {/* admin-only */}
           <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+            <Route path="merchant" element={<Merchants role="admin" />} />
             <Route path="merchant/:mode" element={<Merchants role="admin" />} />
             <Route path="role" element={<Role />} />
             <Route path="settings" element={<Settings />} />
