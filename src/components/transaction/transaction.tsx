@@ -290,8 +290,23 @@ export const Transaction = () => {
                               N/A
                             </TableCell>
                             <TableCell sx={{ textAlign: "center" }}>
-                              <Button variant="text">VIEW</Button>
+                              <Button
+                                variant="text"
+                                onClick={() => setOpen((prev) => !prev)}
+                              >
+                                VIEW
+                              </Button>
                             </TableCell>
+                            <PopupModal
+                              open={open}
+                              setOpen={setOpen}
+                              data={transaction}
+                              buttonTitle1="Dispute"
+                              title="Dispute"
+                              options={1}
+                              key={index}
+                              mode="transaction"
+                            />
                           </TableRow>
                         ))
                       ) : (

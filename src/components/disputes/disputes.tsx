@@ -120,7 +120,7 @@ export const Disputes = () => {
               <InformationContainer
                 mode="read"
                 name="Merchant ID"
-                content="Fresh Farms"
+                content={user!.profile.ID}
               />
             </Stack>
           )}
@@ -357,8 +357,24 @@ export const Disputes = () => {
                               }}
                             >
                               {" "}
-                              <Button variant="text">VIEW</Button>
+                              <Button
+                                variant="text"
+                                onClick={() => setOpen((prev) => !prev)}
+                              >
+                                VIEW
+                              </Button>
                             </TableCell>
+
+                            <PopupModal
+                              open={open}
+                              setOpen={setOpen}
+                              data={d}
+                              title={"Dispute"}
+                              options={1}
+                              buttonTitle1="Close"
+                              key={index}
+                              mode="disputes"
+                            />
                           </TableRow>
                         ))
                       ) : (

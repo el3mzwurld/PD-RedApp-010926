@@ -278,44 +278,62 @@ export function isMerchant(data: unknown): data is Merchant {
 
   return true;
 }
-
 export function isCustomer(data: unknown): data is Customer {
   if (typeof data !== "object" || data === null) {
+    console.log("❌ Failed at: root object check");
     return false;
   }
 
-  const customer = data as Record<string, unknown>;
+  const customer = data as Record<string, any>;
   const merchant = customer.merchant;
   const phones = customer.phones;
   const address = customer.address;
 
-  if (
-    !isLinkedMerchant(merchant) ||
-    typeof phones !== "object" ||
-    phones === null ||
-    typeof address !== "object" ||
-    address === null
-  ) {
+  if (typeof phones !== "object" || phones === null) {
+    console.log("❌ Failed at: phones object check");
     return false;
   }
 
-  const customerPhones = phones as Record<string, unknown>;
-  const customerAddress = address as Record<string, unknown>;
+  if (typeof address !== "object" || address === null) {
+    console.log("❌ Failed at: address object check");
+    return false;
+  }
 
-  return (
-    typeof customer.fName === "string" &&
-    typeof customer.lName === "string" &&
-    typeof customerPhones.main === "number" &&
-    (typeof customerPhones.alternate === "number" ||
-      customerPhones.alternate === null) &&
-    typeof customer.active === "boolean" &&
-    typeof customer.email === "string" &&
-    typeof customerAddress.address1 === "string" &&
-    (typeof customerAddress.address2 === "string" ||
-      customerAddress.address2 === null)
-  );
+  const checks: Record<string, boolean> = {
+    fName: typeof customer.fName === "string",
+    lName: typeof customer.lName === "string",
+    email: typeof customer.email === "string",
+    active: typeof customer.active === "boolean",
+    merchant: isLinkedMerchant(merchant),
+    "phones.main": typeof phones.main === "number",
+    "phones.alternate":
+      typeof phones.alternate === "number" || phones.alternate === null,
+    "address.address1": typeof address.address1 === "string",
+    "address.address2":
+      typeof address.address2 === "string" || address.address2 === null,
+  };
+
+  const failedCheck = Object.keys(checks).find((key) => !checks[key]);
+  if (failedCheck) {
+    let valueReceived: any;
+
+    if (failedCheck.startsWith("phones.")) {
+      valueReceived = phones[failedCheck.split(".")[1]];
+    } else if (failedCheck.startsWith("address.")) {
+      valueReceived = address[failedCheck.split(".")[1]];
+    } else {
+      valueReceived = customer[failedCheck];
+    }
+
+    console.log(
+      `❌ Type guard failed at key: [${failedCheck}]. Value received:`,
+      valueReceived,
+    );
+    return false;
+  }
+
+  return true;
 }
-
 export function isTransaction(data: unknown): data is Transaction {
   if (typeof data !== "object" || data === null) {
     return false;

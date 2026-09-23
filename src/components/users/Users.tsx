@@ -16,7 +16,8 @@ import { InformationContainer } from "../ui/InformationContainer";
 import { Search } from "../ui/Search";
 import { useUser } from "../../context/user";
 import { useMerchant } from "../../hooks/useMerchant";
-
+import { PopupModal } from "../ui/Popup";
+import { useState } from "react";
 const Users = () => {
   const theme = useTheme();
   const handleSubmit = (filter: string) => {};
@@ -24,6 +25,7 @@ const Users = () => {
   const id = user!.role === "merchant" ? user!.profile.ID : " ";
   const { customers } = useMerchant(id);
   const role = user!.role;
+  const [open, setOpen] = useState(false);
   return (
     <Box
       sx={{
@@ -279,8 +281,22 @@ const Users = () => {
                             }}
                           >
                             {" "}
-                            <Button variant="text">VIEW</Button>
+                            <Button
+                              variant="text"
+                              onClick={() => setOpen((prev) => !prev)}
+                            >
+                              VIEW
+                            </Button>
                           </TableCell>
+                          <PopupModal
+                            open={open}
+                            setOpen={setOpen}
+                            title="Details"
+                            buttonTitle1="close"
+                            data={c}
+                            options={1}
+                            mode="customers"
+                          />
                         </TableRow>
                       ))
                     ) : (

@@ -207,6 +207,7 @@ export const Customers = () => {
                           buttonTitle1="close"
                           data={cus}
                           options={1}
+                          mode="customers"
                         />
                       </TableRow>
                     ))

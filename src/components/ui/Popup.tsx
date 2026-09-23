@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  isCustomer,
   isDispute,
   isMerchant,
   isTransaction,
@@ -31,7 +32,13 @@ export const PopupModal = ({
   options: number;
   buttonTitle2?: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  mode: "disputes" | "merchants" | "role" | "transaction" | "role linkage";
+  mode:
+    | "disputes"
+    | "merchants"
+    | "role"
+    | "transaction"
+    | "role linkage"
+    | "customers";
 }) => {
   return (
     <div style={{ background: "none" }}>
@@ -42,7 +49,7 @@ export const PopupModal = ({
         }}
         slotProps={{
           backdrop: {
-            sx: { backgroundColor: "rgba(0, 0, 0, 0.3)" },
+            sx: { backgroundColor: "rgba(0, 0, 0, 0.11)" },
           },
         }}
         sx={{ background: "none" }}
@@ -433,6 +440,49 @@ export const PopupModal = ({
                   name="Status"
                   content={data.status}
                 />{" "}
+              </>
+            )}
+            {mode === "customers" && isCustomer(data) && (
+              <>
+                <InformationContainer
+                  mode="read"
+                  name="First Name"
+                  content={data.fName}
+                />
+                <InformationContainer
+                  mode="read"
+                  name="Last Name"
+                  content={data.lName}
+                />
+                <InformationContainer
+                  mode="read"
+                  name="Email Address"
+                  content={data.email}
+                />
+                <InformationContainer
+                  mode="read"
+                  name="Phone Number"
+                  content={data.phones.main}
+                />{" "}
+                {data.phones.alternate && (
+                  <InformationContainer
+                    mode="read"
+                    name="Alternate Phone"
+                    content={data.phones.alternate}
+                  />
+                )}
+                <InformationContainer
+                  mode="read"
+                  name="Address 1"
+                  content={data.address.address1}
+                />
+                {data.address.address2 && (
+                  <InformationContainer
+                    mode="read"
+                    name="Address 2"
+                    content={data.address.address2}
+                  />
+                )}
               </>
             )}
           </Stack>
