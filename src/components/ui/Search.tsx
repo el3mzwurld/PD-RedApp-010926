@@ -2,6 +2,7 @@ import { Button, Stack } from "@mui/material";
 import type React from "react";
 import { useState } from "react";
 import type { Dispute, DisputeFilter } from "../../lib/types";
+import { useAdmin } from "../../hooks/useAdmin";
 
 interface SearchProps {
   onSubmit: (filter: string) => void;
@@ -113,6 +114,8 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
 
     onSubmit(filter);
   };
+
+  const { myMerchants } = useAdmin(role);
   return (
     <>
       {mode === "default" && (
@@ -904,9 +907,12 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
               value={merchantID}
               onChange={(e) => setMerchantID(e.target.value)}
             >
-              <option disabled selected hidden>
-                Merchant ID
-              </option>
+              <option defaultChecked>Merchant ID</option>
+              {myMerchants.map((m, index) => (
+                <option key={index} value={m}>
+                  {m}
+                </option>
+              ))}
             </select>
           </div>
           {/* payment reference */}
@@ -1087,7 +1093,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
                 border: "2px solid lightgrey",
                 cursor: "pointer",
                 fontFamily: "poppins",
-                color: "lightgray",
+                color: "gray",
               }}
               value={merchantID}
               onChange={(e) => setMerchantID(e.target.value)}
@@ -1095,6 +1101,11 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
               <option disabled selected hidden>
                 Search by merchant ID
               </option>
+              {myMerchants.map((m, index) => (
+                <option key={index} value={m}>
+                  {m}
+                </option>
+              ))}
             </select>
           </div>
           {/* User status */}

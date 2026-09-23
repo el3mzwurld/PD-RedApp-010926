@@ -19,6 +19,7 @@ import { useState } from "react";
 import { useUser } from "../../context/user";
 import { useMerchant } from "../../hooks/useMerchant";
 import { useAdmin } from "../../hooks/useAdmin";
+import { PopupModal } from "../ui/Popup";
 
 export const Disputes = () => {
   const theme = useTheme();
@@ -27,7 +28,9 @@ export const Disputes = () => {
   const role = user!.role;
   const id = user!.role === "merchant" ? user!.profile.ID : "";
   const { disputes } = useMerchant(id);
-  const { adminDisputes } = useAdmin(role);
+  const { adminDisputes, myMerchants } = useAdmin(role);
+  const [open, setOpen] = useState(false);
+
   const formatDate = (query: string): string => {
     const date = new Date(query);
     const formatted = date.toLocaleDateString();
@@ -578,8 +581,24 @@ export const Disputes = () => {
                               }}
                             >
                               {" "}
-                              <Button variant="text">VIEW</Button>
+                              <Button
+                                variant="text"
+                                onClick={() => setOpen((prev) => !prev)}
+                              >
+                                VIEW
+                              </Button>
                             </TableCell>
+
+                            <PopupModal
+                              open={open}
+                              setOpen={setOpen}
+                              data={d}
+                              title={"Dispute"}
+                              options={1}
+                              buttonTitle1="Close"
+                              key={index}
+                              mode="disputes"
+                            />
                           </TableRow>
                         ))
                       ) : (

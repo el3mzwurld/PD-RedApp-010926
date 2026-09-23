@@ -12,7 +12,7 @@
     "paymentMtd": "Card",
     "cardScheme": "Visa",
     "customerEmail": "ifeoma.nwosu@example.com",
-    "transactionStatus": "disputed",
+    "transactionStatus": "failed",
     "status": "Open"
   },
   {
@@ -44,7 +44,7 @@
     "paymentMtd": "Card",
     "cardScheme": "Mastercard",
     "customerEmail": "bola.adebayo@example.com",
-    "transactionStatus": "settled",
+    "transactionStatus": "successful",
     "status": "Fully Accepted"
   }
 ]

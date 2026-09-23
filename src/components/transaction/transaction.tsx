@@ -18,12 +18,16 @@ import { ArrowDownward } from "@mui/icons-material";
 import { useState } from "react";
 import { useUser } from "../../context/user";
 import { useMerchant } from "../../hooks/useMerchant";
+import { useAdmin } from "../../hooks/useAdmin";
+import { PopupModal } from "../ui/Popup";
 
 export const Transaction = () => {
+  const [open, setOpen] = useState(false);
   const { user } = useUser();
   const role = user!.role;
   const id = role === "merchant" ? user!.profile.ID : "";
   const { transactions } = useMerchant(id);
+  const { adminTransactions } = useAdmin(role);
   const theme = useTheme();
   const handleSubmit = (filter: string) => {};
   return (
@@ -164,141 +168,297 @@ export const Transaction = () => {
               </div>
 
               {/* container */}
-              <TableContainer>
-                <Table
-                  sx={{
-                    width: "100%",
-                    height: "auto",
-                    padding: { lg: 1.5, xl: 2.5 },
-                    borderCollapse: "separate",
-                    borderSpacing: "0px 10px",
-                  }}
-                  aria-description="customers-table"
-                >
-                  <TableHead>
-                    <TableRow sx={{ border: "none" }}>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        S/N
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Merchant ID
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Payment Reference
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Amount
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Payment Method
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Card Scheme
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Status
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Date Created
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Transaction Date
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Action
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {transactions.length > 0 ? (
-                      transactions.map((transaction, index) => (
-                        <TableRow
-                          key={`${transaction.paymentRef}-${index}`}
-                          sx={{ backgroundColor: "#F4F4F4" }}
+              {role === "merchant" && (
+                <TableContainer>
+                  <Table
+                    sx={{
+                      width: "100%",
+                      height: "auto",
+                      padding: { lg: 1.5, xl: 2.5 },
+                      borderCollapse: "separate",
+                      borderSpacing: "0px 10px",
+                    }}
+                    aria-description="customers-table"
+                  >
+                    <TableHead>
+                      <TableRow sx={{ border: "none" }}>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
                         >
-                          <TableCell sx={{ textAlign: "center" }}>
-                            {index + 1}
-                          </TableCell>
-                          <TableCell sx={{ textAlign: "center" }}>
-                            {transaction.merchant.ID}
-                          </TableCell>
-                          <TableCell sx={{ textAlign: "center" }}>
-                            {transaction.paymentRef}
-                          </TableCell>
-                          <TableCell sx={{ textAlign: "center" }}>
-                            {transaction.amount}
-                          </TableCell>
-                          <TableCell sx={{ textAlign: "center" }}>
-                            {transaction.paymentMethod}
-                          </TableCell>
-                          <TableCell sx={{ textAlign: "center" }}>
-                            {transaction.cardScheme}
-                          </TableCell>
-                          <TableCell sx={{ textAlign: "center" }}>
-                            {transaction.status.charAt(0).toUpperCase() +
-                              transaction.status.slice(1)}
-                          </TableCell>
-                          <TableCell sx={{ textAlign: "center" }}>
-                            N/A
-                          </TableCell>
-                          <TableCell sx={{ textAlign: "center" }}>
-                            N/A
-                          </TableCell>
-                          <TableCell sx={{ textAlign: "center" }}>
-                            <Button variant="text">VIEW</Button>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
-                        <TableCell colSpan={10} sx={{ textAlign: "center" }}>
-                          No transactions available.
+                          S/N
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Merchant ID
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Payment Reference
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Amount
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Payment Method
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Card Scheme
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Status
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Date Created
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Transaction Date
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Action
                         </TableCell>
                       </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                      {transactions.length > 0 ? (
+                        transactions.map((transaction, index) => (
+                          <TableRow
+                            key={`${transaction.paymentRef}-${index}`}
+                            sx={{ backgroundColor: "#F4F4F4" }}
+                          >
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {index + 1}
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {transaction.merchant.ID}
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {transaction.paymentRef}
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {transaction.amount}
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {transaction.paymentMethod}
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {transaction.cardScheme}
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {transaction.status.charAt(0).toUpperCase() +
+                                transaction.status.slice(1)}
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              N/A
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              N/A
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              <Button variant="text">VIEW</Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
+                          <TableCell colSpan={10} sx={{ textAlign: "center" }}>
+                            No transactions available.
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
+
+              {role === "admin" && (
+                <TableContainer>
+                  <Table
+                    sx={{
+                      width: "100%",
+                      height: "auto",
+                      padding: { lg: 1.5, xl: 2.5 },
+                      borderCollapse: "separate",
+                      borderSpacing: "0px 10px",
+                    }}
+                    aria-description="customers-table"
+                  >
+                    <TableHead>
+                      <TableRow sx={{ border: "none" }}>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          S/N
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Merchant ID
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Payment Reference
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Amount
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Payment Method
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Card Scheme
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Status
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Date Created
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Transaction Date
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Action
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {adminTransactions.length > 0 ? (
+                        adminTransactions.map((transaction, index) => (
+                          <TableRow
+                            key={`${transaction.paymentRef}-${index}`}
+                            sx={{ backgroundColor: "#F4F4F4" }}
+                          >
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {index + 1}
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {transaction.merchant.ID}
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {transaction.paymentRef}
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {transaction.amount}
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {transaction.paymentMethod}
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {transaction.cardScheme}
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              {transaction.status.charAt(0).toUpperCase() +
+                                transaction.status.slice(1)}
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              N/A
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              N/A
+                            </TableCell>
+                            <TableCell sx={{ textAlign: "center" }}>
+                              <Button
+                                variant="text"
+                                onClick={() => setOpen((prev) => !prev)}
+                              >
+                                VIEW
+                              </Button>
+                            </TableCell>
+
+                            <PopupModal
+                              open={open}
+                              setOpen={setOpen}
+                              data={transaction}
+                              buttonTitle1="Dispute"
+                              title="Dispute"
+                              options={1}
+                              key={index}
+                              mode="transaction"
+                            />
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
+                          <TableCell colSpan={10} sx={{ textAlign: "center" }}>
+                            No transactions available.
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
             </div>
           </motion.div>
         </section>

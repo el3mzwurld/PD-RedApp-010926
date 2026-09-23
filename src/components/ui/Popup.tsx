@@ -1,14 +1,18 @@
 import React, { useState } from "react";
-import type {
-  Administrator,
-  Customer,
-  Dispute,
-  Merchant,
-  Transaction,
+import {
+  isDispute,
+  isMerchant,
+  isTransaction,
+  type Administrator,
+  type Customer,
+  type Dispute,
+  type Merchant,
+  type Transaction,
 } from "../../lib/types";
 import { Box, Button, Modal, Stack } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { InformationContainer } from "./InformationContainer";
+import { formatDate } from "../../lib/utils";
 
 export const PopupModal = ({
   open,
@@ -18,6 +22,7 @@ export const PopupModal = ({
   options,
   buttonTitle2,
   setOpen,
+  mode,
 }: {
   open: boolean;
   data: Merchant | Customer | Transaction | Administrator | Dispute;
@@ -26,14 +31,8 @@ export const PopupModal = ({
   options: number;
   buttonTitle2?: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  mode: "disputes" | "merchants" | "role" | "transaction" | "role linkage";
 }) => {
-  const formattedData: { title: string; content: string }[] = Object.entries(
-    data,
-  ).map(([key, value]) => ({
-    title: `${key.charAt(0) + key.slice(1)}`,
-    content: JSON.stringify(value),
-  }));
-
   return (
     <div style={{ background: "none" }}>
       <Modal
@@ -41,25 +40,36 @@ export const PopupModal = ({
         onClose={() => {
           setOpen((prev) => !prev);
         }}
+        slotProps={{
+          backdrop: {
+            sx: { backgroundColor: "rgba(0, 0, 0, 0.3)" },
+          },
+        }}
         sx={{ background: "none" }}
       >
         <Box
           sx={{
-            width: "75%",
+            width: "70%",
             position: "absolute",
             height: "auto",
+            maxHeight: "calc(100vh - 32px)",
             minHeight: 350,
-            top: "50%",
+            top: mode !== "merchants" ? "50%" : "30%",
             left: "50%",
-            transform: "translate(-50%, -50%)",
+            transform:
+              mode === "merchants"
+                ? "translate(-50%, -30%)"
+                : "translate(-50%, -50%)",
             bgcolor: "background.paper",
             borderRadius: 2,
             p: 4,
+            boxSizing: "border-box",
             outline: "none",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             gap: 2.5,
+            overflowY: "auto",
           }}
         >
           {/* header */}
@@ -70,10 +80,11 @@ export const PopupModal = ({
               display: "flex",
               flexWrap: "nowrap",
               justifyContent: "space-between",
-              padding: "0px 15px",
+              padding: "0px 0px",
+              alignItems: "center",
             }}
           >
-            <h4>{title}</h4>
+            <h2 style={{ color: "red" }}>{title}</h2>
 
             <Close
               onClick={() => {
@@ -93,26 +104,352 @@ export const PopupModal = ({
               gap: 5,
             }}
           >
-            {formattedData.map((piece, index) => {
-              const title = piece.title;
-              const content = JSON.parse(piece.content);
-
-              return (
+            {mode === "disputes" && isDispute(data) && (
+              <>
                 <InformationContainer
                   mode="read"
-                  name={piece.title}
-                  content={piece.content}
-                  key={index}
+                  name="Merchant ID"
+                  content={data.merchant.ID}
+                ></InformationContainer>
+                <InformationContainer
+                  mode="read"
+                  name="Merchant Name"
+                  content={data.merchant.fName + " " + data.merchant.lName}
                 />
-              );
-            })}
+                <InformationContainer
+                  mode="read"
+                  name="Payment Reference"
+                  content={data.paymentRef}
+                />{" "}
+                <InformationContainer
+                  mode="read"
+                  name="Transaction Amount"
+                  content={data.amount}
+                />{" "}
+                <InformationContainer
+                  mode="read"
+                  name="Payment Method"
+                  content={data.paymentMtd}
+                />{" "}
+                <InformationContainer
+                  mode="read"
+                  name="Card Scheme"
+                  content={data.cardScheme}
+                />{" "}
+                <InformationContainer
+                  mode="read"
+                  name="Date Created"
+                  content={formatDate(data.createdAt)}
+                />{" "}
+                <InformationContainer
+                  mode="read"
+                  name="Due date"
+                  content={formatDate(data.due)}
+                />{" "}
+                <InformationContainer
+                  mode="read"
+                  name="Transaction Status"
+                  content={
+                    data.transactionStatus.charAt(0).toUpperCase() +
+                    data.transactionStatus.slice(1)
+                  }
+                />
+              </>
+            )}
+            {mode === "merchants" && isMerchant(data) && (
+              <Stack spacing={4.5} sx={{ width: "100%", alignItems: "start" }}>
+                <div
+                  style={{
+                    width: "auto",
+                    height: "auto",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 15,
+                    color: "red",
+                  }}
+                >
+                  <h3>Company Logo</h3>
+                  {/* profile img */}
+                  <div
+                    style={{
+                      width: 150,
+                      height: 150,
+                      backgroundColor: "#A09D9D",
+                      borderRadius: "100%",
+                    }}
+                  ></div>
+                </div>
+
+                <div
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "start",
+                    gap: 15,
+                    color: "red",
+                    fontWeight: 500,
+                  }}
+                >
+                  <h3>Business Information</h3>
+
+                  <Stack
+                    direction={"row"}
+                    spacing={1}
+                    sx={{
+                      flexWrap: "wrap",
+                      flex: 1,
+                      height: "auto",
+                      rowGap: 4.5,
+                      alignItems: "start",
+                      justifyContent: "start",
+                      columnGap: 2.5,
+                      width: "100%",
+                    }}
+                  >
+                    <InformationContainer
+                      mode="read"
+                      name="Business Name"
+                      content={data.businessName}
+                    />
+                    <InformationContainer
+                      mode="read"
+                      name="Business Number"
+                      content={data.ID}
+                    />
+                    <InformationContainer
+                      mode="read"
+                      name="Support Email"
+                      content={data.emails.supportEmail ?? ""}
+                    />
+                    <InformationContainer
+                      mode="read"
+                      name="Dispute Email"
+                      content={data.emails.disputeEmail ?? ""}
+                    />
+                    <InformationContainer
+                      mode="read"
+                      name="Business Email"
+                      content={data.emails.businessEmail}
+                    />
+                    <InformationContainer
+                      mode="read"
+                      name="Phone Number"
+                      content={String(data.phone)}
+                    />
+                    <InformationContainer
+                      mode="read"
+                      name="Website"
+                      content={data.website ?? ""}
+                    />
+                    <InformationContainer
+                      mode="read"
+                      name="Bank Name"
+                      content={data.bank ?? ""}
+                    />
+                    <InformationContainer
+                      mode="read"
+                      name="Account Number"
+                      content={String(data.accountNumber ?? "")}
+                    />
+                    <InformationContainer
+                      mode="read"
+                      name="Address 1"
+                      content={data.address.address1 ?? ""}
+                    />
+                    <InformationContainer
+                      mode="read"
+                      name="Address 2"
+                      content={data.address.address2 ?? ""}
+                    />
+                    <InformationContainer
+                      mode="read"
+                      name="Sector/Industry"
+                      content={data.sector ?? ""}
+                    />
+                  </Stack>
+                  <InformationContainer
+                    mode="read"
+                    name="Country"
+                    content="Nigeria"
+                  />
+                </div>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "start",
+                    gap: 15,
+                    color: "red",
+                    fontWeight: 500,
+                  }}
+                >
+                  <h3>Contact Information</h3>
+
+                  <Stack
+                    direction={"row"}
+                    spacing={1}
+                    sx={{
+                      flexWrap: "wrap",
+                      flex: 1,
+                      height: "auto",
+                      rowGap: 4.5,
+                      alignItems: "start",
+                      justifyContent: "start",
+                      columnGap: 2.5,
+                      width: "100%",
+                    }}
+                  >
+                    <InformationContainer
+                      mode="read"
+                      name="First Name"
+                      content={data.fName}
+                    />
+                    <InformationContainer
+                      mode="read"
+                      name="Last Name"
+                      content={data.lName}
+                    />
+                    <InformationContainer
+                      mode="read"
+                      name="Mobile Number"
+                      content={String(data.personalPhone ?? "")}
+                    />
+                    <InformationContainer
+                      mode="read"
+                      name="Alternate Mobile Number"
+                      content={String(data.altPersonalPhone ?? "")}
+                    />
+                    <InformationContainer
+                      mode="read"
+                      name="Email Address"
+                      content={data.emails.personalEmail ?? ""}
+                    />
+                  </Stack>
+                </div>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "start",
+                    gap: 15,
+                    color: "red",
+                    fontWeight: 500,
+                  }}
+                >
+                  <h3>KYC Documents</h3>
+
+                  <Stack spacing={2.5} sx={{ width: "100%" }}>
+                    {["jumia-cac-documents.pdf", "jumia-mandate.png"].map(
+                      (documentName) => (
+                        <Stack
+                          key={documentName}
+                          direction="row"
+                          spacing={3}
+                          sx={{
+                            width: "100%",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: "50%",
+                              minHeight: 56,
+                              px: 3.5,
+                              display: "flex",
+                              alignItems: "center",
+                              bgcolor: "#d1d1d1",
+                              borderRadius: 1,
+                              color: "#888",
+                              fontSize: 12,
+                            }}
+                          >
+                            {documentName}
+                          </Box>
+                          <Button
+                            variant="outlined"
+                            sx={{
+                              minWidth: 102,
+                              borderColor: "red",
+                              borderRadius: 8,
+                              color: "red",
+                              fontSize: 10,
+                            }}
+                          >
+                            View
+                          </Button>
+                          <Button
+                            variant="text"
+                            sx={{
+                              color: "red",
+                              fontSize: 10,
+                              fontWeight: 700,
+                            }}
+                          >
+                            Download
+                          </Button>
+                        </Stack>
+                      ),
+                    )}
+                  </Stack>
+                </div>
+              </Stack>
+            )}
+            {mode === "transaction" && isTransaction(data) && (
+              <>
+                <InformationContainer
+                  mode="read"
+                  name="Merchant ID"
+                  content={data.merchant.ID}
+                />
+                <InformationContainer
+                  mode="read"
+                  name="Payment Reference"
+                  content={data.paymentRef}
+                />{" "}
+                <InformationContainer
+                  mode="read"
+                  name="Amount"
+                  content={data.amount}
+                />{" "}
+                <InformationContainer
+                  mode="read"
+                  name="Payment Method"
+                  content={data.paymentMethod}
+                />{" "}
+                <InformationContainer
+                  mode="read"
+                  name="Card Scheme"
+                  content={data.cardScheme}
+                />{" "}
+                <InformationContainer
+                  mode="read"
+                  name="Status"
+                  content={data.status}
+                />{" "}
+              </>
+            )}
           </Stack>
           {/* button group */}
-          <Stack direction={"row"}>
-            {options >= 1 ? (
+          <Stack direction={"row"} spacing={2}>
+            {options <= 1 ? (
               <Button
                 variant="contained"
                 sx={{ px: 2.5, py: 1.25, color: "white" }}
+                onClick={() => {
+                  if (buttonTitle1.toLowerCase() === "close") {
+                    setOpen(false);
+                    return;
+                  }
+
+                  return;
+                }}
               >
                 {buttonTitle1}
               </Button>

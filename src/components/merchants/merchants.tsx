@@ -18,6 +18,8 @@ import { useParams } from "react-router-dom";
 import { useUser } from "../../context/user";
 import { useAdmin } from "../../hooks/useAdmin";
 import { formatDate } from "../../lib/utils";
+import { PopupModal } from "../ui/Popup";
+import { useState } from "react";
 
 export const Merchants = ({ role }: { role: "merchant" | "admin" }) => {
   const handleSubmit = (filter: string) => {};
@@ -25,6 +27,7 @@ export const Merchants = ({ role }: { role: "merchant" | "admin" }) => {
   const { mode = "manage" } = useParams<{ mode: "manage" | "commercials" }>();
   const { user } = useUser();
   const { merchants } = useAdmin(role);
+  const [open, setOpen] = useState(false);
   return (
     <Box
       sx={{
@@ -273,8 +276,25 @@ export const Merchants = ({ role }: { role: "merchant" | "admin" }) => {
                               textAlign: "center",
                             }}
                           >
-                            <Button variant="text">VIEW</Button>
+                            <Button
+                              variant="text"
+                              onClick={() => setOpen((prev) => !prev)}
+                            >
+                              VIEW
+                            </Button>
                           </TableCell>
+
+                          <PopupModal
+                            open={open}
+                            setOpen={setOpen}
+                            data={m}
+                            title={"Merchant Information"}
+                            options={2}
+                            buttonTitle1="Activate Merchant"
+                            buttonTitle2="De-activate Merchant"
+                            key={index}
+                            mode="merchants"
+                          />
                         </TableRow>
                       ))}
                     </TableBody>

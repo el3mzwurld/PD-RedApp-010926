@@ -15,12 +15,14 @@ import { Search } from "../ui/Search";
 import { useState } from "react";
 import { useUser } from "../../context/user";
 import { useMerchant } from "../../hooks/useMerchant";
+import { useAdmin } from "../../hooks/useAdmin";
 
 export const Settlement = () => {
   const { user } = useUser();
   const role = user!.role;
   const id = role === "merchant" ? user!.profile.ID : "";
   const { settlements } = useMerchant(id);
+  const { adminSettlements } = useAdmin(role);
   const handleSettlementSearch = (query: string) => {};
   return (
     <Box
@@ -158,184 +160,327 @@ export const Settlement = () => {
               }}
             >
               {/* container */}
-              <TableContainer>
-                <Table
-                  sx={{
-                    width: "100%",
-                    height: "auto",
-                    padding: { lg: 1.5, xl: 2.5 },
-                    borderCollapse: "separate",
-                    borderSpacing: "0px 10px",
-                  }}
-                  aria-description="customers-table"
-                >
-                  <TableHead>
-                    <TableRow sx={{ border: "none" }}>
-                      <TableCell
-                        sx={{
-                          textAlign: "left",
-                        }}
-                      >
-                        S/N
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "left",
-                        }}
-                      >
-                        Account Name
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "left",
-                        }}
-                      >
-                        Account Number
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "left",
-                        }}
-                      >
-                        Batch Code
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "left",
-                        }}
-                      >
-                        Currency
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "left",
-                        }}
-                      >
-                        Reference
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "left",
-                        }}
-                      >
-                        Status
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {settlements.length !== 0 ? (
-                      settlements.map((s, index) => (
-                        <TableRow
-                          sx={{ backgroundColor: "#F4F4F4" }}
-                          key={index}
-                        >
-                          <TableCell
-                            sx={{
-                              textAlign: "left",
-                            }}
-                          >
-                            {index + 1}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "left",
-                            }}
-                          >
-                            {s.accountName}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "left",
-                            }}
-                          >
-                            {s.accountNumber}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "left",
-                            }}
-                          >
-                            {s.batchCode}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "left",
-                            }}
-                          >
-                            {s.currency}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "left",
-                            }}
-                          >
-                            {s.reference}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "left",
-                            }}
-                          >
-                            {s.status}
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
+              {role === "merchant" && (
+                <TableContainer>
+                  <Table
+                    sx={{
+                      width: "100%",
+                      height: "auto",
+                      padding: { lg: 1.5, xl: 2.5 },
+                      borderCollapse: "separate",
+                      borderSpacing: "0px 10px",
+                    }}
+                    aria-description="customers-table"
+                  >
+                    <TableHead>
+                      <TableRow sx={{ border: "none" }}>
                         <TableCell
                           sx={{
                             textAlign: "left",
                           }}
                         >
-                          -
+                          S/N
                         </TableCell>
                         <TableCell
                           sx={{
                             textAlign: "left",
                           }}
                         >
-                          -{" "}
+                          Account Name
                         </TableCell>
                         <TableCell
                           sx={{
                             textAlign: "left",
                           }}
                         >
-                          -
+                          Account Number
                         </TableCell>
                         <TableCell
                           sx={{
                             textAlign: "left",
                           }}
                         >
-                          -
+                          Batch Code
                         </TableCell>
                         <TableCell
                           sx={{
                             textAlign: "left",
                           }}
                         >
-                          -
+                          Currency
                         </TableCell>
                         <TableCell
                           sx={{
                             textAlign: "left",
                           }}
                         >
-                          -
+                          Reference
                         </TableCell>
                         <TableCell
                           sx={{
                             textAlign: "left",
                           }}
                         >
-                          -
+                          Status
                         </TableCell>
                       </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                      {settlements.length !== 0 ? (
+                        settlements.map((s, index) => (
+                          <TableRow
+                            sx={{ backgroundColor: "#F4F4F4" }}
+                            key={index}
+                          >
+                            <TableCell
+                              sx={{
+                                textAlign: "left",
+                              }}
+                            >
+                              {index + 1}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "left",
+                              }}
+                            >
+                              {s.accountName}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "left",
+                              }}
+                            >
+                              {s.accountNumber}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "left",
+                              }}
+                            >
+                              {s.batchCode}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "left",
+                              }}
+                            >
+                              {s.currency}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "left",
+                              }}
+                            >
+                              {s.reference}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "left",
+                              }}
+                            >
+                              {s.status}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
+                          <TableCell
+                            sx={{
+                              textAlign: "left",
+                            }}
+                          >
+                            -
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "left",
+                            }}
+                          >
+                            -{" "}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "left",
+                            }}
+                          >
+                            -
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "left",
+                            }}
+                          >
+                            -
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "left",
+                            }}
+                          >
+                            -
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "left",
+                            }}
+                          >
+                            -
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "left",
+                            }}
+                          >
+                            -
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
+
+              {role === "admin" && (
+                <TableContainer>
+                  <Table
+                    sx={{
+                      width: "100%",
+                      height: "auto",
+                      padding: { lg: 1.5, xl: 2.5 },
+                      borderCollapse: "separate",
+                      borderSpacing: "0px 10px",
+                    }}
+                    aria-description="customers-table"
+                  >
+                    <TableHead>
+                      <TableRow sx={{ border: "none" }}>
+                        <TableCell
+                          sx={{
+                            textAlign: "left",
+                          }}
+                        >
+                          S/N
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "left",
+                          }}
+                        >
+                          Account Name
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "left",
+                          }}
+                        >
+                          Account Number
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "left",
+                          }}
+                        >
+                          Batch Code
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "left",
+                          }}
+                        >
+                          Currency
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "left",
+                          }}
+                        >
+                          Reference
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textAlign: "left",
+                          }}
+                        >
+                          Status
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {adminSettlements.length !== 0 ? (
+                        adminSettlements.map((s, index) => (
+                          <TableRow
+                            sx={{ backgroundColor: "#F4F4F4" }}
+                            key={index}
+                          >
+                            <TableCell
+                              sx={{
+                                textAlign: "left",
+                              }}
+                            >
+                              {index + 1}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "left",
+                              }}
+                            >
+                              {s.accountName}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "left",
+                              }}
+                            >
+                              {s.accountNumber}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "left",
+                              }}
+                            >
+                              {s.batchCode}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "left",
+                              }}
+                            >
+                              {s.currency}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "left",
+                              }}
+                            >
+                              {s.reference}
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                textAlign: "left",
+                              }}
+                            >
+                              {s.status.charAt(0).toUpperCase() +
+                                s.status.slice(1)}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
+                          <TableCell
+                            colSpan={10}
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            There's no settlement data to show here.
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
             </div>
           </motion.div>
         </section>
