@@ -5,6 +5,7 @@ import { Card } from "./card";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { useUser } from "../../context/user";
+import { useAdmin } from "../../hooks/useAdmin";
 export const Dashboard = () => {
   const [range, setRange] = useState<Range>("daily");
   const { user } = useUser();
@@ -12,6 +13,7 @@ export const Dashboard = () => {
   const setTimeRange = (time: Range) => {
     setRange(time);
   };
+  const { myMerchants } = useAdmin(role);
   const theme = useTheme();
   return (
     <Box
@@ -26,7 +28,7 @@ export const Dashboard = () => {
         flex: 1,
       }}
     >
-      <NavBar role={role} />
+      <NavBar />
       <Box
         component={"main"}
         sx={{
@@ -93,7 +95,13 @@ export const Dashboard = () => {
                   fontFamily: "poppins",
                 }}
               >
-                <option>RED100023-JUMIA</option>
+                {myMerchants.length !== 0 ? (
+                  myMerchants.map((m, index) => (
+                    <option key={index}>{m}</option>
+                  ))
+                ) : (
+                  <option>RED100023-JUMIA</option>
+                )}
               </select>
               <select
                 style={{

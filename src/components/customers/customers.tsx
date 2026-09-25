@@ -179,7 +179,7 @@ export const Customers = () => {
               <TableBody sx={{ width: "100%", padding: 1.8, gap: 2, px: 3 }}>
                 {customers.length !== 0 ? (
                   searchResult.length === 0 ? (
-                    paginated.map((cus, index) => (
+                    searchResult.map((cus, index) => (
                       <TableRow sx={{ padding: 2.5 }} key={index}>
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>
@@ -240,6 +240,7 @@ export const Customers = () => {
                           buttonTitle1="close"
                           data={cus}
                           options={1}
+                          mode="customers"
                         />
                       </TableRow>
                     ))
@@ -266,14 +267,6 @@ export const Customers = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Paginate
-            page={page}
-            itemsPerPage={5}
-            array={customers}
-            returnArray={getPaginated}
-            nextPage={nextPage}
-            prev={prevPage}
-          />
         </section>
       </Box>
     </Box>

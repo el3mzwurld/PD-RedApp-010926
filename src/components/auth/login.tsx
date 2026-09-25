@@ -10,36 +10,26 @@ import {
   Typography,
 } from "@mui/material";
 import { Autorenew } from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/user";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Profile } from "../../lib/types";
 import { motion } from "motion/react";
-const BrandMark = () => (
-  <Box
-    sx={{
-      width: 42,
-      height: 42,
-      display: "grid",
-      placeItems: "center",
-      borderRadius: 2,
-      color: "common.white",
-      backgroundColor: "primary.main",
-      fontSize: 20,
-      fontWeight: 800,
-    }}
-  >
-    R
-  </Box>
-);
+import authIllustration from "../../assets/img/auth illustration.png";
 
 export const Login = () => {
-  const { login, authError } = useUser();
+  const { login, authError, user } = useUser();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginMode, setLoginMode] = useState<Profile["role"]>("merchant");
   const isAdminMode = loginMode === "admin";
+
+  useEffect(() => {
+    if (!user) return;
+
+    navigate("/");
+  }, [user, navigate]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -69,51 +59,44 @@ export const Login = () => {
           position: "relative",
           overflow: "hidden",
           flexDirection: "column",
-          justifyContent: "space-between",
-          p: { md: 5, lg: 8 },
-          color: "common.white",
-          backgroundColor: "primary.main",
-          "&::after": {
-            content: '""',
-            position: "absolute",
-            width: 440,
-            height: 440,
-            left: -220,
-            bottom: -170,
-            border: "1px solid rgba(255,255,255,0.22)",
-            borderRadius: "50%",
-          },
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 1.5,
+          backgroundColor: "#f21620",
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-          <BrandMark />
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>
-            red
+        <Box
+          component="img"
+          src={authIllustration}
+          alt="Welcome to red payment illustration"
+          sx={{ width: "auto", height: "60%", objectFit: "contain" }}
+        />
+        <Box
+          sx={{ width: "min(82%, 420px)", textAlign: "center", color: "white" }}
+        >
+          <Typography sx={{ fontSize: { md: 20, lg: 24 }, fontWeight: 700 }}>
+            Welcome to red
           </Typography>
+          <Typography sx={{ mt: 0.75, fontSize: { md: 10, lg: 12 } }}>
+            Providing a very fast and efficient payment experience for
+            individuals across the world to make life easier
+          </Typography>
+          <Box
+            sx={{ display: "flex", justifyContent: "center", gap: 1, mt: 2 }}
+          >
+            {[0, 1, 2, 3].map((dot) => (
+              <Box
+                key={dot}
+                sx={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  backgroundColor: "white",
+                }}
+              />
+            ))}
+          </Box>
         </Box>
-        <Box sx={{ position: "relative", zIndex: 1, maxWidth: 460 }}>
-          <Typography
-            variant="overline"
-            sx={{ opacity: 0.75, letterSpacing: 2 }}
-          >
-            Payments, simplified
-          </Typography>
-          <Typography
-            variant="h3"
-            sx={{ mt: 1.5, fontWeight: 700, lineHeight: 1.12 }}
-          >
-            Move your business forward.
-          </Typography>
-          <Typography
-            sx={{ mt: 2, color: "rgba(255,255,255,0.78)", lineHeight: 1.8 }}
-          >
-            A clear view of every payment, customer, and settlement in one calm
-            workspace.
-          </Typography>
-        </Box>
-        <Typography variant="caption" sx={{ opacity: 0.65 }}>
-          Secure payments for ambitious businesses.
-        </Typography>
       </Box>
 
       <Box
@@ -316,7 +299,7 @@ export const Login = () => {
                   color: "#f21620",
                   fontSize: 13,
                   fontWeight: 700,
-                  display: loginMode === "admin" && "none",
+                  display: loginMode === "admin" ? "none" : undefined,
                   "&:hover": {
                     borderWidth: 2,
                     borderColor: "#d90f18",

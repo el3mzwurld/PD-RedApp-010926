@@ -20,22 +20,35 @@ import { useUser } from "../../context/user";
 import { useMerchant } from "../../hooks/useMerchant";
 import { useAdmin } from "../../hooks/useAdmin";
 import { PopupModal } from "../ui/Popup";
+import type { Dispute, DisputeFilter } from "../../lib/types";
 
 export const Disputes = () => {
   const theme = useTheme();
-  const handleSubmit = (filter: string) => {};
   const { user } = useUser();
   const role = user!.role;
   const id = user!.role === "merchant" ? user!.profile.ID : "";
-  const { disputes } = useMerchant(id);
-  const { adminDisputes, myMerchants } = useAdmin(role);
+  const { disputes, handleDisputeSearch } = useMerchant(id);
+  const { adminDisputes } = useAdmin(role);
   const [open, setOpen] = useState(false);
+  const [filteredDisputes, setFilteredDisputes] = useState<Dispute[] | null>(
+    null,
+  );
 
   const formatDate = (query: string): string => {
     const date = new Date(query);
     const formatted = date.toLocaleDateString();
     return formatted;
   };
+
+  const handleSubmit = (filter: string) => {
+    if (role !== "merchant") return;
+
+    const dispute: DisputeFilter = JSON.parse(filter);
+    setFilteredDisputes(handleDisputeSearch(dispute));
+  };
+
+  const disputesToDisplay = filteredDisputes ?? disputes;
+
   return (
     <Box
       sx={{
@@ -289,8 +302,8 @@ export const Disputes = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {disputes.length !== 0 ? (
-                        disputes.map((d, index) => (
+                      {disputesToDisplay.length !== 0 ? (
+                        disputesToDisplay.map((d, index) => (
                           <TableRow
                             sx={{ backgroundColor: "#F4F4F4" }}
                             key={index}
@@ -370,10 +383,11 @@ export const Disputes = () => {
                               setOpen={setOpen}
                               data={d}
                               title={"Dispute"}
-                              options={1}
-                              buttonTitle1="Close"
+                              options={2}
+                              buttonTitle1="Accept"
                               key={index}
                               mode="disputes"
+                              buttonTitle2="Decline"
                             />
                           </TableRow>
                         ))
@@ -611,7 +625,8 @@ export const Disputes = () => {
                               data={d}
                               title={"Dispute"}
                               options={1}
-                              buttonTitle1="Close"
+                              buttonTitle1="Accept"
+                              buttonTitle2="Decline"
                               key={index}
                               mode="disputes"
                             />

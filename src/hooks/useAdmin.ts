@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import type { Dispute, Merchant, Settlement, Transaction } from "../lib/types";
+import type {
+  Dispute,
+  DisputeFilter,
+  Merchant,
+  Settlement,
+  Transaction,
+} from "../lib/types";
 
 export function useAdmin(role: "merchant" | "admin", id?: string) {
   const [adminDisputes, setAdminDisputes] = useState<Dispute[]>([]);
@@ -102,6 +108,7 @@ export function useAdmin(role: "merchant" | "admin", id?: string) {
     loadMyMerchants();
   }, [merchants]);
 
+  const searchDisputes = (dispute: DisputeFilter) => {};
   return {
     adminDisputes,
     error,

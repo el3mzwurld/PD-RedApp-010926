@@ -14,6 +14,7 @@ import { Box, Button, Modal, Stack } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { InformationContainer } from "./InformationContainer";
 import { formatDate } from "../../lib/utils";
+import { AcceptanceModal } from "./acceptanceModal";
 
 export const PopupModal = ({
   open,
@@ -40,6 +41,20 @@ export const PopupModal = ({
     | "role linkage"
     | "customers";
 }) => {
+  const [openModal, setOpenModal] = useState(false);
+  const [step, setStep] = useState<"confirmation" | "success">("confirmation");
+  const closeModal = () => {
+    setOpenModal(false);
+  };
+
+  function handleConfirmation(action: "accept" | "reject") {
+    if (action === "reject") {
+      closeModal();
+      return;
+    }
+
+    setStep("success");
+  }
   return (
     <div style={{ background: "none" }}>
       <Modal
@@ -49,7 +64,7 @@ export const PopupModal = ({
         }}
         slotProps={{
           backdrop: {
-            sx: { backgroundColor: "rgba(0, 0, 0, 0.11)" },
+            sx: { backgroundColor: "rgba(0, 0, 0, 0.27)" },
           },
         }}
         sx={{ background: "none" }}
@@ -93,10 +108,51 @@ export const PopupModal = ({
           >
             <h2 style={{ color: "red" }}>{title}</h2>
 
-            <Close
-              onClick={() => {
-                setOpen((prev) => !prev);
-              }}
+            {mode === "merchants" && (
+              <Stack
+                direction={"row"}
+                spacing={2}
+                sx={{ width: "auto", height: 40 }}
+              >
+                <Button
+                  sx={{
+                    width: "auto",
+                    px: 3.25,
+                    backgroundColor: "primary.main",
+                    color: "white",
+                    height: "100%",
+                    borderRadius: 25,
+                  }}
+                  onClick={() => setOpenModal(true)}
+                >
+                  Activate Merchant
+                </Button>
+                <Button
+                  sx={{
+                    width: "auto",
+                    px: 3.25,
+                    backgroundColor: "primary.main",
+                    color: "white",
+                    height: "100%",
+                    borderRadius: 25,
+                  }}
+                  onClick={() => setOpenModal(true)}
+                >
+                  De-Activate Merchant
+                </Button>
+              </Stack>
+            )}
+            {mode !== "merchants" && (
+              <Close
+                onClick={() => {
+                  setOpen((prev) => !prev);
+                }}
+              />
+            )}
+            <AcceptanceModal
+              onClose={closeModal}
+              open={openModal}
+              message="Merchant Actioned successfully"
             />
           </div>
           {/* body */}
@@ -488,36 +544,71 @@ export const PopupModal = ({
           </Stack>
           {/* button group */}
           <Stack direction={"row"} spacing={2}>
-            {options <= 1 ? (
-              <Button
-                variant="contained"
-                sx={{ px: 2.5, py: 1.25, color: "white" }}
-                onClick={() => {
-                  if (buttonTitle1.toLowerCase() === "close") {
-                    setOpen(false);
-                    return;
-                  }
-
-                  return;
-                }}
-              >
-                {buttonTitle1}
-              </Button>
-            ) : (
+            {mode === "disputes" && (
               <>
                 {" "}
                 <Button
                   variant="contained"
-                  sx={{ px: 2.5, py: 1.25, color: "white" }}
+                  sx={{
+                    px: 3.5,
+                    py: 1.25,
+                    color: "white",
+                    backgroundColor: "red",
+                    borderRadius: 25,
+                  }}
+                  onClick={() => setOpenModal(true)}
                 >
                   {buttonTitle1}
                 </Button>
                 <Button
                   variant="contained"
-                  sx={{ px: 2.5, py: 1.25, color: "white" }}
+                  sx={{
+                    px: 3.5,
+                    py: 1.25,
+                    color: "red",
+                    backgroundColor: "white",
+                    borderRadius: 25,
+                  }}
+                  onClick={() => setOpen(false)}
                 >
                   {buttonTitle2}
                 </Button>
+                <AcceptanceModal
+                  onClose={closeModal}
+                  open={openModal}
+                  message="Accepted successfully"
+                />
+              </>
+            )}
+            {mode === "transaction" && (
+              <>
+                <Button
+                  variant="contained"
+                  sx={{
+                    px: 3.5,
+                    py: 1.25,
+                    color: "white",
+                    backgroundColor: "red",
+                    borderRadius: 25,
+                  }}
+                  onClick={() => {
+                    if (buttonTitle1.toLowerCase() === "close") {
+                      setOpen(false);
+                      return;
+                    }
+
+                    setOpenModal(true);
+                    return;
+                  }}
+                >
+                  {buttonTitle1}
+                </Button>
+
+                <AcceptanceModal
+                  onClose={closeModal}
+                  open={openModal}
+                  message="Disputed successfully"
+                />
               </>
             )}
           </Stack>

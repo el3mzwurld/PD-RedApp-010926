@@ -12,24 +12,7 @@ import { ArrowForward } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/user";
 import { useState } from "react";
-
-const BrandMark = () => (
-  <Box
-    sx={{
-      width: 42,
-      height: 42,
-      display: "grid",
-      placeItems: "center",
-      borderRadius: 2,
-      color: "common.white",
-      backgroundColor: "primary.main",
-      fontSize: 20,
-      fontWeight: 800,
-    }}
-  >
-    R
-  </Box>
-);
+import authIllustration from "../../assets/img/auth illustration.png";
 
 export const Signup = () => {
   const { createUser, authError } = useUser();
@@ -67,79 +50,44 @@ export const Signup = () => {
           position: "relative",
           overflow: "hidden",
           flexDirection: "column",
-          justifyContent: "space-between",
-          p: { md: 5, lg: 8 },
-          color: "common.white",
-          backgroundColor: "primary.main",
-          "&::after": {
-            content: '""',
-            position: "absolute",
-            width: 440,
-            height: 440,
-            left: -220,
-            bottom: -170,
-            border: "1px solid rgba(255,255,255,0.22)",
-            borderRadius: "50%",
-          },
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 1.5,
+          backgroundColor: "#f21620",
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-          <BrandMark />
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>
-            red
+        <Box
+          component="img"
+          src={authIllustration}
+          alt="Welcome to red payment illustration"
+          sx={{ width: "auto", height: "60%", objectFit: "contain" }}
+        />
+        <Box
+          sx={{ width: "min(82%, 420px)", textAlign: "center", color: "white" }}
+        >
+          <Typography sx={{ fontSize: { md: 20, lg: 24 }, fontWeight: 700 }}>
+            Welcome to red
           </Typography>
-        </Box>
-        <Box sx={{ position: "relative", zIndex: 1, maxWidth: 460 }}>
-          <Typography
-            variant="overline"
-            sx={{ opacity: 0.75, letterSpacing: 2 }}
+          <Typography sx={{ mt: 0.75, fontSize: { md: 10, lg: 12 } }}>
+            Providing a very fast and efficient payment experience for
+            individuals across the world to make life easier
+          </Typography>
+          <Box
+            sx={{ display: "flex", justifyContent: "center", gap: 1, mt: 2 }}
           >
-            Your business, in focus
-          </Typography>
-          <Typography
-            variant="h3"
-            sx={{ mt: 1.5, fontWeight: 700, lineHeight: 1.12 }}
-          >
-            Everything you need to grow with confidence.
-          </Typography>
-          <Stack spacing={2} sx={{ mt: 4 }}>
-            {[
-              [
-                "01",
-                "See the full picture",
-                "Track money moving through your business.",
-              ],
-              [
-                "02",
-                "Work with clarity",
-                "Keep customers and operations in sync.",
-              ],
-              [
-                "03",
-                "Build momentum",
-                "Turn every transaction into a next step.",
-              ],
-            ].map(([number, title, detail]) => (
-              <Box key={number} sx={{ display: "flex", gap: 2 }}>
-                <Typography sx={{ opacity: 0.65, fontWeight: 700 }}>
-                  {number}
-                </Typography>
-                <Box>
-                  <Typography sx={{ fontWeight: 700 }}>{title}</Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ mt: 0.25, color: "rgba(255,255,255,0.72)" }}
-                  >
-                    {detail}
-                  </Typography>
-                </Box>
-              </Box>
+            {[0, 1, 2, 3].map((dot) => (
+              <Box
+                key={dot}
+                sx={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  backgroundColor: "white",
+                }}
+              />
             ))}
-          </Stack>
+          </Box>
         </Box>
-        <Typography variant="caption" sx={{ opacity: 0.65 }}>
-          Secure payments for ambitious businesses.
-        </Typography>
       </Box>
 
       <Box sx={{ display: "grid", placeItems: "center", p: { xs: 3, sm: 5 } }}>
@@ -160,7 +108,6 @@ export const Signup = () => {
               mb: 7,
             }}
           >
-            <BrandMark />
             <Typography variant="h6" sx={{ fontWeight: 700 }}>
               red
             </Typography>

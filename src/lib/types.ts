@@ -61,7 +61,7 @@ export type MerchantProfile = {
   isComplete: boolean;
 };
 
-type AdminProfile = {
+export type AdminProfile = {
   role: "admin";
   profile: Administrator;
   email: string;
@@ -178,7 +178,9 @@ export type Transaction = {
   paymentMethod: string;
   cardScheme: string;
   status: TransactionStatus;
+  customerEmail: string;
 };
+
 export function isMerchant(data: unknown): data is Merchant {
   if (typeof data !== "object" || data === null) {
     console.log("❌ isMerchant failed: data is not a non-null object");

@@ -1,10 +1,13 @@
 // "JAZ-688E62"
 import { useEffect, useState } from "react";
-import type { Customer, Dispute, Settlement, Transaction } from "../lib/types";
-import { useUser } from "../context/user";
-import { Profile } from "./../components/profile/profile";
+import type {
+  Customer,
+  Dispute,
+  DisputeFilter,
+  Settlement,
+  Transaction,
+} from "../lib/types";
 export const useMerchant = (id: string) => {
-  const { user } = useUser();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [disputes, setDisputes] = useState<Dispute[]>([]);
   const [settlements, setSettlements] = useState<Settlement[]>([]);
@@ -127,12 +130,45 @@ export const useMerchant = (id: string) => {
       return results;
     }
   };
+
+  const handleDisputeSearch = (query: DisputeFilter): Dispute[] => {
+    return disputes.filter((dispute) => {
+      const matchesPaymentReference =
+        query.paymentRef.length === 0 ||
+        dispute.paymentRef
+          .toLowerCase()
+          .includes(query.paymentRef.toLowerCase());
+      const matchesCustomerEmail =
+        query.customerEmail.length === 0 ||
+        dispute.customerEmail
+          .toLowerCase()
+          .includes(query.customerEmail.toLowerCase());
+      const matchesStatus =
+        query.status.length === 0 || dispute.status === query.status;
+      const matchesTransactionStatus =
+        query.transactionStatus.length === 0 ||
+        dispute.transactionStatus === query.transactionStatus;
+      const matchesCreatedAt =
+        query.createdAt.length === 0 || dispute.createdAt >= query.createdAt;
+      const matchesDue = query.due.length === 0 || dispute.due <= query.due;
+
+      return (
+        matchesPaymentReference &&
+        matchesCustomerEmail &&
+        matchesStatus &&
+        matchesTransactionStatus &&
+        matchesCreatedAt &&
+        matchesDue
+      );
+    });
+  };
   return {
     customers,
     error,
     loading,
     customerCount,
     handleCustomerSearch,
+    handleDisputeSearch,
     disputes,
     settlements,
     transactions,

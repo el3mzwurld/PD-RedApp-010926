@@ -1,7 +1,13 @@
 import { Button, Stack } from "@mui/material";
 import type React from "react";
 import { useState } from "react";
-import type { Dispute, DisputeFilter } from "../../lib/types";
+import type {
+  Dispute,
+  DisputeFilter,
+  SettlementStatus,
+  Transaction,
+  TransactionStatus,
+} from "../../lib/types";
 import { useAdmin } from "../../hooks/useAdmin";
 
 interface SearchProps {
@@ -18,46 +24,29 @@ interface SearchProps {
 }
 
 interface AdminDisputeFilter {
-  merchantID?: string;
+  merchantID: string;
   transactionStatus: TransactionStatus;
-  paymentRef?: string;
+  paymentRef: string;
   startDate: string;
   endDate: string;
 }
-type TransactionStatus = "Successful" | "Failed" | "Pending" | "Processing";
-type PaymentMethod = "Card" | "Bank Transfer";
-
-type Transaction = {
-  refNumber?: string;
-  start: string;
-  endDate: string;
-  transStatus: TransactionStatus;
-  paymentMethod: PaymentMethod;
-};
-
-interface MerchantFilter {
-  merchantID: string;
-  status: UserStatus;
-}
-
 type UserStatus = "new" | "inactive" | "active";
 
+type PaymentMtd = "Card" | "Bank Transfer";
 export const Search = ({ onSubmit, mode, role }: SearchProps) => {
   const [query, setQuery] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [paymentRef, setPaymentRef] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
-  const [disputeStatus, setDisputeStatus] = useState<Dispute["status"]>("Open");
-  const [status, setStatus] = useState<"pending" | "settled" | "disputed">(
-    "pending",
+  const [disputeStatus, setDisputeStatus] = useState<Dispute["status"] | null>(
+    null,
   );
+  const [status, setStatus] = useState<SettlementStatus | null>(null);
   const [settlementSearchParams, setSettlementSearchParams] = useState("");
   const [transactionStatus, setTransactionStatus] =
-    useState<TransactionStatus>("Processing");
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | "any">(
-    "any",
-  );
+    useState<TransactionStatus | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMtd | null>(null);
   const [refNumber, setRefNumber] = useState("");
   const [fName, setFName] = useState("");
   const [lName, setLName] = useState("");
@@ -74,13 +63,13 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
     onSubmit(query);
   };
   const submitDispute = () => {
-    const disputeFilter: Partial<DisputeFilter> = {
-      paymentRef,
+    const disputeFilter: DisputeFilter = {
+      paymentRef: paymentRef,
       customerEmail,
-      status: disputeStatus,
+      status: disputeStatus ?? "Open",
       createdAt: startDate,
       due: endDate,
-      transactionStatus: status,
+      transactionStatus: transactionStatus ?? "pending",
     };
 
     const filter = JSON.stringify(disputeFilter);
@@ -88,14 +77,11 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
     onSubmit(filter);
   };
   const submitTransaction = () => {
-    const payMtd = paymentMethod === "any" ? null : paymentMethod;
-    // transaction filters
-    const transactionFilter: Transaction = {
-      refNumber: refNumber ?? undefined,
-      start: startDate,
-      endDate,
-      transStatus: transactionStatus,
-      paymentMethod: payMtd ?? "Card",
+    const transactionFilter: Partial<Transaction> = {
+      paymentRef: refNumber ?? undefined,
+      paymentMethod: paymentMethod ?? "Card",
+      status: transactionStatus ?? "pending",
+      customerEmail: customerEmail,
     };
 
     const filter = JSON.stringify(transactionFilter);
@@ -105,9 +91,9 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
     const dispute: AdminDisputeFilter = {
       startDate,
       endDate,
-      merchantID: merchantID ?? undefined,
-      paymentRef: paymentRef ?? undefined,
-      transactionStatus: transactionStatus,
+      merchantID: merchantID,
+      paymentRef: paymentRef,
+      transactionStatus: transactionStatus ?? "pending",
     };
 
     const filter = JSON.stringify(dispute);
@@ -364,9 +350,13 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
                 setStatus(e.target.value as typeof status);
               }}
             >
-              <option value={"all"}>All</option>
-              <option value={"resolved"}>Resolved</option>
-              <option value={"unresolved"}>Unresolved</option>
+              <option selected hidden>
+                All
+              </option>
+              <option value={"open"}>Open</option>
+              <option value={"successful"}>Successful</option>
+              <option value={"disputed"}>Disputes</option>
+              <option value={"failed"}>Failed</option>
             </select>
           </div>
           <Button

@@ -302,7 +302,7 @@ export const Transaction = () => {
                               setOpen={setOpen}
                               data={transaction}
                               buttonTitle1="Dispute"
-                              title="Dispute"
+                              title="Transactions"
                               options={1}
                               key={index}
                               mode="transaction"
