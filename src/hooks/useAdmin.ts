@@ -134,7 +134,11 @@ export function useAdmin(role: "merchant" | "admin") {
     (filter: DisputeFilter): Dispute[] => {
       if (!filter.merchantID) return adminDisputes;
       return adminDisputes.filter((dispute) => {
-        if (filter.merchantID !== dispute.merchant.ID) return false;
+        if (
+          filter.merchantID.trim().length === 0 ||
+          filter.merchantID !== dispute.merchant.ID
+        )
+          return false;
 
         if (filter.status && dispute.status !== filter.status) return false;
         if (

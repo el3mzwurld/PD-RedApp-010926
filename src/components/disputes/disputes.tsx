@@ -28,7 +28,7 @@ export const Disputes = () => {
   const role = user!.role;
   const id = user!.role === "merchant" ? user!.profile.ID : "";
   const { disputes, handleDisputeSearch } = useMerchant(id);
-  const { adminDisputes } = useAdmin(role);
+  const { adminDisputes, handleDisputeSearch: adminSearch } = useAdmin(role);
   const [open, setOpen] = useState(false);
   const [filteredDisputes, setFilteredDisputes] = useState<Dispute[] | null>(
     null,
@@ -50,8 +50,13 @@ export const Disputes = () => {
     setFilteredDisputes(handleDisputeSearch(dispute));
   };
 
+  const adminDisputeSubmit = (filter: string) => {
+    const dispute: DisputeFilter = JSON.parse(filter);
+    setFilteredDisputes(adminSearch(dispute));
+  };
   const disputesToDisplay = filteredDisputes ?? disputes;
 
+  const adminDisputesToDisplay = filteredDisputes ?? adminDisputes;
   return (
     <Box
       sx={{
@@ -155,7 +160,15 @@ export const Disputes = () => {
               boxShadow: role === "admin" ? "2px 2.5px 10px gray" : "none",
             }}
           >
-            <Search mode="disputes" onSubmit={handleSubmit} role={role} />
+            {role === "merchant" ? (
+              <Search mode="disputes" onSubmit={handleSubmit} role={role} />
+            ) : (
+              <Search
+                mode="disputes"
+                onSubmit={adminDisputeSubmit}
+                role={role}
+              />
+            )}
           </Stack>
 
           <motion.div
@@ -478,8 +491,8 @@ export const Disputes = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {adminDisputes.length !== 0 ? (
-                        adminDisputes.map((d, index) => (
+                      {adminDisputesToDisplay.length !== 0 ? (
+                        adminDisputesToDisplay.map((d, index) => (
                           <TableRow
                             sx={{ backgroundColor: "#F4F4F4" }}
                             key={index}
