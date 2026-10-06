@@ -293,6 +293,9 @@ export const MerchantCount = () => {
           flex: 1,
           alignItems: "center",
           justifyContent: "space-evenly",
+          overflow: "auto",
+          gap: { xs: 2.5, md: 0 },
+          px: { xs: 1, md: 1 },
         }}
       >
         <CustomerCount variant="new" />

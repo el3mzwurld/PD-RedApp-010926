@@ -171,7 +171,7 @@ export const Dashboard = () => {
                 display: "grid",
                 alignItems: "center",
                 width: { xs: "100%", md: "45%" },
-                gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+                gridTemplateColumns: { xs: "1fr 1fr", md: "1fr 1fr" },
                 gridTemplateRows:
                   role === "admin"
                     ? { xs: "250px 300px", md: "250px 300px" }

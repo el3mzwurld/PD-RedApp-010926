@@ -49,9 +49,8 @@ export const RoleModal = ({
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: "50%",
+          width: { xs: "80%", md: "60%" },
           minHeight: 350,
-          //   boxSizing: "border-box",
           px: 3,
           py: 6.5,
           borderRadius: 2.5,
@@ -78,15 +77,21 @@ export const RoleModal = ({
             onClick={onClose}
           />
         </div>
-        <section style={{ width: "100%", height: 300, overflow: "auto" }}>
+        <Stack sx={{ width: "100%", height: { xs: "auto" }, overflow: "auto" }}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>S/N</TableCell>
+                <TableCell sx={{ display: { xs: "none", md: "block" } }}>
+                  S/N
+                </TableCell>
                 <TableCell colSpan={2} scope="col">
                   Permission
                 </TableCell>
-                <TableCell colSpan={3} scope="col">
+                <TableCell
+                  colSpan={3}
+                  scope="col"
+                  sx={{ display: { xs: "none", md: "block" } }}
+                >
                   Description
                 </TableCell>
                 <TableCell>Action</TableCell>
@@ -97,11 +102,17 @@ export const RoleModal = ({
                 ? permissions.map((p, index) => (
                     <TableRow key={index}>
                       {" "}
-                      <TableCell>{index + 1}</TableCell>
+                      <TableCell sx={{ display: { xs: "none", md: "block" } }}>
+                        {index + 1}
+                      </TableCell>
                       <TableCell colSpan={2} scope="col">
                         {p.permission}
                       </TableCell>
-                      <TableCell colSpan={3} scope="col">
+                      <TableCell
+                        colSpan={3}
+                        scope="col"
+                        sx={{ display: { xs: "none", md: "block" } }}
+                      >
                         {p.description}
                       </TableCell>
                       <TableCell>
@@ -126,7 +137,7 @@ export const RoleModal = ({
                 : null}
             </TableBody>
           </Table>
-        </section>
+        </Stack>
       </Box>
     </Modal>
   );

@@ -135,9 +135,7 @@ export const Settlement = () => {
                 name="Merchant ID"
                 content={user!.profile.ID}
               />
-            ) : (
-              <InformationContainer mode="edit" name="Merchant ID" content="" />
-            )}
+            ) : null}
           </Stack>
           <Stack
             direction={"row"}

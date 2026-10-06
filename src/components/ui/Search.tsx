@@ -1069,7 +1069,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
             }}
             onClick={(e) => {
               e.preventDefault();
-              adminSubmitDispute();
+              submitDispute();
             }}
           >
             Search

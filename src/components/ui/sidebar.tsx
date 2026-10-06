@@ -440,9 +440,9 @@ const AdminSidebarItem = ({
             fontWeight: 550,
             display: active && !mobileOpen ? "none" : "block",
             position: "relative",
-            height: "100%",
             alignItems: "center",
-            justifyContent: "start",
+            justifyContent: "center",
+            textAlign: "center",
           }}
           onClick={() => {
             if (label.toLowerCase() === "dashboard") {

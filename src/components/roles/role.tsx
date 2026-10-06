@@ -8,6 +8,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   useTheme,
 } from "@mui/material";
 import { NavBar } from "../ui/navbar";
@@ -98,17 +99,17 @@ export const Role = () => {
             Roles
           </p>
         </motion.div>
-        <section
-          style={{
+        <Box
+          sx={{
             width: "100%",
             minHeight: "80vh",
             backgroundColor: "lightgray",
-            borderRadius: 12,
-            padding: "45px",
+            borderRadius: { xs: 2, md: 3.5 },
+            padding: { xs: 2, md: 4.5 },
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: 40,
+            gap: { xs: 4, md: 5 },
             justifyContent: "start",
           }}
         >
@@ -119,7 +120,7 @@ export const Role = () => {
               height: "auto",
               alignItems: "center",
               justifyContent: "center",
-              gap: 4.5,
+              gap: 5,
               width: "100%",
               backgroundColor: "none",
               padding: 1,
@@ -127,53 +128,58 @@ export const Role = () => {
           >
             {/* role creation container */}
 
-            <div
-              style={{
+            <Box
+              sx={{
                 display: "flex",
                 flexDirection: "row",
-                gap: 20,
+                gap: 10,
                 alignItems: "end",
                 flexWrap: "wrap",
                 justifyContent: "start",
                 width: "100%",
-                rowGap: 20,
+                rowGap: { xs: 2.5, md: 3 },
               }}
             >
               {/* role name */}
-              <Stack spacing={1}>
+              <Stack spacing={1} sx={{ width: { xs: "100%", md: "auto" } }}>
                 <label style={{ fontSize: 14 }}>Role Name</label>
-                <input
+                <TextField
                   type="text"
                   placeholder="Enter role name"
+                  variant="filled"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  style={{
-                    width: 220,
+                  sx={{
+                    width: { xs: "100%", md: 220 },
                     height: 48,
-                    backgroundColor: "white",
                     border: "none",
-                    padding: 10,
                     fontFamily: "poppins",
+                    "& .MuiFilledInput-root": {
+                      backgroundColor: "#f4f4f4",
+                    },
                   }}
-                ></input>
+                ></TextField>
               </Stack>
               {/* role description */}
-              <Stack spacing={1}>
+              <Stack spacing={1} sx={{ width: { xs: "100%", md: "auto" } }}>
                 <label style={{ fontSize: 14 }}>Role Description</label>
-                <input
+                <TextField
                   type="text"
                   placeholder="Enter role description"
-                  style={{
-                    width: 700,
+                  variant="filled"
+                  sx={{
+                    width: { xs: "100%", md: 600 },
                     height: 48,
-                    backgroundColor: "white",
+                    // backgroundColor: "white",
                     border: "none",
-                    padding: 10,
                     fontFamily: "poppins",
+                    "& .MuiFilledInput-root": {
+                      backgroundColor: "#f4f4f4",
+                    },
                   }}
                   value={desc}
                   onChange={(e) => setDesc(e.target.value)}
-                ></input>
+                ></TextField>
               </Stack>
               {/* select permission */}
               <Button
@@ -183,7 +189,7 @@ export const Role = () => {
                   color: "primary.main",
                   height: 45,
                   fontSize: 14,
-                  width: 300,
+                  width: { xs: "100%", md: 300 },
                 }}
                 onClick={() => {
                   setOpen(true);
@@ -191,7 +197,7 @@ export const Role = () => {
               >
                 Select Permissions
               </Button>
-            </div>
+            </Box>
 
             {/* action button */}
 
@@ -368,7 +374,7 @@ export const Role = () => {
               </TableContainer>
             </div>
           </motion.div>
-        </section>
+        </Box>
 
         <RoleModal open={open} onClose={onClose} onSubmit={onSubmit} />
       </Box>{" "}

@@ -104,17 +104,17 @@ export const Disputes = () => {
             Disputes
           </p>
         </motion.div>
-        <section
-          style={{
+        <Stack
+          sx={{
             width: "100%",
             minHeight: "100vh",
             backgroundColor: "lightgray",
-            borderRadius: 12,
-            padding: 45,
+            borderRadius: { xs: 1.5, md: 2.5 },
+            padding: { xs: 2.5, md: 4 },
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
-            gap: 40,
+            gap: { xs: 2.5, md: 3.5 },
             paddingLeft: role === "admin" ? 65 : 45,
             paddingRight: role === "admin" ? 65 : 45,
           }}
@@ -573,7 +573,7 @@ export const Disputes = () => {
               )}
             </div>
           </motion.div>
-        </section>
+        </Stack>
 
         {dis !== null ? (
           <PopupModal
