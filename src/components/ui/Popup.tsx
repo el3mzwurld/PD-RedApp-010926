@@ -42,19 +42,10 @@ export const PopupModal = ({
     | "customers";
 }) => {
   const [openModal, setOpenModal] = useState(false);
-  const [step, setStep] = useState<"confirmation" | "success">("confirmation");
   const closeModal = () => {
     setOpenModal(false);
   };
 
-  function handleConfirmation(action: "accept" | "reject") {
-    if (action === "reject") {
-      closeModal();
-      return;
-    }
-
-    setStep("success");
-  }
   return (
     <div style={{ background: "none" }}>
       <Modal
@@ -62,12 +53,8 @@ export const PopupModal = ({
         onClose={() => {
           setOpen((prev) => !prev);
         }}
-        slotProps={{
-          backdrop: {
-            sx: { backgroundColor: "rgba(0, 0, 0, 0.27)" },
-          },
-        }}
-        sx={{ background: "none" }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
       >
         <Box
           sx={{

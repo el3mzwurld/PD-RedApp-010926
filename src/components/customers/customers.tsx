@@ -24,21 +24,13 @@ import { Paginate } from "../ui/paginate";
 export const Customers = () => {
   const [open, setOpen] = useState(false);
   const [searchResult, setSearchResult] = useState<Customer[]>([]);
-  const [paginated, setPaginated] = useState<Customer[]>([]);
-  const [page, setPage] = useState(1);
+  const [cus, setCus] = useState<Customer | null>(null);
+
   const handleSubmit = (query: string) => {
     const result = handleCustomerSearch(query);
     setSearchResult(result);
   };
-  const getPaginated = (array: unknown[]) => {
-    setPaginated(array as Customer[]);
-  };
-  const nextPage = () => {
-    setPage((prev) => prev + 1);
-  };
-  const prevPage = () => {
-    setPage((prev) => prev - 1);
-  };
+
   const { user } = useUser();
   const userID = user!.role === "merchant" ? user!.profile.ID : "";
   const { customers, customerCount, handleCustomerSearch } =
@@ -100,17 +92,17 @@ export const Customers = () => {
             Customers
           </p>
         </motion.div>
-        <section
-          style={{
+        <Stack
+          sx={{
             width: "100%",
             minHeight: "100vh",
             backgroundColor: "lightgray",
-            borderRadius: 12,
-            padding: "45px",
+            borderRadius: { xs: 1.5, md: 1.8 },
+            padding: { xs: 2.4, md: 5 },
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
-            gap: 25,
+            gap: 6,
           }}
         >
           <Stack
@@ -141,14 +133,14 @@ export const Customers = () => {
             direction={"row"}
             spacing={1}
             sx={{
-              height: 120,
+              height: { xs: "auto", md: 150 },
               alignItems: "center",
               justifyContent: "start",
               gap: 4.5,
               width: "100%",
-              px: 8,
+              px: { xs: 1.8, md: 8 },
               backgroundColor: "white",
-              py: 10,
+              py: { xs: 2, md: 2 },
               boxShadow: "1.5px 1.5px 10px #7876769f",
             }}
           >
@@ -228,20 +220,14 @@ export const Customers = () => {
                         <TableCell>
                           <Button
                             variant="text"
-                            onClick={() => setOpen((prev) => !prev)}
+                            onClick={() => {
+                              setOpen(true);
+                              setCus(cus);
+                            }}
                           >
                             VIEW
                           </Button>
                         </TableCell>
-                        <PopupModal
-                          open={open}
-                          setOpen={setOpen}
-                          title="Details"
-                          buttonTitle1="close"
-                          data={cus}
-                          options={1}
-                          mode="customers"
-                        />
                       </TableRow>
                     ))
                   )
@@ -253,21 +239,25 @@ export const Customers = () => {
                     <TableCell>Phone Number</TableCell>
                     <TableCell>Email Address</TableCell>
                     <TableCell>
-                      <Button
-                        variant="text"
-                        onClick={() => {
-                          setOpen((prev) => !prev);
-                        }}
-                      >
-                        VIEW
-                      </Button>
+                      <Button variant="text">VIEW</Button>
                     </TableCell>
                   </TableRow>
                 )}
               </TableBody>
             </Table>
           </TableContainer>
-        </section>
+        </Stack>
+        {cus !== null ? (
+          <PopupModal
+            open={open}
+            setOpen={setOpen}
+            title="Details"
+            buttonTitle1="close"
+            data={cus}
+            options={1}
+            mode="customers"
+          />
+        ) : null}
       </Box>
     </Box>
   );

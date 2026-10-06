@@ -18,6 +18,7 @@ import { useUser } from "../../context/user";
 import { useMerchant } from "../../hooks/useMerchant";
 import { PopupModal } from "../ui/Popup";
 import { useState } from "react";
+import type { Customer } from "../../lib/types";
 const Users = () => {
   const theme = useTheme();
   const handleSubmit = (filter: string) => {};
@@ -26,6 +27,7 @@ const Users = () => {
   const { customers } = useMerchant(id);
   const role = user!.role;
   const [open, setOpen] = useState(false);
+  const [cus, setCus] = useState<Customer | null>(null);
   return (
     <Box
       sx={{
@@ -283,20 +285,14 @@ const Users = () => {
                             {" "}
                             <Button
                               variant="text"
-                              onClick={() => setOpen((prev) => !prev)}
+                              onClick={() => {
+                                setOpen(true);
+                                setCus(c);
+                              }}
                             >
                               VIEW
                             </Button>
                           </TableCell>
-                          <PopupModal
-                            open={open}
-                            setOpen={setOpen}
-                            title="Details"
-                            buttonTitle1="close"
-                            data={c}
-                            options={1}
-                            mode="customers"
-                          />
                         </TableRow>
                       ))
                     ) : (
@@ -317,6 +313,17 @@ const Users = () => {
             </div>
           </motion.div>
         </section>
+        {cus !== null ? (
+          <PopupModal
+            open={open}
+            setOpen={setOpen}
+            title="Details"
+            buttonTitle1="close"
+            data={cus}
+            options={1}
+            mode="customers"
+          />
+        ) : null}
       </Box>{" "}
     </Box>
   );

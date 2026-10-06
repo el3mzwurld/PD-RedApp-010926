@@ -1,12 +1,16 @@
 // "JAZ-688E62"
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type {
   Customer,
   Dispute,
   DisputeFilter,
   Settlement,
+  SettlementFilter,
   Transaction,
+  TransactionFilter,
+  UserCreationData,
 } from "../lib/types";
+import { useUser } from "../context/user";
 export const useMerchant = (id: string) => {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [disputes, setDisputes] = useState<Dispute[]>([]);
@@ -15,6 +19,7 @@ export const useMerchant = (id: string) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [customerCount, setCustomerCount] = useState(0);
+  const { user } = useUser();
 
   useEffect(() => {
     async function loadCustomer() {
@@ -92,7 +97,6 @@ export const useMerchant = (id: string) => {
           );
 
         const data: Transaction[] = await response.json();
-        console.log(data);
         setTransactions(data.filter((cus) => cus.merchant.ID === id));
       } catch (error) {
         console.error(error);
@@ -131,36 +135,128 @@ export const useMerchant = (id: string) => {
     }
   };
 
-  const handleDisputeSearch = (query: DisputeFilter): Dispute[] => {
-    return disputes.filter((dispute) => {
-      const matchesPaymentReference =
-        query.paymentRef.length === 0 ||
-        dispute.paymentRef
-          .toLowerCase()
-          .includes(query.paymentRef.toLowerCase());
-      const matchesCustomerEmail =
-        query.customerEmail.length === 0 ||
-        dispute.customerEmail
-          .toLowerCase()
-          .includes(query.customerEmail.toLowerCase());
-      const matchesStatus =
-        query.status.length === 0 || dispute.status === query.status;
-      const matchesTransactionStatus =
-        query.transactionStatus.length === 0 ||
-        dispute.transactionStatus === query.transactionStatus;
-      const matchesCreatedAt =
-        query.createdAt.length === 0 || dispute.createdAt >= query.createdAt;
-      const matchesDue = query.due.length === 0 || dispute.due <= query.due;
+  const handleDisputeSearch = useCallback(
+    (filter: DisputeFilter): Dispute[] => {
+      return disputes.filter((dispute) => {
+        if (id !== dispute.merchant.ID) return false;
 
-      return (
-        matchesPaymentReference &&
-        matchesCustomerEmail &&
-        matchesStatus &&
-        matchesTransactionStatus &&
-        matchesCreatedAt &&
-        matchesDue
-      );
+        if (filter.status && dispute.status !== filter.status) return false;
+        if (
+          filter.transactionStatus &&
+          dispute.transactionStatus !== filter.transactionStatus
+        )
+          return false;
+
+        if (filter.paymentRef) {
+          const query = filter.paymentRef.trim().toLowerCase();
+          if (!dispute.paymentRef.trim().toLowerCase().includes(query))
+            return false;
+        }
+        if (filter.start) {
+          if (
+            new Date(dispute.createdAt).getTime() <
+            new Date(filter.start).getTime()
+          )
+            return false;
+        }
+
+        if (filter.due) {
+          if (new Date(dispute.due).getTime() > new Date(filter.due).getTime())
+            return false;
+        }
+
+        return true;
+      });
+    },
+    [disputes, id],
+  );
+
+  const handleSettlementSearch = useCallback(
+    (query: SettlementFilter): Settlement[] => {
+      return settlements.filter((settlement) => {
+        // you're trying to search for something that's not there
+        if (id !== settlement.merchant.ID) return false;
+        if (query.name) {
+          const search = query.name.trim().toLowerCase();
+          if (!settlement.accountName.trim().toLowerCase().includes(search))
+            return false;
+        }
+        if (query.from) {
+          if (
+            new Date(settlement.createdAt).getTime() <
+            new Date(query.from).getTime()
+          )
+            return false;
+        }
+
+        if (query.to) {
+          if (new Date(settlement.due).getTime() > new Date(query.to).getTime())
+            return false;
+        }
+
+        return true;
+      });
+    },
+    [settlements, id],
+  );
+  const handleTransactionSearch = (
+    filter: TransactionFilter,
+  ): Transaction[] => {
+    return transactions.filter((transaction) => {
+      if (id !== transaction.merchant.ID) return false;
+
+      // payment method
+      if (filter.paymentMtd) {
+        const query = filter.paymentMtd.trim().toLowerCase();
+        if (!transaction.paymentMethod.trim().toLowerCase().includes(query))
+          return false;
+      }
+      // payment reference
+      if (filter.paymentRef) {
+        const query = filter.paymentRef.trim().toLowerCase();
+        if (!transaction.paymentRef.trim().toLowerCase().includes(query))
+          return false;
+      }
+      // check if start range started before transaction date
+      if (filter.start) {
+        if (
+          new Date(transaction.createdAt).getTime() <
+          new Date(filter.start).getTime()
+        )
+          return false;
+      }
+      // check if end range ended after transaction date
+      if (filter.due) {
+        if (
+          new Date(transaction.due).getTime() > new Date(filter.due).getTime()
+        )
+          return false;
+      }
     });
+  };
+  const createUser = (userData: UserCreationData): boolean => {
+    if (user!.role === "admin") return false;
+    const customer: Customer = {
+      merchant: {
+        ID: user!.profile.ID,
+        fName: user!.profile.fName,
+        lName: user!.profile.lName,
+      },
+      fName: userData.fName,
+      lName: userData.lName,
+      email: userData.email,
+      phones: {
+        main: userData.phone.main,
+        alternate: userData.phone.alt ?? null,
+      },
+      active: false,
+      address: {
+        address1: "",
+        address2: null,
+      },
+    };
+    setCustomers((prev) => [...prev, customer]);
+    return true;
   };
   return {
     customers,
@@ -172,5 +268,8 @@ export const useMerchant = (id: string) => {
     disputes,
     settlements,
     transactions,
+    handleSettlementSearch,
+    handleTransactionSearch,
+    createUser,
   };
 };

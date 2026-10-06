@@ -11,29 +11,47 @@ export const NavBar = () => {
       direction={"row"}
       sx={{
         alignItems: "center",
-        justifyContent: "space-evenly",
-        height: { lg: 65, xl: 70 },
+        justifyContent: { xs: "space-between", md: "space-evenly" },
+        height: { xs: "auto", lg: 65, xl: 70 },
+        minHeight: { xs: 48, lg: 65, xl: 70 },
         width: "100%",
-        gap: 1.5,
+        gap: { xs: 1, md: 1.5 },
+        [theme.breakpoints.down("md")]: {
+          px: 2.2,
+        },
       }}
     >
       {/* welcome = 25%*/}
-      <div style={{ width: "25%", textAlign: "left" }}>
+      <Box
+        sx={{
+          width: "25%",
+          textAlign: "left",
+          display: { xs: "none", md: "block" },
+        }}
+      >
         <Typography variant="body2" sx={{ fontWeight: 400 }}>
           Welcome, <span style={{ color: "red" }}>{user!.profile.fName}</span>
         </Typography>
-      </div>
+      </Box>
       {/* date/role = 30%*/}
-      <div
-        style={{
-          width: "35%",
+      <Box
+        sx={{
+          width: { xs: "auto", md: "35%" },
           textAlign: "left",
           display: "flex",
-          gap: 2,
+          gap: { xs: 0.75, md: 2 },
           alignItems: "center",
         }}
       >
-        <Typography variant="body2" sx={{ fontWeight: 400, marginRight: 3.5 }}>
+        <Typography
+          variant="body2"
+          sx={{
+            fontWeight: 400,
+            marginRight: { xs: 0, md: 3.5 },
+            fontSize: { xs: "0.75rem", md: "0.875rem" },
+            whiteSpace: "nowrap",
+          }}
+        >
           {getDate()}
         </Typography>
 
@@ -49,26 +67,34 @@ export const NavBar = () => {
           }}
         />
 
-        <Typography variant="body2" sx={{ fontWeight: 400, marginLeft: 3.5 }}>
+        <Typography
+          variant="body2"
+          sx={{
+            fontWeight: 400,
+            marginLeft: { xs: 0, md: 3.5 },
+            fontSize: { xs: "0.75rem", md: "0.875rem" },
+            whiteSpace: "nowrap",
+          }}
+        >
           Role :
           <span style={{ fontWeight: 600, marginLeft: 2.5 }}>
             {role === "merchant" ? "Merchant" : "Admin"}
           </span>
         </Typography>
-      </div>
+      </Box>
 
       {/* controls : notifications + profile pic + name + logout */}
       <Box
         sx={{
-          flex: 1,
+          flex: { xs: "0 0 auto", md: 1 },
           display: "flex",
-          justifyContent: "space-evenly",
-          width: "100%",
+          justifyContent: { xs: "flex-end", md: "space-evenly" },
+          width: { xs: "auto", md: "100%" },
           alignItems: "center",
-          gap: 2.5,
+          gap: { xs: 1, md: 2.5 },
         }}
       >
-        <Notifications />
+        <Notifications sx={{ display: { xs: "none", md: "block" } }} />
 
         <div
           style={{
@@ -77,35 +103,55 @@ export const NavBar = () => {
             backgroundColor: "gray",
             borderRadius: "100%",
           }}
+          aria-hidden="true"
         ></div>
         {/* name = width 30% */}
-        <div
-          style={{ width: "30%", display: "flex", justifyContent: "center" }}
+        <Box
+          sx={{
+            width: { xs: "auto", md: "30%" },
+            minWidth: 0,
+            display: "flex",
+            justifyContent: "center",
+          }}
         >
-          <Typography variant="body2" sx={{ fontWeight: 400 }}>
+          <Typography
+            variant="body2"
+            sx={{
+              fontWeight: 400,
+              fontSize: { xs: "0.75rem", md: "0.875rem" },
+              maxWidth: { xs: 100, md: "none" },
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
             {user!.profile.fName + " " + user!.profile.lName}
           </Typography>
-        </div>
+        </Box>
         {/* logout = width 30% */}
-        <div
-          style={{
+        <Box
+          sx={{
             width: "30%",
-            display: "flex",
             justifyContent: "center",
             cursor: "pointer",
             alignItems: "center",
             gap: 2.5,
+            display: "flex",
           }}
           onClick={logout}
         >
           <ExitToApp sx={{ color: "primary.main" }} />
           <Typography
             variant="body2"
-            sx={{ fontWeight: 500, color: "primary.main" }}
+            sx={{
+              fontWeight: 500,
+              color: "primary.main",
+              display: { xs: "none", md: "block" },
+            }}
           >
             Logout
           </Typography>
-        </div>
+        </Box>
       </Box>
     </Stack>
   );

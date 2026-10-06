@@ -42,9 +42,9 @@ type Permission = {
   description: string;
 };
 
-type AdminRole = {
+export type AdminRole = {
   name: string;
-  permissions: Permission[];
+  permission: Permission;
   createdAt: string;
 };
 export type Administrator = {
@@ -153,6 +153,8 @@ export type Settlement = {
   currency: string;
   reference: string;
   status: SettlementStatus;
+  createdAt: string;
+  due: string;
 };
 
 export type Customer = {
@@ -160,8 +162,8 @@ export type Customer = {
   fName: string;
   lName: string;
   phones: {
-    main: number;
-    alternate: number | null;
+    main: number | string;
+    alternate: number | string | null;
   };
   active: boolean;
   email: string;
@@ -179,6 +181,8 @@ export type Transaction = {
   cardScheme: string;
   status: TransactionStatus;
   customerEmail: string;
+  createdAt: string;
+  due: string;
 };
 
 export function isMerchant(data: unknown): data is Merchant {
@@ -367,12 +371,36 @@ function isLinkedMerchant(data: unknown): data is LinkedMerchant {
   );
 }
 
-export type DisputeFilter = Pick<
-  Dispute,
-  | "status"
-  | "createdAt"
-  | "due"
-  | "customerEmail"
-  | "paymentRef"
-  | "transactionStatus"
->;
+export type DisputeFilter = {
+  merchantID: string;
+  start?: string;
+  paymentRef?: string;
+  transactionStatus?: TransactionStatus;
+  status?: DisputeStatus;
+  due?: string;
+};
+
+export type SettlementFilter = {
+  merchantID: string;
+  name?: string;
+  from?: string;
+  to?: string;
+};
+
+export type TransactionFilter = {
+  merchantID: string;
+  paymentMtd?: string;
+  paymentRef?: string;
+  start?: string;
+  due?: string;
+};
+
+export type UserCreationData = {
+  fName: string;
+  lName: string;
+  phone: {
+    main: string;
+    alt?: string;
+  };
+  email: string;
+};

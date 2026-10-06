@@ -114,7 +114,7 @@ export const InformationContainer = (props: InputProps) => {
   return (
     <Stack
       sx={{
-        width: "auto",
+        width: { xs: "100%", md: 250 },
         height: "auto",
         gap: 1.5,
         alignItems: "start",
@@ -134,7 +134,7 @@ export const InformationContainer = (props: InputProps) => {
         readOnly={props.mode === "read"}
         disabled={props.mode === "read"}
         style={{
-          width: "auto",
+          width: "100%",
           height: 48,
           display: "flex",
           alignItems: "center",

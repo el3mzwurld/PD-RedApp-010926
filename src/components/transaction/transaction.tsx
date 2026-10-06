@@ -105,7 +105,7 @@ export const Transaction = () => {
               gap: 4.5,
               width: "100%",
               backgroundColor: role === "admin" ? "white" : "none",
-              padding: 5,
+              padding: { xs: 1, md: 5 },
               borderRadius: 1.5,
             }}
           >

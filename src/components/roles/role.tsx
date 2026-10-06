@@ -15,9 +15,37 @@ import { motion } from "motion/react";
 import { Search } from "../ui/Search";
 import { ArrowDownward } from "@mui/icons-material";
 import { useState } from "react";
+import type { AdminRole } from "../../lib/types";
+import { useUser } from "../../context/user";
+import { useAdmin } from "../../hooks/useAdmin";
+import { RoleModal } from "../ui/roleModal";
+import { formatDate } from "../../lib/utils";
 
 export const Role = () => {
   const theme = useTheme();
+  const { user } = useUser();
+  const { createRole, roles } = useAdmin(user!.role);
+  const [open, setOpen] = useState(false);
+  const onClose = () => setOpen(false);
+  const [permission, setPermission] = useState<AdminRole["permission"] | null>(
+    null,
+  );
+  const [name, setName] = useState("");
+  const [desc, setDesc] = useState("");
+  const onSubmit = (perm: AdminRole["permission"]) => {
+    setPermission(perm);
+  };
+
+  const handleSubmit = () => {
+    if (!permission) return;
+    if (name.trim().length === 0) return;
+    const perm: typeof permission = {
+      ...permission,
+      description: desc,
+    };
+    createRole(perm, name);
+  };
+
   return (
     <Box
       sx={{
@@ -117,6 +145,8 @@ export const Role = () => {
                 <input
                   type="text"
                   placeholder="Enter role name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   style={{
                     width: 220,
                     height: 48,
@@ -141,6 +171,8 @@ export const Role = () => {
                     padding: 10,
                     fontFamily: "poppins",
                   }}
+                  value={desc}
+                  onChange={(e) => setDesc(e.target.value)}
                 ></input>
               </Stack>
               {/* select permission */}
@@ -152,6 +184,9 @@ export const Role = () => {
                   height: 45,
                   fontSize: 14,
                   width: 300,
+                }}
+                onClick={() => {
+                  setOpen(true);
                 }}
               >
                 Select Permissions
@@ -168,6 +203,9 @@ export const Role = () => {
                 fontSize: 14,
                 color: "white",
                 borderRadius: 25,
+              }}
+              onClick={() => {
+                handleSubmit();
               }}
             >
               Submit
@@ -282,49 +320,57 @@ export const Role = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        1
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Admin
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        Full access to manage users and settings
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        12/09/2026
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: "center",
-                        }}
-                      >
-                        <Button variant="text">VIEW</Button>
-                      </TableCell>
-                    </TableRow>
+                    {roles.length !== 0 &&
+                      roles.map((r, index) => (
+                        <TableRow
+                          sx={{ backgroundColor: "#F4F4F4" }}
+                          key={index}
+                        >
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {index + 1}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {r.name.charAt(0).toUpperCase() + r.name.slice(1)}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {r.permission.description}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            {formatDate(r.createdAt)}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              textAlign: "center",
+                            }}
+                          >
+                            <Button variant="text">VIEW</Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
                   </TableBody>
                 </Table>
               </TableContainer>
             </div>
           </motion.div>
         </section>
+
+        <RoleModal open={open} onClose={onClose} onSubmit={onSubmit} />
       </Box>{" "}
     </Box>
   );

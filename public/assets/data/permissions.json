@@ -1,0 +1,22 @@
+[
+  {
+    "permission": "manage_merchants",
+    "description": "Create, view, update, and delete merchant accounts"
+  },
+  {
+    "permission": "manage_customers",
+    "description": "Create, view, update, and delete customer records"
+  },
+  {
+    "permission": "manage_transactions",
+    "description": "Create, view, update, and delete transaction records"
+  },
+  {
+    "permission": "manage_disputes",
+    "description": "Create, view, update, and delete dispute records"
+  },
+  {
+    "permission": "manage_settlements",
+    "description": "Create, view, update, and delete settlement records"
+  }
+]

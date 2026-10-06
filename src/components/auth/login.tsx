@@ -8,6 +8,7 @@ import {
   Link as MuiLink,
   Stack,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { Autorenew } from "@mui/icons-material";
 import { Link, Navigate, useNavigate } from "react-router-dom";
@@ -24,7 +25,7 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   const [loginMode, setLoginMode] = useState<Profile["role"]>("merchant");
   const isAdminMode = loginMode === "admin";
-
+  const theme = useTheme();
   useEffect(() => {
     if (!user) return;
 

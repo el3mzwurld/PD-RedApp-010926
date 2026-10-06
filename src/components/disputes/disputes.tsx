@@ -33,7 +33,12 @@ export const Disputes = () => {
   const [filteredDisputes, setFilteredDisputes] = useState<Dispute[] | null>(
     null,
   );
+  const [dis, setDis] = useState<Dispute | null>(null);
 
+  const openDisputeModal = (dispute: Dispute) => {
+    setOpen((prev) => !prev);
+    setDis(dispute);
+  };
   const formatDate = (query: string): string => {
     const date = new Date(query);
     const formatted = date.toLocaleDateString();
@@ -41,8 +46,6 @@ export const Disputes = () => {
   };
 
   const handleSubmit = (filter: string) => {
-    if (role !== "merchant") return;
-
     const dispute: DisputeFilter = JSON.parse(filter);
     setFilteredDisputes(handleDisputeSearch(dispute));
   };
@@ -372,90 +375,22 @@ export const Disputes = () => {
                               {" "}
                               <Button
                                 variant="text"
-                                onClick={() => setOpen((prev) => !prev)}
+                                onClick={() => openDisputeModal(d)}
                               >
                                 VIEW
                               </Button>
                             </TableCell>
-
-                            <PopupModal
-                              open={open}
-                              setOpen={setOpen}
-                              data={d}
-                              title={"Dispute"}
-                              options={2}
-                              buttonTitle1="Accept"
-                              key={index}
-                              mode="disputes"
-                              buttonTitle2="Decline"
-                            />
                           </TableRow>
                         ))
                       ) : (
                         <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
                           <TableCell
+                            colSpan={10}
                             sx={{
                               textAlign: "center",
                             }}
                           >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "center",
-                            }}
-                          >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "center",
-                            }}
-                          >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "center",
-                            }}
-                          >
-                            -{" "}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "center",
-                            }}
-                          >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "center",
-                            }}
-                          >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "center",
-                            }}
-                          >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "center",
-                            }}
-                          >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "center",
-                            }}
-                          >
-                            {" "}
-                            <Button variant="text">VIEW</Button>
+                            There's nothing to see here for now.
                           </TableCell>
                         </TableRow>
                       )}
@@ -613,90 +548,22 @@ export const Disputes = () => {
                               {" "}
                               <Button
                                 variant="text"
-                                onClick={() => setOpen((prev) => !prev)}
+                                onClick={() => openDisputeModal(d)}
                               >
                                 VIEW
                               </Button>
                             </TableCell>
-
-                            <PopupModal
-                              open={open}
-                              setOpen={setOpen}
-                              data={d}
-                              title={"Dispute"}
-                              options={1}
-                              buttonTitle1="Accept"
-                              buttonTitle2="Decline"
-                              key={index}
-                              mode="disputes"
-                            />
                           </TableRow>
                         ))
                       ) : (
                         <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
                           <TableCell
+                            colSpan={10}
                             sx={{
                               textAlign: "center",
                             }}
                           >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "center",
-                            }}
-                          >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "center",
-                            }}
-                          >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "center",
-                            }}
-                          >
-                            -{" "}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "center",
-                            }}
-                          >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "center",
-                            }}
-                          >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "center",
-                            }}
-                          >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "center",
-                            }}
-                          >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "center",
-                            }}
-                          >
-                            {" "}
-                            <Button variant="text">VIEW</Button>
+                            There's nothing to see here for now.
                           </TableCell>
                         </TableRow>
                       )}
@@ -707,6 +574,19 @@ export const Disputes = () => {
             </div>
           </motion.div>
         </section>
+
+        {dis !== null ? (
+          <PopupModal
+            open={open}
+            setOpen={setOpen}
+            data={dis}
+            title={"Dispute"}
+            options={2}
+            buttonTitle1="Accept"
+            buttonTitle2="Decline"
+            mode="disputes"
+          />
+        ) : null}
       </Box>{" "}
     </Box>
   );

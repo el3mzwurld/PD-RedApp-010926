@@ -4,11 +4,15 @@ import { useState } from "react";
 import type {
   Dispute,
   DisputeFilter,
+  SettlementFilter,
   SettlementStatus,
   Transaction,
+  TransactionFilter,
   TransactionStatus,
+  UserCreationData,
 } from "../../lib/types";
 import { useAdmin } from "../../hooks/useAdmin";
+import { useUser } from "../../context/user";
 
 interface SearchProps {
   onSubmit: (filter: string) => void;
@@ -23,17 +27,11 @@ interface SearchProps {
   role: "merchant" | "admin";
 }
 
-interface AdminDisputeFilter {
-  merchantID: string;
-  transactionStatus: TransactionStatus;
-  paymentRef: string;
-  startDate: string;
-  endDate: string;
-}
 type UserStatus = "new" | "inactive" | "active";
 
 type PaymentMtd = "Card" | "Bank Transfer";
 export const Search = ({ onSubmit, mode, role }: SearchProps) => {
+  const { user } = useUser();
   const [query, setQuery] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -55,6 +53,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
   const [email, setEmail] = useState("");
   const [merchantID, setMerchantID] = useState<string>("");
   const [userStatus, setUserStatus] = useState<UserStatus | null>();
+  const [acctName, setAcctName] = useState("");
   const handleSubmit = (
     e: React.SubmitEvent<HTMLFormElement> | React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -64,49 +63,63 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
   };
   const submitDispute = () => {
     const disputeFilter: DisputeFilter = {
-      paymentRef: paymentRef,
-      customerEmail,
-      status: disputeStatus ?? "Open",
-      createdAt: startDate,
-      due: endDate,
-      transactionStatus: transactionStatus ?? "pending",
+      merchantID: user!.role === "merchant" ? user!.profile.ID : merchantID,
+      paymentRef: paymentRef.trim().length !== 0 ? paymentRef : undefined,
+      start: startDate.trim().length !== 0 ? startDate : undefined,
+      due: endDate.trim().length !== 0 ? startDate : undefined,
+      status: disputeStatus ?? undefined,
+      transactionStatus: transactionStatus ?? undefined,
     };
-
+    console.log(disputeFilter);
     const filter = JSON.stringify(disputeFilter);
 
     onSubmit(filter);
   };
   const submitTransaction = () => {
-    const transactionFilter: Partial<Transaction> = {
-      paymentRef: refNumber ?? undefined,
-      paymentMethod: paymentMethod ?? "Card",
-      status: transactionStatus ?? "pending",
-      customerEmail: customerEmail,
+    const transactionFilter: TransactionFilter = {
+      merchantID: user!.role === "merchant" ? user!.profile.ID : merchantID,
+      paymentRef: paymentRef.trim().length !== 0 ? paymentRef : undefined,
+      paymentMtd: paymentMethod ?? undefined,
+      start: startDate.trim().length !== 0 ? startDate : undefined,
+      due: endDate.trim().length !== 0 ? endDate : undefined,
     };
 
     const filter = JSON.stringify(transactionFilter);
     onSubmit(filter);
   };
-  const adminSubmitDispute = () => {
-    const dispute: AdminDisputeFilter = {
-      startDate,
-      endDate,
-      merchantID: merchantID,
-      paymentRef: paymentRef,
-      transactionStatus: transactionStatus ?? "pending",
+
+  const submitSettlement = () => {
+    const settlementFilter: SettlementFilter = {
+      merchantID: user!.role === "merchant" ? user!.profile.ID : merchantID,
+      name: acctName.trim().length !== 0 ? acctName : undefined,
+      from: startDate.trim().length !== 0 ? startDate : undefined,
+      to: endDate.trim().length !== 0 ? endDate : undefined,
     };
 
-    const filter = JSON.stringify(dispute);
-
+    const filter = JSON.stringify(settlementFilter);
     onSubmit(filter);
   };
+  const submitUser = () => {
+    const userCreationData: UserCreationData = {
+      fName,
+      lName,
+      phone: {
+        main: phone,
+        alt: altPhone.trim().length !== 0 ? altPhone : undefined,
+      },
+      email,
+    };
 
+    const data = JSON.stringify(userCreationData);
+    onSubmit(data);
+  };
   const { myMerchants } = useAdmin(role);
   return (
     <>
       {mode === "default" && (
         <Stack
           component={"form"}
+          className="search-mode"
           direction={"row"}
           sx={{ width: "auto", height: 55, gap: 3.5, alignItems: "end" }}
           onSubmit={(e) => {
@@ -163,6 +176,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
       {mode === "disputes" && role === "merchant" && (
         <Stack
           component={"form"}
+          className="search-mode"
           direction={"row"}
           sx={{
             width: "auto",
@@ -258,35 +272,6 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
               onChange={(e) => setPaymentRef(e.target.value)}
             ></input>
           </div>
-          {/* email */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              fontSize: 12,
-              gap: 5,
-            }}
-          >
-            <label>Customer Email</label>
-            <input
-              style={{
-                width: 270,
-                height: 55,
-                padding: 1.8,
-                paddingLeft: 10,
-                paddingRight: 10,
-                fontSize: 14,
-                borderRadius: 10,
-                border: "2px solid lightgrey",
-                cursor: "pointer",
-                fontFamily: "poppins",
-              }}
-              type="email"
-              value={customerEmail}
-              required
-              onChange={(e) => setCustomerEmail(e.target.value)}
-            ></input>
-          </div>
           {/* dispute status */}
           <div
             style={{
@@ -322,7 +307,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
               <option value={"Fully Accepted"}>Fully Accepted</option>
             </select>
           </div>
-          {/* status */}
+          {/* transaction status */}
           <div
             style={{
               display: "flex",
@@ -383,6 +368,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
       {mode === "settlement" && (
         <Stack
           component={"form"}
+          className="search-mode"
           direction={"row"}
           sx={{
             width: "auto",
@@ -390,9 +376,46 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
             gap: 3.5,
             alignItems: "end",
             flexWrap: "wrap",
+            pr: 2.5,
           }}
         >
           {/* settlement search parameters*/}
+
+          {role === "admin" && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                fontSize: 12,
+                gap: 5,
+              }}
+            >
+              <label>Filter by</label>
+              <select
+                style={{
+                  width: 270,
+                  height: 55,
+                  padding: 1.8,
+                  paddingLeft: 10,
+                  paddingRight: 10,
+                  fontSize: 14,
+                  borderRadius: 10,
+                  border: "2px solid lightgrey",
+                  cursor: "pointer",
+                  fontFamily: "poppins",
+                }}
+                value={merchantID}
+                onChange={(e) => setMerchantID(e.target.value)}
+              >
+                <option defaultChecked>Merchant ID</option>
+                {myMerchants.map((m, index) => (
+                  <option key={index} value={m}>
+                    {m}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           <div
             style={{
               display: "flex",
@@ -401,7 +424,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
               gap: 5,
             }}
           >
-            <label>Search By</label>
+            <label>Account Name</label>
             <input
               style={{
                 width: 250,
@@ -416,9 +439,9 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
                 fontFamily: "poppins",
               }}
               type="text"
-              value={settlementSearchParams}
+              value={acctName}
               required
-              onChange={(e) => setSettlementSearchParams(e.target.value)}
+              onChange={(e) => setAcctName(e.target.value)}
             ></input>
           </div>
           {/* from  */}
@@ -496,7 +519,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
             }}
             onClick={(e) => {
               e.preventDefault();
-              submitDispute();
+              submitSettlement();
             }}
           >
             Search
@@ -506,6 +529,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
       {mode === "transaction" && role !== "admin" && (
         <Stack
           component={"form"}
+          className="search-mode"
           direction={"row"}
           sx={{
             width: "auto",
@@ -516,6 +540,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
           }}
         >
           {/* transaction status */}
+
           <div
             style={{
               display: "flex",
@@ -695,6 +720,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
       {mode === "users" && (
         <Stack
           component={"form"}
+          className="search-mode"
           direction={"row"}
           sx={{
             width: "auto",
@@ -843,7 +869,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
             variant="contained"
             type="submit"
             sx={{
-              width: 150,
+              width: "auto",
               p: 1.25,
               px: 5,
               fontSize: 12,
@@ -855,13 +881,14 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
               e.preventDefault();
             }}
           >
-            Search
+            Create User
           </Button>
         </Stack>
       )}
       {mode === "disputes" && role === "admin" && (
         <Stack
           component={"form"}
+          className="search-mode"
           direction={"row"}
           sx={{
             width: "auto",
@@ -1052,6 +1079,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
       {mode === "merchant management" && (
         <Stack
           component={"form"}
+          className="search-mode"
           direction={"row"}
           sx={{
             width: "auto",
@@ -1158,6 +1186,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
       {mode === "transaction" && role === "admin" && (
         <Stack
           component={"form"}
+          className="search-mode"
           direction={"column"}
           sx={{
             width: "auto",
@@ -1168,6 +1197,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
           }}
         >
           <div
+            className="search-mode-fields"
             style={{
               width: "auto",
               height: "auto",
@@ -1181,36 +1211,42 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
             }}
           >
             {/* merchant ID */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                fontSize: 12,
-                gap: 5,
-              }}
-            >
-              <label>Merchant ID</label>
-              <select
+
+            {role === "admin" && (
+              <div
                 style={{
-                  width: 200,
-                  height: 55,
-                  padding: 1.8,
-                  paddingLeft: 10,
-                  paddingRight: 10,
-                  fontSize: 14,
-                  borderRadius: 10,
-                  border: "2px solid lightgrey",
-                  cursor: "pointer",
-                  fontFamily: "poppins",
+                  display: "flex",
+                  flexDirection: "column",
+                  fontSize: 12,
+                  gap: 5,
                 }}
-                value={merchantID}
-                onChange={(e) => setMerchantID(e.target.value)}
               >
-                <option disabled selected hidden>
-                  Merchant ID
-                </option>
-              </select>
-            </div>
+                <label>Filter by</label>
+                <select
+                  style={{
+                    width: 270,
+                    height: 55,
+                    padding: 1.8,
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    fontSize: 14,
+                    borderRadius: 10,
+                    border: "2px solid lightgrey",
+                    cursor: "pointer",
+                    fontFamily: "poppins",
+                  }}
+                  value={merchantID}
+                  onChange={(e) => setMerchantID(e.target.value)}
+                >
+                  <option defaultChecked>Merchant ID</option>
+                  {myMerchants.map((m, index) => (
+                    <option key={index} value={m}>
+                      {m}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             {/* transaction status */}
             <div
               style={{
@@ -1222,7 +1258,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
             >
               <label>Transaction Status</label>
               <select
-                value={transactionStatus}
+                value={transactionStatus ?? ""}
                 style={{
                   width: 200,
                   height: 55,
@@ -1239,6 +1275,10 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
                   setTransactionStatus(e.target.value as TransactionStatus);
                 }}
               >
+                <option defaultChecked hidden>
+                  Transaction Status
+                </option>
+
                 <option value={"Successful"}>Successful</option>
                 <option value={"Failed"}>Failed</option>
                 <option value={"Pending"}>Pending</option>
@@ -1256,7 +1296,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
             >
               <label>Payment Method</label>
               <select
-                value={paymentMethod}
+                value={paymentMethod ?? ""}
                 style={{
                   width: 190,
                   height: 55,
@@ -1270,7 +1310,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
                   fontFamily: "poppins",
                 }}
                 onChange={(e) => {
-                  setPaymentMethod(e.target.value as PaymentMethod);
+                  setPaymentMethod(e.target.value as PaymentMtd);
                 }}
               >
                 <option value={"Card"}>Card</option>
@@ -1392,6 +1432,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
       {mode === "settings" && (
         <Stack
           component={"form"}
+          className="search-mode"
           direction={"row"}
           sx={{
             width: "auto",
@@ -1478,7 +1519,7 @@ export const Search = ({ onSubmit, mode, role }: SearchProps) => {
             }}
             onClick={(e) => {
               e.preventDefault();
-              adminSubmitDispute();
+              submitDispute();
             }}
           >
             Search

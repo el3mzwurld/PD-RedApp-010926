@@ -3,10 +3,20 @@ import { NavBar } from "../ui/navbar";
 import { motion } from "motion/react";
 import { InformationContainer } from "../ui/InformationContainer";
 import { Search } from "../ui/Search";
+import { useState } from "react";
+import { ContentCopy, ContentCopyRounded } from "@mui/icons-material";
+import { useUser } from "../../context/user";
+import { Navigate } from "react-router-dom";
 
 export const PaymentLink = () => {
   const theme = useTheme();
   const handleSubmit = (filter: string) => {};
+  const { user } = useUser();
+  const [open, setOpen] = useState(false);
+
+  if (user!.role === "admin") {
+    return <Navigate to={"/"} />;
+  }
   return (
     <Box
       sx={{
@@ -89,19 +99,19 @@ export const PaymentLink = () => {
             }}
           >
             <InformationContainer
-              mode="edit"
+              mode="read"
               name="Merchant ID"
-              content="RED00000"
+              content={user!.profile.ID}
             />
             <InformationContainer
-              mode="edit"
+              mode="read"
               name="Business Name"
-              content="Mammodu Stores"
+              content={user!.profile.businessName}
             />{" "}
             <InformationContainer
-              mode="edit"
+              mode="read"
               name="Business Email"
-              content="iamalberto777@gmail.com"
+              content={user!.profile.emails.businessEmail}
             />{" "}
             <InformationContainer
               mode="edit"
@@ -124,10 +134,47 @@ export const PaymentLink = () => {
             }}
             onClick={(e) => {
               e.preventDefault();
+              setOpen(true);
             }}
           >
             GENERATE PAYMENT LINK
           </Button>
+
+          <Stack
+            direction="row"
+            sx={{
+              width: "100%",
+              height: "auto",
+              gap: 3.5,
+              alignItems: "center",
+              justifyContent: { xs: "center", lg: "start" },
+              px: 5,
+            }}
+          >
+            {open && (
+              <>
+                <input
+                  type="text"
+                  style={{
+                    minWidth: 300,
+                    height: 50,
+                    padding: "10px 10px",
+                    borderRadius: 10,
+                    border: "none",
+                  }}
+                  value={"Payment URL"}
+                />
+
+                <ContentCopyRounded
+                  sx={{
+                    fontSize: 25,
+                    color: "primary.main",
+                    cursor: "pointer",
+                  }}
+                />
+              </>
+            )}
+          </Stack>
         </section>
       </Box>{" "}
     </Box>

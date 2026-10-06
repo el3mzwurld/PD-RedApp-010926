@@ -10,7 +10,7 @@ export const Container = ({ children }: { children: React.ReactNode }) => {
         flex: 1,
         height: "100vh",
         width: "100%",
-        px: { xs: 0, lg: 2.5 },
+        px: { xs: 1, lg: 2.5 },
         py: { xs: 1.5, lg: 2.5 },
         overflowY: "auto",
       }}

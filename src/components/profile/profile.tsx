@@ -130,17 +130,17 @@ export const Profile = () => {
           </p>
         </motion.div>
 
-        <section
-          style={{
+        <Stack
+          sx={{
             width: "100%",
             minHeight: "100vh",
             backgroundColor: "lightgray",
-            borderRadius: 12,
-            padding: "45px",
+            borderRadius: { xs: 0.8, md: 12 },
+            padding: "clamp(16px, 4vw, 45px)",
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
-            gap: 25,
+            gap: 4,
           }}
         >
           {page === "profile" ? (
@@ -223,7 +223,7 @@ export const Profile = () => {
                     flexWrap: "wrap",
                     flex: 1,
                     height: "auto",
-                    rowGap: 4.5,
+                    rowGap: { xs: 1.25, md: 4.5 },
                     alignItems: "start",
                     justifyContent: "start",
                     columnGap: 2.5,
@@ -293,7 +293,7 @@ export const Profile = () => {
                   {/* state */}
                   <Stack
                     sx={{
-                      width: "auto",
+                      width: { xs: "100%", md: "auto" },
                       height: "auto",
                       gap: 1.5,
                       alignItems: "start",
@@ -314,7 +314,7 @@ export const Profile = () => {
                         });
                       }}
                       style={{
-                        width: "auto",
+                        width: "100%",
                         height: 48,
                         display: "flex",
                         alignItems: "center",
@@ -346,7 +346,7 @@ export const Profile = () => {
                   {/* city */}
                   <Stack
                     sx={{
-                      width: "auto",
+                      width: { xs: "100%", md: "auto" },
                       height: "auto",
                       gap: 1.5,
                       alignItems: "start",
@@ -365,7 +365,7 @@ export const Profile = () => {
                         });
                       }}
                       style={{
-                        width: "auto",
+                        width: "100%",
                         height: 48,
                         display: "flex",
                         alignItems: "center",
@@ -397,7 +397,7 @@ export const Profile = () => {
                   {/* local government */}
                   <Stack
                     sx={{
-                      width: "auto",
+                      width: { xs: "100%", md: "auto" },
                       height: "auto",
                       gap: 1.5,
                       alignItems: "start",
@@ -416,7 +416,7 @@ export const Profile = () => {
                         });
                       }}
                       style={{
-                        width: "auto",
+                        width: "100%",
                         height: 48,
                         display: "flex",
                         alignItems: "center",
@@ -521,122 +521,137 @@ export const Profile = () => {
 
                 <Stack
                   sx={{
-                    width: "85%",
+                    width: { xs: "100%", md: "85%" },
                     height: "auto",
-                    p: 5,
+                    p: { xs: 1.5, sm: 2.5, md: 5 },
                     backgroundColor: "white",
                     boxShadow: "2.5px 2.5px 10px #888888",
-                    gap: 1.5,
+                    gap: { xs: 1, sm: 1.5 },
                   }}
                 >
-                  <div
-                    style={{
-                      height: 75,
+                  <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    sx={{
+                      minHeight: { xs: 0, sm: 75 },
                       width: "100%",
                       backgroundColor: theme.palette.background.paper,
-                      display: "flex",
-                      alignItems: "center",
+                      alignItems: "stretch",
                       justifyContent: "space-evenly",
-                      padding: "12.5px 7px",
+                      gap: { xs: 1, sm: 1.5 },
+                      p: { xs: 1, sm: 1.5 },
                     }}
                   >
-                    <div
-                      style={{
-                        width: "60%",
-                        height: "100%",
+                    <Box
+                      sx={{
+                        width: { xs: "100%", sm: "60%" },
+                        minHeight: { xs: 48, sm: "auto" },
                         backgroundColor: "white",
                         display: "flex",
                         alignItems: "center",
-                        padding: 15,
+                        p: { xs: 1.5, sm: 2 },
                       }}
                     >
                       <Typography variant="body2" sx={{ fontWeight: 500 }}>
                         Company CAC Certificate
                       </Typography>
-                    </div>
-                    <div
-                      style={{
-                        width: "30%",
-                        height: "100%",
+                    </Box>
+                    <Box
+                      sx={{
+                        width: { xs: "100%", sm: "30%" },
+                        minHeight: { xs: 64, sm: "auto" },
                         backgroundColor: "white",
                       }}
-                    ></div>
-                  </div>
+                    />
+                  </Stack>
                   {/* utility bill */}
-                  <div
-                    style={{
-                      height: 90,
+                  <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    sx={{
+                      minHeight: { xs: 0, sm: 90 },
                       width: "100%",
                       backgroundColor: theme.palette.background.paper,
-                      display: "flex",
-                      alignItems: "center",
+                      alignItems: "stretch",
                       justifyContent: "space-evenly",
-                      padding: "12.5px 7px",
+                      gap: { xs: 1, sm: 1.5 },
+                      p: { xs: 1, sm: 1.5 },
                     }}
                   >
-                    <div
-                      style={{
-                        width: "60%",
-                        height: "100%",
+                    <Box
+                      sx={{
+                        width: { xs: "100%", sm: "60%" },
+                        minHeight: { xs: 48, sm: "auto" },
                         backgroundColor: "white",
                         display: "flex",
                         alignItems: "center",
-                        padding: 15,
+                        p: { xs: 1.5, sm: 2 },
                       }}
                     >
                       <Typography variant="body2" sx={{ fontWeight: 500 }}>
                         Utility Bill{" "}
-                        <span style={{ fontSize: 14, color: "lightgray" }}>
+                        <Box
+                          component="span"
+                          sx={{
+                            fontSize: { xs: 12, sm: 14 },
+                            color: "lightgray",
+                          }}
+                        >
                           (Electricity/Water Bill)
-                        </span>{" "}
+                        </Box>{" "}
                       </Typography>
-                    </div>
-                    <div
-                      style={{
-                        width: "30%",
-                        height: "100%",
+                    </Box>
+                    <Box
+                      sx={{
+                        width: { xs: "100%", sm: "30%" },
+                        minHeight: { xs: 64, sm: "auto" },
                         backgroundColor: "white",
                       }}
-                    ></div>
-                  </div>
+                    />
+                  </Stack>
                   {/* ID */}
-                  <div
-                    style={{
-                      height: 90,
+                  <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    sx={{
+                      minHeight: { xs: 0, sm: 90 },
                       width: "100%",
                       backgroundColor: theme.palette.background.paper,
-                      display: "flex",
-                      alignItems: "center",
+                      alignItems: "stretch",
                       justifyContent: "space-evenly",
-                      padding: "12.5px 7px",
+                      gap: { xs: 1, sm: 1.5 },
+                      p: { xs: 1, sm: 1.5 },
                     }}
                   >
-                    <div
-                      style={{
-                        width: "60%",
-                        height: "100%",
+                    <Box
+                      sx={{
+                        width: { xs: "100%", sm: "60%" },
+                        minHeight: { xs: 48, sm: "auto" },
                         backgroundColor: "white",
                         display: "flex",
                         alignItems: "center",
-                        padding: 15,
+                        p: { xs: 1.5, sm: 2 },
                       }}
                     >
                       <Typography variant="body2" sx={{ fontWeight: 500 }}>
                         Means of Identification{" "}
-                        <span style={{ fontSize: 14, color: "lightgray" }}>
+                        <Box
+                          component="span"
+                          sx={{
+                            fontSize: { xs: 12, sm: 14 },
+                            color: "lightgray",
+                          }}
+                        >
                           (Driver’s License, International passport, Natonal
                           identity card or Permanent Voter’s card)
-                        </span>
+                        </Box>
                       </Typography>
-                    </div>
-                    <div
-                      style={{
-                        width: "30%",
-                        height: "100%",
+                    </Box>
+                    <Box
+                      sx={{
+                        width: { xs: "100%", sm: "30%" },
+                        minHeight: { xs: 64, sm: "auto" },
                         backgroundColor: "white",
                       }}
-                    ></div>
-                  </div>
+                    />
+                  </Stack>
                 </Stack>
               </Stack>
             </>
@@ -644,13 +659,14 @@ export const Profile = () => {
             <>
               {/* button group */}
               <Stack
-                direction={"row"}
+                direction={{ xs: "column", md: "row" }}
                 sx={{
-                  width: "50%",
-                  height: 80,
+                  width: { xs: "100%", md: "50%" },
+                  height: { xs: "auto", md: 80 },
                   py: 0.65,
-                  alignItems: "end",
+                  alignItems: { xs: "center", md: "end" },
                   justifyContent: "space-evenly",
+                  gap: 2,
                 }}
               >
                 <InformationContainer
@@ -668,13 +684,14 @@ export const Profile = () => {
               </Stack>
 
               <Stack
-                direction={"row"}
+                direction={{ xs: "column", md: "row" }}
                 sx={{
-                  width: "50%",
-                  height: 80,
+                  width: { xs: "100%", md: "50%" },
+                  height: { xs: "auto", md: 80 },
                   py: 0.65,
-                  alignItems: "end",
+                  alignItems: { xs: "center", md: "end" },
                   justifyContent: "space-evenly",
+                  gap: 2,
                 }}
               >
                 <InformationContainer
@@ -692,7 +709,7 @@ export const Profile = () => {
               </Stack>
             </>
           )}
-        </section>
+        </Stack>
       </Box>
     </Box>
   );

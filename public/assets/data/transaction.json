@@ -9,7 +9,10 @@
     "amount": "25000.00",
     "paymentMethod": "Card",
     "cardScheme": "Visa",
-    "status": "successful"
+    "status": "successful",
+    "customerEmail": "",
+    "createdAt": "2026-08-18T00:00:00.000Z",
+    "due": "2026-08-25T23:59:59.000Z"
   },
   {
     "merchant": {
@@ -21,7 +24,10 @@
     "amount": "18540.75",
     "paymentMethod": "Bank Transfer",
     "cardScheme": "N/A",
-    "status": "pending"
+    "status": "pending",
+    "customerEmail": "",
+    "createdAt": "2026-08-18T00:00:00.000Z",
+    "due": "2026-08-25T23:59:59.000Z"
   },
   {
     "merchant": {
@@ -33,7 +39,10 @@
     "amount": "49200.00",
     "paymentMethod": "Card",
     "cardScheme": "Mastercard",
-    "status": "successful"
+    "status": "successful",
+    "customerEmail": "",
+    "createdAt": "2026-08-18T00:00:00.000Z",
+    "due": "2026-08-25T23:59:59.000Z"
   },
   {
     "merchant": {
@@ -45,7 +54,10 @@
     "amount": "6800.00",
     "paymentMethod": "Wallet",
     "cardScheme": "N/A",
-    "status": "failed"
+    "status": "failed",
+    "customerEmail": "",
+    "createdAt": "2026-08-19T00:00:00.000Z",
+    "due": "2026-08-26T23:59:59.000Z"
   },
   {
     "merchant": {
@@ -57,7 +69,10 @@
     "amount": "120000.00",
     "paymentMethod": "Card",
     "cardScheme": "Verve",
-    "status": "successful"
+    "status": "successful",
+    "customerEmail": "",
+    "createdAt": "2026-08-19T00:00:00.000Z",
+    "due": "2026-08-26T23:59:59.000Z"
   },
   {
     "merchant": {
@@ -69,7 +84,10 @@
     "amount": "7600.50",
     "paymentMethod": "Bank Transfer",
     "cardScheme": "N/A",
-    "status": "pending"
+    "status": "pending",
+    "customerEmail": "",
+    "createdAt": "2026-08-20T00:00:00.000Z",
+    "due": "2026-08-27T23:59:59.000Z"
   },
   {
     "merchant": {
@@ -81,7 +99,10 @@
     "amount": "33450.00",
     "paymentMethod": "Card",
     "cardScheme": "Visa",
-    "status": "successful"
+    "status": "successful",
+    "customerEmail": "",
+    "createdAt": "2026-08-20T00:00:00.000Z",
+    "due": "2026-08-27T23:59:59.000Z"
   },
   {
     "merchant": {
@@ -93,7 +114,10 @@
     "amount": "15025.25",
     "paymentMethod": "Card",
     "cardScheme": "Mastercard",
-    "status": "failed"
+    "status": "failed",
+    "customerEmail": "",
+    "createdAt": "2026-08-21T00:00:00.000Z",
+    "due": "2026-08-28T23:59:59.000Z"
   },
   {
     "merchant": {
@@ -105,7 +129,10 @@
     "amount": "21000.00",
     "paymentMethod": "Wallet",
     "cardScheme": "N/A",
-    "status": "successful"
+    "status": "successful",
+    "customerEmail": "",
+    "createdAt": "2026-08-21T00:00:00.000Z",
+    "due": "2026-08-28T23:59:59.000Z"
   },
   {
     "merchant": {
@@ -117,7 +144,10 @@
     "amount": "8900.00",
     "paymentMethod": "Card",
     "cardScheme": "Verve",
-    "status": "pending"
+    "status": "pending",
+    "customerEmail": "",
+    "createdAt": "2026-08-22T00:00:00.000Z",
+    "due": "2026-08-29T23:59:59.000Z"
   },
   {
     "merchant": {
@@ -129,7 +159,10 @@
     "amount": "47800.90",
     "paymentMethod": "Bank Transfer",
     "cardScheme": "N/A",
-    "status": "successful"
+    "status": "successful",
+    "customerEmail": "",
+    "createdAt": "2026-08-22T00:00:00.000Z",
+    "due": "2026-08-29T23:59:59.000Z"
   },
   {
     "merchant": {
@@ -141,6 +174,9 @@
     "amount": "13250.40",
     "paymentMethod": "Card",
     "cardScheme": "Visa",
-    "status": "failed"
+    "status": "failed",
+    "customerEmail": "",
+    "createdAt": "2026-08-23T00:00:00.000Z",
+    "due": "2026-08-30T23:59:59.000Z"
   }
 ]

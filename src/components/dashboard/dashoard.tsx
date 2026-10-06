@@ -66,27 +66,37 @@ export const Dashboard = () => {
             Dashboard
           </p>
         </motion.div>{" "}
-        <section
-          style={{
+        <Box
+          sx={{
             width: "100%",
             height: "auto",
             backgroundColor: theme.palette.background.paper,
-            padding: "20px",
+            padding: { xs: 2.5, lg: "20px" },
             display: "flex",
             alignItems: "start",
             justifyContent: "center",
-            borderRadius: 10,
+            borderRadius: { xs: 0.8, md: 3.5 },
             gap: "20px",
             flexDirection: "column",
+            [theme.breakpoints.down("sm")]: {
+              py: 3,
+              gap: 3.25,
+            },
           }}
         >
           {role === "admin" && (
-            <div
-              style={{ width: "auto", height: 48, display: "flex", gap: 25 }}
+            <Box
+              sx={{
+                width: { xs: "100%", md: "auto" },
+                height: 48,
+                display: "flex",
+                justifyContent: { xs: "center" },
+                gap: 2.5,
+              }}
             >
               <select
                 style={{
-                  width: 220,
+                  width: "auto",
                   height: "100%",
                   color: "gray",
                   backgroundColor: "lightgray",
@@ -123,11 +133,11 @@ export const Dashboard = () => {
                 <option value={"weekly"}>Daily</option>
                 <option value={"monthly"}>Year</option>
               </select>
-            </div>
+            </Box>
           )}
 
           <Stack
-            direction={"row"}
+            direction={{ xs: "column", md: "row" }}
             sx={{
               alignItems: "center",
               justifyContent: "space-evenly",
@@ -136,14 +146,15 @@ export const Dashboard = () => {
               width: "100%",
             }}
           >
-            <div
-              style={{
+            <Box
+              sx={{
                 display: "grid",
                 alignItems: "center",
                 gap: "15px",
-                width: "50%",
+                width: { xs: "100%", lg: "50%" },
                 gridTemplateColumns: "1fr",
                 gridTemplateRows: "260px 260px",
+                justifyContent: { lg: "space-between" },
               }}
             >
               <Modal
@@ -152,20 +163,25 @@ export const Dashboard = () => {
                 setTimeRange={setTimeRange}
               />
               <Modal mode="bar" timeRange={range} setTimeRange={setTimeRange} />
-            </div>
+            </Box>
 
-            <div
+            <Box
               className="dash-card--grid"
-              style={{
+              sx={{
                 display: "grid",
                 alignItems: "center",
-                width: "45%",
-                gridTemplateColumns: "1fr 1fr",
+                width: { xs: "100%", md: "45%" },
+                gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
                 gridTemplateRows:
-                  role === "admin" ? "250px 300px" : "290px 290px",
-                columnGap: 30,
-                rowGap: 20,
+                  role === "admin"
+                    ? { xs: "250px 300px", md: "250px 300px" }
+                    : { xs: "250px 300px", md: "250px 300px" },
+                columnGap: { xs: 5, md: 2.5 },
+                rowGap: { xs: 5, md: 2.5 },
                 height: "100%",
+                [theme.breakpoints.down("md")]: {
+                  justifyContent: "center",
+                },
               }}
             >
               {role === "merchant" && (
@@ -192,9 +208,9 @@ export const Dashboard = () => {
                   <Card mode="transaction count" />
                 </>
               )}
-            </div>
+            </Box>
           </Stack>
-        </section>
+        </Box>
       </Box>
     </Box>
   );

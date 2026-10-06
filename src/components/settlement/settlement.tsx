@@ -12,18 +12,45 @@ import { NavBar } from "../ui/navbar";
 import { motion } from "motion/react";
 import { InformationContainer } from "../ui/InformationContainer";
 import { Search } from "../ui/Search";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../../context/user";
 import { useMerchant } from "../../hooks/useMerchant";
 import { useAdmin } from "../../hooks/useAdmin";
+import type {
+  Settlement as SettlementType,
+  SettlementFilter,
+} from "../../lib/types";
 
 export const Settlement = () => {
   const { user } = useUser();
   const role = user!.role;
   const id = role === "merchant" ? user!.profile.ID : "";
-  const { settlements } = useMerchant(id);
-  const { adminSettlements } = useAdmin(role);
-  const handleSettlementSearch = (query: string) => {};
+  const { settlements, handleSettlementSearch: handleSetSearch } =
+    useMerchant(id);
+  const { adminSettlements, handleSettlementSearch: adminSettlementSearch } =
+    useAdmin(role);
+
+  // states
+  const [filteredSettlements, setFilteredSettlements] = useState<
+    SettlementType[] | null
+  >(null);
+
+  const handleSettlementSearch = (query: string) => {
+    const settlementFilter: SettlementFilter = JSON.parse(query);
+
+    setFilteredSettlements(handleSetSearch(settlementFilter));
+  };
+
+  const adminSearch = (query: string) => {
+    const settlementFilter: SettlementFilter = JSON.parse(query);
+
+    setFilteredSettlements(adminSettlementSearch(settlementFilter));
+  };
+
+  console.log(adminSettlements);
+
+  const displayData = filteredSettlements ?? settlements;
+  const adminData = filteredSettlements ?? adminSettlements;
   return (
     <Box
       sx={{
@@ -76,17 +103,17 @@ export const Settlement = () => {
             Settlement
           </p>
         </motion.div>
-        <section
-          style={{
+        <Stack
+          sx={{
             width: "100%",
             minHeight: "100vh",
             backgroundColor: "lightgray",
-            borderRadius: 12,
-            padding: "45px",
+            borderRadius: { xs: 1.25, md: 4.5 },
+            padding: { xs: 1.8, md: 5.5 },
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
-            gap: 40,
+            gap: 5,
           }}
         >
           <Stack
@@ -116,22 +143,26 @@ export const Settlement = () => {
             direction={"row"}
             spacing={1}
             sx={{
-              height: 120,
+              height: "auto",
               alignItems: "center",
               justifyContent: "start",
-              gap: 4.5,
+              gap: { xs: 2, md: 4 },
               width: "100%",
-              px: 5,
+              px: 6,
               backgroundColor: "white",
-              py: { md: 15, xl: 10 },
+              py: { xs: 4, xl: 3.5 },
               boxShadow: "1.5px 1.5px 10px #7876769f",
             }}
           >
-            <Search
-              mode="settlement"
-              role={role}
-              onSubmit={handleSettlementSearch}
-            />
+            {role === "admin" ? (
+              <Search mode="settlement" role={"admin"} onSubmit={adminSearch} />
+            ) : (
+              <Search
+                mode="settlement"
+                role={"merchant"}
+                onSubmit={handleSettlementSearch}
+              />
+            )}
           </Stack>
 
           <motion.div
@@ -226,8 +257,8 @@ export const Settlement = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {settlements.length !== 0 ? (
-                        settlements.map((s, index) => (
+                      {displayData.length !== 0 ? (
+                        displayData.map((s, index) => (
                           <TableRow
                             sx={{ backgroundColor: "#F4F4F4" }}
                             key={index}
@@ -286,53 +317,12 @@ export const Settlement = () => {
                       ) : (
                         <TableRow sx={{ backgroundColor: "#F4F4F4" }}>
                           <TableCell
+                            colSpan={10}
                             sx={{
-                              textAlign: "left",
+                              textAlign: "center",
                             }}
                           >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "left",
-                            }}
-                          >
-                            -{" "}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "left",
-                            }}
-                          >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "left",
-                            }}
-                          >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "left",
-                            }}
-                          >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "left",
-                            }}
-                          >
-                            -
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textAlign: "left",
-                            }}
-                          >
-                            -
+                            There's nothing to see here for now.
                           </TableCell>
                         </TableRow>
                       )}
@@ -407,8 +397,8 @@ export const Settlement = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {adminSettlements.length !== 0 ? (
-                        adminSettlements.map((s, index) => (
+                      {adminData.length !== 0 ? (
+                        adminData.map((s, index) => (
                           <TableRow
                             sx={{ backgroundColor: "#F4F4F4" }}
                             key={index}
@@ -483,7 +473,7 @@ export const Settlement = () => {
               )}
             </div>
           </motion.div>
-        </section>
+        </Stack>
       </Box>{" "}
     </Box>
   );

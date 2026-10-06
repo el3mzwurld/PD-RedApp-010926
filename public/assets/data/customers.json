@@ -1,7 +1,7 @@
 [
   {
     "merchant": {
-      "ID": "JAZ-688E62",
+      "ID": "FRE-85ADDD",
       "fName": "Adaeze",
       "lName": "Okafor"
     },
@@ -20,7 +20,7 @@
   },
   {
     "merchant": {
-      "ID": "JAZ-688E62",
+      "ID": "FRE-85ADDD",
       "fName": "Chinedu",
       "lName": "Eze"
     },
@@ -39,7 +39,7 @@
   },
   {
     "merchant": {
-      "ID": "FRE-001",
+      "ID": "FRE-85ADDD",
       "fName": "Adaeze",
       "lName": "Okafor"
     },
@@ -57,7 +57,7 @@
     }
   },
   {
-    "merchant": { "ID": "JAZ-688E62", "fName": "Adaeze", "lName": "Okafor" },
+    "merchant": { "ID": "FRE-85ADDD", "fName": "Adaeze", "lName": "Okafor" },
     "fName": "Chisom",
     "lName": "Okeke",
     "phones": { "main": 8076543210, "alternate": null },

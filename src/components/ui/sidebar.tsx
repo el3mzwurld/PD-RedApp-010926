@@ -1,4 +1,4 @@
-import { Box, Stack, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Stack, Typography, useTheme } from "@mui/material";
 import type { SvgIconComponent } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import {
@@ -16,11 +16,12 @@ import {
   GroupWork,
   Wallet,
   Settings,
-  ExpandLess,
   ExpandMore,
+  Menu,
+  Close,
 } from "@mui/icons-material";
 import logo from "../img/logo.png";
-import type { AdminPages, RenderedPage } from "../../pages/home";
+import type { AdminPages } from "../../pages/home";
 import { useLocation, useNavigate } from "react-router-dom";
 
 type SidebarItem = {
@@ -126,127 +127,157 @@ const adminLinks: AdminSidebarItem[] = [
     },
   },
 ];
-export const Sidebar = ({ role = "admin" }: SidebarProps) => {
+export const Sidebar = ({ role }: SidebarProps) => {
   const [collapse, setCollapse] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
+  const location = useLocation();
   const handleNavToggle = () => {
     setCollapse((prev) => !prev);
   };
 
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
   return (
-    <aside
-      className={`sidebar ${collapse ? "collapsed" : ""}`}
-      style={{ backgroundColor: theme.palette.primary.main }}
-    >
-      <Box
-        className="sidebar--header"
-        sx={{
-          height: 120,
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <img
-          src={logo}
-          alt="Logo"
-          aria-description="red app logo"
-          style={{
-            width: "auto",
-            height: "80%",
-            objectFit: "cover",
-            display: collapse ? "none" : "block",
-          }}
-        />
-      </Box>
-      <Stack
-        direction={"column"}
-        component={"nav"}
-        aria-description="navigation pane for sidebar"
-        spacing={0.8}
-        sx={{
-          height: "auto",
-          flex: 1,
-          width: "100%",
-          justifyContent: "start",
-          marginBottom: 2.5,
-        }}
-      >
-        {role === "merchant" ? (
-          <>
-            {" "}
-            {navLinks.map((link, index) => (
-              <SidebarItem
-                Icon={link.Icon}
-                label={link.label}
-                key={index}
-                active={collapse}
-              />
-            ))}
-          </>
-        ) : (
-          <>
-            {" "}
-            {adminLinks.map((link, index) => (
-              <AdminSidebarItem
-                Icon={link.Icon}
-                label={link.label.main}
-                key={index}
-                active={collapse}
-                sublinks={link.label.sublinks}
-              />
-            ))}
-          </>
-        )}
+    <>
+      {mobileOpen && (
         <div
-          style={{
+          className="sidebar--backdrop"
+          onClick={() => setMobileOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+      <aside
+        className={`sidebar ${collapse ? "collapsed" : ""} ${mobileOpen ? "mobile-open" : ""}`}
+        style={{ backgroundColor: theme.palette.primary.main }}
+      >
+        <Box
+          className="sidebar--header"
+          sx={{
+            height: 120,
             width: "100%",
-            height: "auto",
             display: "flex",
-            justifyContent: "center",
             alignItems: "center",
-            cursor: "pointer",
+            justifyContent: "center",
           }}
         >
-          {collapse ? (
-            <Box
-              sx={{
-                height: 40,
-                width: 40,
-                borderRadius: 100,
-                ":hover": { opacity: 0.8 },
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                cursor: "pointer",
-                backgroundColor: "white",
-              }}
-              onClick={handleNavToggle}
-            >
-              <ChevronRight sx={{ width: 40 }} />
-            </Box>
+          <img
+            src={logo}
+            alt="Logo"
+            aria-description="red app logo"
+            style={{
+              width: "auto",
+              height: "80%",
+              objectFit: "cover",
+              display: collapse ? "none" : "block",
+            }}
+          />
+          <IconButton
+            className="sidebar--mobile-close"
+            aria-label="Close navigation menu"
+            onClick={() => setMobileOpen(false)}
+            sx={{ color: "white" }}
+          >
+            <Close />
+          </IconButton>
+        </Box>
+        <Stack
+          direction={"column"}
+          component={"nav"}
+          aria-description="navigation pane for sidebar"
+          spacing={0.8}
+          sx={{
+            height: "auto",
+            flex: 1,
+            width: "100%",
+            justifyContent: "start",
+            marginBottom: 2.5,
+          }}
+        >
+          {role === "merchant" ? (
+            <>
+              {" "}
+              {navLinks.map((link, index) => (
+                <SidebarItem
+                  Icon={link.Icon}
+                  label={link.label}
+                  key={index}
+                  active={collapse}
+                  mobileOpen={mobileOpen}
+                />
+              ))}
+            </>
           ) : (
-            <Box
-              sx={{
-                height: 40,
-                width: 40,
-                borderRadius: 100,
-                ":hover": { opacity: 0.8 },
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                cursor: "pointer",
-                backgroundColor: "white",
-              }}
-              onClick={handleNavToggle}
-            >
-              <ChevronLeft sx={{ width: 40 }} />
-            </Box>
+            <>
+              {" "}
+              {adminLinks.map((link, index) => (
+                <AdminSidebarItem
+                  Icon={link.Icon}
+                  label={link.label.main}
+                  key={index}
+                  active={collapse}
+                  sublinks={link.label.sublinks}
+                  mobileOpen={mobileOpen}
+                />
+              ))}
+            </>
           )}
-        </div>
-      </Stack>
-    </aside>
+          <div className="sidebar--collapse-control">
+            {collapse ? (
+              <Box
+                sx={{
+                  height: 40,
+                  width: 40,
+                  borderRadius: 100,
+                  ":hover": { opacity: 0.8 },
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  backgroundColor: "white",
+                }}
+                onClick={handleNavToggle}
+              >
+                <ChevronRight sx={{ width: 40 }} />
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  height: 40,
+                  width: 40,
+                  borderRadius: 100,
+                  ":hover": { opacity: 0.8 },
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  backgroundColor: "white",
+                }}
+                onClick={handleNavToggle}
+              >
+                <ChevronLeft sx={{ width: 40 }} />
+              </Box>
+            )}
+          </div>
+        </Stack>
+      </aside>
+      <IconButton
+        className="sidebar--mobile-open"
+        aria-label="Open navigation menu"
+        aria-expanded={mobileOpen}
+        onClick={() => setMobileOpen(true)}
+        sx={{
+          color: "white",
+          backgroundColor: "primary.main",
+          boxShadow: 3,
+          "&:hover": { backgroundColor: "white", opacity: 0.9 },
+        }}
+      >
+        <Menu />
+      </IconButton>
+    </>
   );
 };
 
@@ -254,9 +285,10 @@ interface SidebarItemProps {
   Icon: SvgIconComponent;
   label: string;
   active: boolean;
+  mobileOpen: boolean;
 }
 
-const SidebarItem = ({ Icon, label, active }: SidebarItemProps) => {
+const SidebarItem = ({ Icon, label, active, mobileOpen }: SidebarItemProps) => {
   const nav = useNavigate();
   const location = useLocation();
   const path = location.pathname;
@@ -281,7 +313,7 @@ const SidebarItem = ({ Icon, label, active }: SidebarItemProps) => {
     <Box
       sx={{
         width: "100%",
-        height: active ? { md: 45, xl: 55 } : { md: 50 },
+        height: active && !mobileOpen ? { xs: 45, xl: 55 } : { xs: 50 },
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -315,7 +347,7 @@ const SidebarItem = ({ Icon, label, active }: SidebarItemProps) => {
         sx={{
           width: "70%",
           fontWeight: 550,
-          display: active ? "none" : "block",
+          display: active && !mobileOpen ? "none" : "block",
           color: isPage() ? "red" : "white",
         }}
       >
@@ -330,12 +362,14 @@ interface AdminSidebarItemProps {
   label: AdminPages;
   active: boolean;
   sublinks?: string[];
+  mobileOpen: boolean;
 }
 const AdminSidebarItem = ({
   Icon,
   label,
   active,
   sublinks,
+  mobileOpen,
 }: AdminSidebarItemProps) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -374,7 +408,7 @@ const AdminSidebarItem = ({
       <Box
         sx={{
           width: "100%",
-          height: active ? { md: 45, xl: 55 } : { md: 50 },
+          height: active && !mobileOpen ? { xs: 45, xl: 55 } : { xs: 50 },
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -404,7 +438,7 @@ const AdminSidebarItem = ({
             width: "65%",
             color: isPage() ? "red" : "white",
             fontWeight: 550,
-            display: active ? "none" : "flex",
+            display: active && !mobileOpen ? "none" : "block",
             position: "relative",
             height: "100%",
             alignItems: "center",
@@ -424,7 +458,7 @@ const AdminSidebarItem = ({
           style={{
             opacity: active ? "0" : "1",
             width: "20%",
-            display: active ? "none" : "block",
+            display: active && !mobileOpen ? "none" : "block",
           }}
         >
           {sublinks &&
@@ -464,7 +498,7 @@ const AdminSidebarItem = ({
               fontSize: 12,
               marginTop: 2.5,
               marginBottom: 2.5,
-              display: active || !open ? "none" : "list-item",
+              display: active || (!open && mobileOpen) ? "none" : "list-item",
               listStyleType: "square",
             }}
             key={index}
